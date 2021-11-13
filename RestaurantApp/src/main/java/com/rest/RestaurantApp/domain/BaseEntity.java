@@ -2,6 +2,7 @@ package com.rest.RestaurantApp.domain;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
@@ -14,14 +15,13 @@ import org.hibernate.annotations.Where;
 public class BaseEntity {
 	
 	@Id
-	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "uuid2")
-	protected String id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
 	@Column(columnDefinition = "boolean default false", nullable = false)
 	protected boolean deleted;
 	
-	public String getId() {
+	public Integer getId() {
 		return id;
 	}
 
@@ -33,7 +33,7 @@ public class BaseEntity {
 		this.deleted = deleted;
 	}
 
-	public void setId(String id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 }
