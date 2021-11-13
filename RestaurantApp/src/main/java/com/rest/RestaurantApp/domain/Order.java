@@ -1,5 +1,6 @@
 package com.rest.RestaurantApp.domain;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -28,7 +29,7 @@ public class Order extends BaseEntity{
 	private int tableNumber;
 	
 	@Column(nullable = false)
-	private Date orderDate;
+	private LocalDateTime orderDate;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "employee_id", nullable = false)
@@ -37,7 +38,7 @@ public class Order extends BaseEntity{
 	@OneToMany(mappedBy = "order")
 	private Set<OrderedArticle> orderedArticles;
 
-	public Order(String description, int tableNumber, Date orderDate, Employee employee) {
+	public Order(String description, int tableNumber, LocalDateTime orderDate, Employee employee) {
 		super();
 		this.description = description;
 		this.tableNumber = tableNumber;
@@ -66,11 +67,11 @@ public class Order extends BaseEntity{
 		this.tableNumber = tableNumber;
 	}
 
-	public Date getOrderDate() {
+	public LocalDateTime getOrderDate() {
 		return orderDate;
 	}
 
-	public void setOrderDate(Date orderDate) {
+	public void setOrderDate(LocalDateTime orderDate) {
 		this.orderDate = orderDate;
 	}
 
