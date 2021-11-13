@@ -19,6 +19,9 @@ public class Ingredient extends BaseEntity {
 	@Column(nullable = false)
 	private double price;
 	
+	@Column(nullable = false)
+	private boolean isAllergen;
+	
 	@ManyToMany(mappedBy = "ingredients")
 	private Set<Article> articles;
 

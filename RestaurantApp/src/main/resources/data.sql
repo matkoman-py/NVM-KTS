@@ -1,0 +1,2 @@
+INSERT INTO users (id, type, birthday, email, name, surname, privileged_type, username, password) VALUES
+  ('PRIVILEGED_USER', '582e7f46-75c4-4ece-9f46 ', '1999-10-29', 'petarns99@yahoo.com', 'Petar', 'Markovic', 'OWNER', 'markuza99', 'petar123');

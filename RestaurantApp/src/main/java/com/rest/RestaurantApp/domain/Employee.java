@@ -21,11 +21,11 @@ import com.rest.RestaurantApp.domain.enums.UserType;
 @Where(clause = "deleted = false")
 public class Employee extends User {
 	
-	@Column(nullable = false)
+	//@Column(nullable = false)
 	private int pincode;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
+	//@Column(nullable = false)
 	private EmployeeType employeeType;
 
 	@OneToMany(mappedBy = "employee")

@@ -18,14 +18,14 @@ import com.rest.RestaurantApp.domain.enums.UserType;
 @Where(clause = "deleted = false")
 public class PrivilegedUser extends User {
 	
-	@Column(nullable = false)
+	//@Column(nullable = false)
 	private String username;
 	
-	@Column(nullable = false)
+	//@Column(nullable = false)
 	private String password;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
+	//@Column(nullable = false)
 	private PrivilegedUserType privilegedType;
 	
 	
