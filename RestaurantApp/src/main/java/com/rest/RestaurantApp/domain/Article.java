@@ -1,5 +1,7 @@
 package com.rest.RestaurantApp.domain;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,6 +20,7 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.Where;
 
 import com.rest.RestaurantApp.domain.enums.ArticleType;
+import com.rest.RestaurantApp.domain.enums.PriceStatus;
 
 import javax.persistence.JoinColumn;
 
@@ -39,26 +42,26 @@ public class Article extends BaseEntity{
 		@Column(nullable = false)
 		private String description;
 		
-		@Column(nullable = false)
-		private double price;
+		@OneToMany(mappedBy = "article")
+		private List<PriceInfo> prices;
 		
 		@Enumerated(EnumType.STRING)
 		@Column(nullable = false)
 		private ArticleType type;
 		
 		@ManyToOne(fetch = FetchType.LAZY)
-		@JoinColumn(name = "menu_id", nullable = false)
+		@JoinColumn(name = "menu_id", nullable = true)
 		private Menu menu;
 		
 		@OneToMany(mappedBy = "article")
 		private Set<OrderedArticle> orderedArticles;
 
-		public Article(String name, String description, double price, ArticleType type) {
+		public Article(String name, String description, ArticleType type) {
 			super();
 			this.ingredients = new HashSet<>();
 			this.name = name;
 			this.description = description;
-			this.price = price;
+			this.prices = new ArrayList<PriceInfo>();
 			this.type = type;
 			this.menu = new Menu();
 			this.orderedArticles = new HashSet<>();
@@ -92,14 +95,27 @@ public class Article extends BaseEntity{
 			this.description = description;
 		}
 
-		public double getPrice() {
-			return price;
+		public List<PriceInfo> getPrices() {
+			return prices;
 		}
 
-		public void setPrice(double price) {
-			this.price = price;
+		public void setPrices(List<PriceInfo>  prices) {
+			this.prices = prices;
 		}
-
+		
+		public PriceInfo getActivePrice() {
+			return prices.stream().filter(price -> price.getStatus().equals(PriceStatus.ACTIVE)).findAny().orElse(null);
+		}
+		
+		public void setNewPrice(PriceInfo priceInfo) {
+			if(prices.size() > 0) {
+				PriceInfo oldPrice = prices.stream().filter(price -> price.getStatus().equals(PriceStatus.ACTIVE)).findAny().orElse(null);
+				oldPrice.setToDate(new Date());
+				oldPrice.setStatus(PriceStatus.EXPIRED);
+			}
+			prices.add(priceInfo);
+		}
+		
 		public ArticleType getType() {
 			return type;
 		}

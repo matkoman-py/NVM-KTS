@@ -17,18 +17,15 @@ public class Ingredient extends BaseEntity {
 	private String name;
 	
 	@Column(nullable = false)
-	private double price;
-	
-	@Column(nullable = false)
 	private boolean isAllergen;
 	
 	@ManyToMany(mappedBy = "ingredients")
 	private Set<Article> articles;
 
-	public Ingredient(String name, double price) {
+	public Ingredient(String name, boolean isAllergen) {
 		super();
 		this.name = name;
-		this.price = price;
+		this.isAllergen = isAllergen;
 		this.articles = new HashSet<Article>();
 	}
 
@@ -44,20 +41,20 @@ public class Ingredient extends BaseEntity {
 		this.name = name;
 	}
 
-	public double getPrice() {
-		return price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
-
 	public Set<Article> getArticles() {
 		return articles;
 	}
 
 	public void setArticles(Set<Article> articles) {
 		this.articles = articles;
+	}
+
+	public boolean isAllergen() {
+		return isAllergen;
+	}
+
+	public void setAllergen(boolean isAllergen) {
+		this.isAllergen = isAllergen;
 	}	
 	
 	
