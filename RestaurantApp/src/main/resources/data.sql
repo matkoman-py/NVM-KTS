@@ -9,8 +9,6 @@ INSERT INTO users (type, birthday, email, name, surname, employee_type, pincode)
 INSERT INTO orders (description, order_date, table_number, employee_id) VALUES
   ('No ketchup', '2021-11-3 12:43:33', 1, 2),
   ('Extra mayo', '2021-12-3 15:21:00', 3, 2);
-  ('PRIVILEGED_USER', '1999-10-29', 'petarns99@yahoo.com', 'Petar', 'Markovic', 'OWNER', 'markuza99', 'petar123'),
-  ('PRIVILEGED_USER', '1999-10-29', 'petarns999@yahoo.com', 'Petar', 'Markovic', 'MANAGER', 'markuza999', 'petar123');
 
 INSERT INTO article (name, description, type) VALUES
   ('Dobos torta', 'Jako fina', 'APPETIZER'),
