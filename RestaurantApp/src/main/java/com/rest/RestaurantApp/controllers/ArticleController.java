@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rest.RestaurantApp.dto.ArticleCreationDTO;
 import com.rest.RestaurantApp.dto.ArticleDTO;
 import com.rest.RestaurantApp.services.ArticleService;
 
@@ -53,7 +54,7 @@ public class ArticleController {
 	}
 	
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ArticleDTO> create(@RequestBody ArticleDTO article) {
+	public ResponseEntity<ArticleDTO> create(@RequestBody ArticleCreationDTO article) {
 		ArticleDTO createdArticle = articleService.create(article);
 		return new ResponseEntity<ArticleDTO>(createdArticle, HttpStatus.CREATED);
 	}

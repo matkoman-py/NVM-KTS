@@ -2,6 +2,7 @@ package com.rest.RestaurantApp.services;
 
 import java.util.List;
 
+import com.rest.RestaurantApp.dto.ArticleCreationDTO;
 import com.rest.RestaurantApp.dto.ArticleDTO;
 
 public interface IArticleService {
@@ -12,7 +13,7 @@ public interface IArticleService {
 	
 	ArticleDTO delete(int id);
 	
-	ArticleDTO create(ArticleDTO article);
+	ArticleDTO create(ArticleCreationDTO article);
 	
 	ArticleDTO update(int id, ArticleDTO article);
 }

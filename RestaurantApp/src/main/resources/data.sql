@@ -1,10 +1,11 @@
 INSERT INTO users (type, birthday, email, name, surname, privileged_type, username, password) VALUES
   ('PRIVILEGED_USER', '1999-10-29', 'petarns99@yahoo.com', 'Petar', 'Markovic', 'OWNER', 'markuza99', 'petar123'),
   ('PRIVILEGED_USER', '1999-10-29', 'petarns999@yahoo.com', 'Petar', 'Markovic', 'MANAGER', 'markuza999', 'petar123');
-
-INSERT INTO article (name, description, type) VALUES
-  ('Dobos torta', 'Jako fina', 'APPETIZER'),
-  ('Princes krofna', 'Ubica', 'APPETIZER');
+INSERT INTO menu (id) VALUES
+  ('420');
+INSERT INTO article (name, description, type, menu_id) VALUES
+  ('Dobos torta', 'Jako fina', 'APPETIZER', 420),
+  ('Princes krofna', 'Ubica', 'APPETIZER', 420);
   
 INSERT INTO ingredient (name, is_allergen) VALUES
   ('Vanila', FALSE),

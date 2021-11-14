@@ -37,7 +37,7 @@ public class PriceInfo extends BaseEntity {
 	private PriceStatus status;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "article_id", nullable = false)
+	@JoinColumn(name = "article_id", nullable = true)
 	private Article article;
 
 	public PriceInfo(Date fromDate, double makingPrice, double sellingPrice, Article article) {
