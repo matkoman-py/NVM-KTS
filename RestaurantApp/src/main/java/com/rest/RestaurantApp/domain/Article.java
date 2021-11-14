@@ -7,6 +7,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -40,6 +42,7 @@ public class Article extends BaseEntity{
 		@Column(nullable = false)
 		private double price;
 		
+		@Enumerated(EnumType.STRING)
 		@Column(nullable = false)
 		private ArticleType type;
 		
