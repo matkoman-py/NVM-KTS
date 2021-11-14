@@ -1,13 +1,10 @@
 package com.rest.RestaurantApp.dto;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import com.rest.RestaurantApp.domain.Article;
 import com.rest.RestaurantApp.domain.enums.ArticleType;
 
-public class ArticleDTO {
-	private Integer id;
+public class ArticleCreationDTO {
 	
 	private List<IngredientDTO> ingredients;
 	
@@ -21,10 +18,9 @@ public class ArticleDTO {
 	
 	private ArticleType type;
 
-	public ArticleDTO(Integer id, List<IngredientDTO> ingredients, String name, double makingPrice, double sellingPrice, String description,
-			ArticleType type) {
+	public ArticleCreationDTO(List<IngredientDTO> ingredients, String name, double makingPrice, double sellingPrice,
+			String description, ArticleType type) {
 		super();
-		this.id = id;
 		this.ingredients = ingredients;
 		this.name = name;
 		this.makingPrice = makingPrice;
@@ -32,30 +28,9 @@ public class ArticleDTO {
 		this.description = description;
 		this.type = type;
 	}
-	
-	public ArticleDTO(Article article) {
-		super();
-		this.id = article.getId();
-		this.ingredients = article.getIngredients().stream().map(ingredient -> new IngredientDTO(ingredient)).collect(Collectors.toList());
-		this.name = article.getName();
-		this.makingPrice = article.getActivePrice().getMakingPrice();
-		this.sellingPrice = article.getActivePrice().getSellingPrice();
-//		this.makingPrice = 100;
-//		this.sellingPrice = 200;
-		this.description = article.getDescription();
-		this.type = article.getType();
-	}
-	
-	public ArticleDTO() {
-		super();
-	}
-	
-	public Integer getId() {
-		return id;
-	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public ArticleCreationDTO() {
+		super();
 	}
 
 	public List<IngredientDTO> getIngredients() {
@@ -105,6 +80,5 @@ public class ArticleDTO {
 	public void setType(ArticleType type) {
 		this.type = type;
 	}
-	
 	
 }

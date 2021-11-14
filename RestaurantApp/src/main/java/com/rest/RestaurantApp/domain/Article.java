@@ -63,7 +63,6 @@ public class Article extends BaseEntity{
 			this.description = description;
 			this.prices = new ArrayList<PriceInfo>();
 			this.type = type;
-			this.menu = new Menu();
 			this.orderedArticles = new HashSet<>();
 		}
 
@@ -105,6 +104,7 @@ public class Article extends BaseEntity{
 		
 		public PriceInfo getActivePrice() {
 			return prices.stream().filter(price -> price.getStatus().equals(PriceStatus.ACTIVE)).findAny().orElse(null);
+			
 		}
 		
 		public void setNewPrice(PriceInfo priceInfo) {

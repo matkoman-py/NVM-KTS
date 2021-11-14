@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.rest.RestaurantApp.domain.Article;
 import com.rest.RestaurantApp.domain.Ingredient;
 import com.rest.RestaurantApp.domain.PriceInfo;
+import com.rest.RestaurantApp.dto.ArticleCreationDTO;
 import com.rest.RestaurantApp.dto.ArticleDTO;
 import com.rest.RestaurantApp.repositories.ArticleRepository;
 import com.rest.RestaurantApp.repositories.IngredientRepository;
@@ -63,15 +64,16 @@ public class ArticleService implements IArticleService {
 	}
 	
 	@Override
-	public ArticleDTO create(ArticleDTO article) {
+	public ArticleDTO create(ArticleCreationDTO article) {
+		
 		Article newArticle = new Article(article.getName(), article.getDescription(),article.getType());
-		PriceInfo priceInfo = new PriceInfo(new Date(), article.getMakingPrice(), article.getSellingPrice(), newArticle);
+		Article savedArticle = articleRepository.save(newArticle);
+		PriceInfo priceInfo = new PriceInfo(new Date(), article.getMakingPrice(), article.getSellingPrice(), savedArticle);
 		priceInfoRepository.save(priceInfo);
-		newArticle.setNewPrice(priceInfo);
 		Set<Ingredient> ingredients = article.getIngredients().stream()
 				.map(ingredientDTO -> ingredientRepository.findById(ingredientDTO.getId()).orElse(null)).collect(Collectors.toSet());
-		newArticle.setIngredients(ingredients);
-		return new ArticleDTO(articleRepository.save(newArticle));
+		savedArticle.setIngredients(ingredients);
+		return new ArticleDTO(articleRepository.save(savedArticle));
 	}
 	
 	@Override
