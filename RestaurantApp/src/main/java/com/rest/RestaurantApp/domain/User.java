@@ -17,7 +17,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Where;
 
-
+import com.rest.RestaurantApp.domain.enums.PriceStatus;
+import com.rest.RestaurantApp.domain.enums.SalaryStatus;
 import com.rest.RestaurantApp.domain.enums.UserType;
 
 @Entity
@@ -59,7 +60,20 @@ public class User extends BaseEntity{
 	public User() {
 		
 	}
-
+	
+	public void setNewSalary(SalaryInfo salaryInfo) {
+		if(salaries.size() > 0) {
+			SalaryInfo oldPrice = salaries.stream().filter(salary -> salary.getStatus().equals(SalaryStatus.ACTIVE)).findAny().orElse(null);
+			oldPrice.setToDate(new Date());
+			oldPrice.setStatus(SalaryStatus.EXPIRED);
+		}
+		salaries.add(salaryInfo);
+	}
+	
+	public SalaryInfo getActiveSalary() {
+		return salaries.stream().filter(salary -> salary.getStatus().equals(SalaryStatus.ACTIVE)).findAny().orElse(null);
+	}
+	
 	public String getEmail() {
 		return email;
 	}

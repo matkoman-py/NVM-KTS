@@ -24,7 +24,7 @@ public class SalaryInfo extends BaseEntity {
 	@Column(nullable = false)
 	private Date fromDate;
 	
-	@Column(nullable = false)
+	@Column
 	private Date toDate;
 	
 	@Column(nullable = false)
@@ -38,12 +38,11 @@ public class SalaryInfo extends BaseEntity {
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
-	public SalaryInfo(Date from, Date to, double value, SalaryStatus status, User user) {
+	public SalaryInfo(Date from, double value, User user) {
 		super();
 		this.fromDate = from;
-		this.toDate = to;
 		this.value = value;
-		this.status = status;
+		this.status = SalaryStatus.ACTIVE;
 		this.user = user;
 	}
 

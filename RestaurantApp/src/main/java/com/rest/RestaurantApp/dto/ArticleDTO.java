@@ -7,6 +7,7 @@ import com.rest.RestaurantApp.domain.Article;
 import com.rest.RestaurantApp.domain.enums.ArticleType;
 
 public class ArticleDTO {
+	
 	private Integer id;
 	
 	private List<IngredientDTO> ingredients;
