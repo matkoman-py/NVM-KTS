@@ -65,6 +65,4 @@ public class PrivilegedUser extends User {
 		this.privilegedType = privilegedType;
 	}
 	
-	
-	
 }
