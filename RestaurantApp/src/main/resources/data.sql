@@ -14,6 +14,14 @@ INSERT INTO users (type, birthday, email, name, surname, employee_type, pincode)
   ('EMPLOYEE', '1999-11-25 ', 'perica@yahoo.com', 'Petar', 'Petrovic', 'COOK', 4269),
   ('EMPLOYEE', '1999-11-25 ', 'maric@yahoo.com', 'Marko', 'Maric', 'COOK', 2910);
   
+INSERT INTO salaries (from_date, to_date, status, value, user_id) VALUES
+  ('2003-5-6', '2003-5-6', 'ACTIVE', 23000, 3),
+  ('2003-5-6', '2003-5-6', 'ACTIVE', 23000, 4),
+  ('2003-5-6', '2003-5-6', 'ACTIVE', 23000, 5),
+  ('2003-5-6', '2003-5-6', 'ACTIVE', 23000, 6),
+  ('2003-5-6', '2003-5-6', 'ACTIVE', 23000, 7);
+  
+  
 INSERT INTO orders (description, order_date, table_number, employee_id) VALUES
   ('No ketchup', '2021-11-3 12:43:33', 1, 4),
   ('Extra mayo', '2021-12-3 15:21:00', 3, 4);
