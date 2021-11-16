@@ -16,7 +16,15 @@ import com.rest.RestaurantApp.domain.Employee;
 import com.rest.RestaurantApp.domain.Order;
 import com.rest.RestaurantApp.domain.OrderedArticle;
 import com.rest.RestaurantApp.domain.enums.ArticleStatus;
+import com.rest.RestaurantApp.domain.enums.ArticleType;
+import com.rest.RestaurantApp.domain.enums.EmployeeType;
 import com.rest.RestaurantApp.dto.OrderDTO;
+import com.rest.RestaurantApp.dto.OrderedArticleDTO;
+import com.rest.RestaurantApp.exceptions.ChangeFinishedStateException;
+import com.rest.RestaurantApp.exceptions.IncompatibleEmployeeTypeException;
+import com.rest.RestaurantApp.exceptions.NullArticlesException;
+import com.rest.RestaurantApp.exceptions.OrderAlreadyTakenException;
+import com.rest.RestaurantApp.exceptions.OrderTakenByWrongEmployeeTypeException;
 import com.rest.RestaurantApp.repositories.ArticleRepository;
 import com.rest.RestaurantApp.repositories.EmployeeRepository;
 import com.rest.RestaurantApp.repositories.OrderRepository;
@@ -87,12 +95,20 @@ public class OrderService implements IOrderService {
 		// List<Article> articles = order.getOrderedArticles().stream().map(article ->
 		// article)
 		Employee employee = employeeRepository.getById(order.getEmployeeId());
+		if(!employee.getEmployeeType().equals(EmployeeType.WAITER)) {
+			throw new OrderTakenByWrongEmployeeTypeException("An employee of type " + employee.getEmployeeType().toString() +" can't create a new order");
+		}
 		List<Article> articles = order.getOrderedArticles().stream()
 				.map(article -> articleRepository.findById(article).get()).collect(Collectors.toList());
 		List<OrderedArticle> orderedArticles = articles.stream()
 				.map(orderedArticle -> new OrderedArticle(ArticleStatus.NOT_TAKEN, orderedArticle))
 				.collect(Collectors.toList());
 		Order createdOrder = new Order(order.getDescription(), order.getTableNumber(), order.getOrderDate(), employee);
+		
+		if(order.getOrderedArticles().size() == 0 || order.getOrderedArticles() == null) {
+			throw new NullArticlesException("Order must have at least 1 article");
+		}
+		
 		for (OrderedArticle o : orderedArticles) {
 			createdOrder.addOrderedArticle(o);
 		}
@@ -107,8 +123,11 @@ public class OrderService implements IOrderService {
 		if (oldOrderData.isEmpty()) {
 			return null;
 		}
-		
+		if(order.getOrderedArticles().size() == 0 || order.getOrderedArticles() == null) {
+			throw new NullArticlesException("Updated order must have at least 1 article");
+		}
 		Order oldOrder = oldOrderData.get();
+	
 		for (OrderedArticle orderedArticle : oldOrder.getOrderedArticles()) {
 			oldOrder.removeOrderedArticle(orderedArticle);
 		}
@@ -127,6 +146,56 @@ public class OrderService implements IOrderService {
 		Order updatedOrder = orderRepository.save(oldOrder);
 		
 		return new OrderDTO(updatedOrder);
+	}
+
+	@Override
+	public List<OrderedArticleDTO> getArticlesForOrder(int id) {
+		// TODO Auto-generated method stub
+		Optional<Order> oldOrderData = orderRepository.findById(id);
+		if (oldOrderData.isEmpty()) {
+			return null;
+		}
+		Order order = oldOrderData.get();
+		List<OrderedArticleDTO> orderedArticles = order.getOrderedArticles().stream().map(article -> new OrderedArticleDTO(article)).collect(Collectors.toList());
+		return orderedArticles;
+	}
+
+	@Override
+	public OrderedArticleDTO changeStatusOfArticle(int employeePin, int articleId) {
+		// TODO Auto-generated method stub
+		OrderedArticle orderedArticle = orderedArticleRepository.findById(articleId).get();
+		Employee employee = employeeRepository.findByPincode(employeePin);
+		switch(orderedArticle.getStatus()) {
+		case NOT_TAKEN:
+			if((employee.getEmployeeType().equals(EmployeeType.WAITER)) || (employee.getEmployeeType().equals(EmployeeType.BARMAN) && !orderedArticle.getArticle().getType().equals(ArticleType.DRINK)) || (employee.getEmployeeType().equals(EmployeeType.COOK) && orderedArticle.getArticle().getType().equals(ArticleType.DRINK))) {
+				throw new IncompatibleEmployeeTypeException("An employee of type " + employee.getEmployeeType().toString() +" can't take an article that is a type of " + orderedArticle.getArticle().getType());
+			}
+			orderedArticle.setTakenByEmployee(employee);
+			orderedArticle.setStatus(ArticleStatus.TAKEN);
+			break;
+		case TAKEN:
+			if(employee.getId() != orderedArticle.getTakenByEmployee().getId()) {
+				throw new OrderAlreadyTakenException("Ordered Article with id " + orderedArticle.getId() + " and name " + orderedArticle.getArticle().getName() + " has already been taken by employee " + orderedArticle.getTakenByEmployee().getName() + " " + orderedArticle.getTakenByEmployee().getSurname());
+			}
+			if((employee.getEmployeeType().equals(EmployeeType.WAITER)) || (employee.getEmployeeType().equals(EmployeeType.BARMAN) && !orderedArticle.getArticle().getType().equals(ArticleType.DRINK)) || (employee.getEmployeeType().equals(EmployeeType.COOK) && orderedArticle.getArticle().getType().equals(ArticleType.DRINK))) {
+				throw new IncompatibleEmployeeTypeException("An employee of type " + employee.getEmployeeType().toString() +" can't start to prepare an article that is a type of " + orderedArticle.getArticle().getType().equals(ArticleType.DRINK));
+			}
+			orderedArticle.setStatus(ArticleStatus.PREPARING);
+			break;
+		case PREPARING:
+			if(employee.getId() != orderedArticle.getTakenByEmployee().getId()) {
+				throw new OrderAlreadyTakenException("Ordered Article with id " + orderedArticle.getId() + " and name " + orderedArticle.getArticle().getName() + " has already been taken by employee " + orderedArticle.getTakenByEmployee().getName() + " " + orderedArticle.getTakenByEmployee().getSurname());
+			}
+			if((employee.getEmployeeType().equals(EmployeeType.WAITER)) || (employee.getEmployeeType().equals(EmployeeType.BARMAN) && !orderedArticle.getArticle().getType().equals(ArticleType.DRINK)) || (employee.getEmployeeType().equals(EmployeeType.COOK) && orderedArticle.getArticle().getType().equals(ArticleType.DRINK))) {
+				throw new IncompatibleEmployeeTypeException("An employee of type " + employee.getEmployeeType().toString() +" can't start to prepare an article that is a type of " + orderedArticle.getArticle().getType().equals(ArticleType.DRINK));
+			}
+			orderedArticle.setStatus(ArticleStatus.FINISHED);
+			break;
+		default:
+			throw new ChangeFinishedStateException("Can't change status of order that is finished");
+		}
+		
+		return new OrderedArticleDTO(orderedArticleRepository.save(orderedArticle));
 	}
 
 
