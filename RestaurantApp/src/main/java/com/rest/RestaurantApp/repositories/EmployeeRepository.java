@@ -6,4 +6,5 @@ import com.rest.RestaurantApp.domain.Employee;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
+	Employee findByPincode(int pin);
 }

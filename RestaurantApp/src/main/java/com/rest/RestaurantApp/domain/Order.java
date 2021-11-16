@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -35,8 +36,8 @@ public class Order extends BaseEntity{
 	@JoinColumn(name = "employee_id", nullable = false)
 	private Employee employee;
 	
-	@OneToMany(mappedBy = "order")
-	private Set<OrderedArticle> orderedArticles;
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<OrderedArticle> orderedArticles;
 
 	public Order(String description, int tableNumber, LocalDateTime orderDate, Employee employee) {
 		super();
@@ -44,12 +45,22 @@ public class Order extends BaseEntity{
 		this.tableNumber = tableNumber;
 		this.orderDate = orderDate;
 		this.employee = employee;
-		this.orderedArticles = new HashSet<>();
+		this.orderedArticles = new ArrayList<>();
 	}
 
 	public Order() {
 		super();
 	}
+	
+	public void addOrderedArticle(OrderedArticle orderedArticle) {
+        orderedArticles.add(orderedArticle);
+        orderedArticle.setOrder(this);
+    }
+ 
+	public void removeOrderedArticle(OrderedArticle orderedArticle) {
+        //orderedArticles.remove(orderedArticle);
+        orderedArticle.setDeleted(true);
+    }
 
 	public String getDescription() {
 		return description;
@@ -83,11 +94,11 @@ public class Order extends BaseEntity{
 		this.employee = employee;
 	}
 
-	public Set<OrderedArticle> getOrderedArticles() {
+	public List<OrderedArticle> getOrderedArticles() {
 		return orderedArticles;
 	}
 
-	public void setOrderedArticles(Set<OrderedArticle> orderedArticles) {
+	public void setOrderedArticles(List<OrderedArticle> orderedArticles) {
 		this.orderedArticles = orderedArticles;
 	}
 	

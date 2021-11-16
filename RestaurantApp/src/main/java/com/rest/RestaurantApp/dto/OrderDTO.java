@@ -1,7 +1,9 @@
 package com.rest.RestaurantApp.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDateTime;import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.rest.RestaurantApp.domain.Order;
 
@@ -12,6 +14,7 @@ public class OrderDTO {
 	private boolean deleted;
 	private String description;
 	private LocalDateTime orderDate;
+	private List<Integer> orderedArticles;
 	private int tableNumber;
 	private int employeeId;
 	
@@ -37,6 +40,21 @@ public class OrderDTO {
 		this.orderDate = order.getOrderDate();
 		this.tableNumber = order.getTableNumber();
 		this.employeeId = order.getEmployee().getId();
+		this.orderedArticles = order.getOrderedArticles().stream().map(article -> article.getArticle().getId()).collect(Collectors.toList());
+	}
+	
+	
+
+	public OrderDTO(Integer id, boolean deleted, String description, LocalDateTime orderDate,
+			List<Integer> orderedArticles, int tableNumber, int employeeId) {
+		super();
+		this.id = id;
+		this.deleted = deleted;
+		this.description = description;
+		this.orderDate = orderDate;
+		this.orderedArticles = orderedArticles;
+		this.tableNumber = tableNumber;
+		this.employeeId = employeeId;
 	}
 
 	public Integer getId() {
@@ -61,6 +79,15 @@ public class OrderDTO {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	
+	public List<Integer> getOrderedArticles() {
+		return orderedArticles;
+	}
+
+	public void setOrderedArticles(List<Integer> orderedArticles) {
+		this.orderedArticles = orderedArticles;
 	}
 
 	public LocalDateTime getOrderDate() {
