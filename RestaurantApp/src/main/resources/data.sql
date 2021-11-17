@@ -1,5 +1,5 @@
 INSERT INTO users (type, birthday, email, name, surname, privileged_type, username, password) VALUES
-  ('PRIVILEGED_USER', '1999-10-29', 'petarns99@yahoo.com', 'Petar', 'Markovic', 'OWNER', 'markuza99', 'petar123'),
+  ('PRIVILEGED_USER', '1999-10-29', 'petarns99@yahoo.com', 'Petar', 'Markovic', 'OWNER', 'markuza99', '$2a$04$YDxc20QTMQ2mo68b/yo4VuWKdiz27bbU2xDimhcNflva95FBjAt8G'),
   ('PRIVILEGED_USER', '1999-10-29', 'petarns999@yahoo.com', 'Petar', 'Markovic', 'MANAGER', 'markuza999', 'petar123');
 INSERT INTO menu (id) VALUES
   ('420');
