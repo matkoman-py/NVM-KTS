@@ -2,6 +2,7 @@ package com.rest.RestaurantApp.controllers;
 
 import java.util.List;
 
+import com.rest.RestaurantApp.domain.enums.EmployeeType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -64,5 +65,12 @@ public class EmployeeController {
 			return new ResponseEntity<EmployeeDTO>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<EmployeeDTO>(updatedEmployee, HttpStatus.OK);
+	}
+
+	@GetMapping("/test_waiter/{pin}")
+	public ResponseEntity<Boolean> checkIfWaiterPin(@PathVariable("pin") int pin) {
+		boolean pinValid = employeeService.checkPin(pin, EmployeeType.WAITER);
+		if(pinValid) return new ResponseEntity<>(true, HttpStatus.OK);
+		return new ResponseEntity<>(false, HttpStatus.FORBIDDEN);
 	}
 }
