@@ -71,9 +71,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/menu/**").permitAll()
                 .antMatchers("/api/order/**").permitAll()
                 .antMatchers("/api/ingredient").permitAll()
-                .antMatchers("/api/privilegedUser/**").permitAll()
+                .antMatchers("/api/privilegedUser/**").permitAll().and()
 
-                .anyRequest().authenticated().and().formLogin().loginProcessingUrl("/api/auth/login").and()
+//                .anyRequest().authenticated().and().formLogin().loginProcessingUrl("/api/auth/loging").and()
 
                 .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, userAuthService), BasicAuthenticationFilter.class);
         http.cors().and().csrf().disable();
