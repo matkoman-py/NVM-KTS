@@ -41,8 +41,6 @@ public class ArticleDTO {
 		this.name = article.getName();
 		this.makingPrice = article.getActivePrice().getMakingPrice();
 		this.sellingPrice = article.getActivePrice().getSellingPrice();
-//		this.makingPrice = 100;
-//		this.sellingPrice = 200;
 		this.description = article.getDescription();
 		this.type = article.getType();
 	}

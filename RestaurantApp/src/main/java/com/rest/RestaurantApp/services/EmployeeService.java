@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.rest.RestaurantApp.domain.enums.EmployeeType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -98,4 +99,18 @@ public class EmployeeService implements IEmployeeService{
 		return new EmployeeDTO(employeeRepository.save(oldEmployee));
 	}
 
+	@Override
+	public boolean checkPin(int pin, EmployeeType type) {
+		Employee e = employeeRepository.findByPincode(pin);
+
+		return e != null && e.getEmployeeType().equals(type);
+	}
+
+	public EmployeeDTO getOneByPin(int pin) {
+		Optional<Employee> employee = Optional.ofNullable(employeeRepository.findByPincode(pin));
+		if(employee.isEmpty()) {
+			return null;
+		}
+		return new EmployeeDTO(employee.get());
+	}
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.rest.RestaurantApp.domain.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,10 +19,13 @@ import com.rest.RestaurantApp.repositories.SalaryInfoRepository;
 @Service
 @Transactional
 public class PrivilegedUserService implements IPrivilegedUserService{
-	
+
+
 	private PriviligedUserRepository privilegedUserRepository;
-	
+
 	private SalaryInfoRepository salaryInfoRepository;
+
+	private RoleService roleService;
 	
 	@Autowired
 	public PrivilegedUserService(PriviligedUserRepository priviligedUserRepository, SalaryInfoRepository salaryInfoRepository) {
@@ -62,6 +66,8 @@ public class PrivilegedUserService implements IPrivilegedUserService{
 		SalaryInfo salaryInfo = new SalaryInfo(new Date(), privilegedUser.getSalary(), newPrivilegedUser);
 		salaryInfoRepository.save(salaryInfo);
 		newPrivilegedUser.setNewSalary(salaryInfo);
+		List<Role> roles = roleService.findByName("MANAGER");
+		newPrivilegedUser.setRoles(roles);
 		return new PrivilegedUserDTO(privilegedUserRepository.save(newPrivilegedUser));
 	}
 

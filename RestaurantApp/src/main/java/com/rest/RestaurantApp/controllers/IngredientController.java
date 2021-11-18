@@ -1,18 +1,25 @@
 package com.rest.RestaurantApp.controllers;
 
+import com.rest.RestaurantApp.domain.Role;
 import com.rest.RestaurantApp.dto.IngredientDTO;
 import com.rest.RestaurantApp.services.IngredientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/ingredient")
 public class IngredientController {
+
     private IngredientService ingredientService;
 
     @Autowired
@@ -21,7 +28,9 @@ public class IngredientController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<IngredientDTO>> getAll() { return ResponseEntity.ok(ingredientService.getAll()); }
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<List<IngredientDTO>> getAll() {
+        return ResponseEntity.ok(ingredientService.getAll()); }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<IngredientDTO> getOne(@PathVariable("id") int id) {

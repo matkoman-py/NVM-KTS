@@ -1,22 +1,23 @@
 package com.rest.RestaurantApp.domain;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Where;
 
 import com.rest.RestaurantApp.domain.enums.PrivilegedUserType;
 import com.rest.RestaurantApp.domain.enums.UserType;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @DiscriminatorValue("PRIVILEGED_USER")
 @Where(clause = "deleted = false")
-public class PrivilegedUser extends User {
+public class PrivilegedUser extends User implements UserDetails {
 	
 	//@Column(nullable = false)
 	private String username;
@@ -27,8 +28,18 @@ public class PrivilegedUser extends User {
 	@Enumerated(EnumType.STRING)
 	//@Column(nullable = false)
 	private PrivilegedUserType privilegedType;
-	
-	
+
+	@JsonIgnore
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return this.roles;
+	}
+
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "user_role",
+			joinColumns = @JoinColumn(name = "username", referencedColumnName = "username"),
+			inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+	private List<Role> roles;
+
 	public PrivilegedUser() {
 		super();
 	}
@@ -43,6 +54,26 @@ public class PrivilegedUser extends User {
 
 	public String getUsername() {
 		return username;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return !this.deleted;
 	}
 
 	public void setUsername(String username) {
@@ -64,5 +95,12 @@ public class PrivilegedUser extends User {
 	public void setPrivilegedType(PrivilegedUserType privilegedType) {
 		this.privilegedType = privilegedType;
 	}
-	
+
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
 }

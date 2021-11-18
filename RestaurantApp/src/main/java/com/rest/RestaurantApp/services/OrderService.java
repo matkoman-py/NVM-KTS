@@ -8,6 +8,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +35,10 @@ import com.rest.RestaurantApp.repositories.OrderedArticleRepository;
 @Service
 @Transactional
 public class OrderService implements IOrderService {
-
+	
+	@Autowired
+    SimpMessagingTemplate template;
+	
 	private OrderRepository orderRepository;
 
 	private EmployeeRepository employeeRepository;
@@ -59,7 +64,10 @@ public class OrderService implements IOrderService {
 		return orders;
 
 	}
-
+	
+	
+	
+	
 	@Override
 	public OrderDTO getOne(int id) {
 		// TODO Auto-generated method stub
@@ -94,10 +102,21 @@ public class OrderService implements IOrderService {
 		// TODO Auto-generated method stub
 		// List<Article> articles = order.getOrderedArticles().stream().map(article ->
 		// article)
+		// dodati proveru jel sto slobodan 
 		Employee employee = employeeRepository.getById(order.getEmployeeId());
+		
 		if(!employee.getEmployeeType().equals(EmployeeType.WAITER)) {
 			throw new OrderTakenByWrongEmployeeTypeException("An employee of type " + employee.getEmployeeType().toString() +" can't create a new order");
 		}
+		
+		if(order.getOrderedArticles() == null) {
+			throw new NullArticlesException("Order must have at least 1 article");
+		}
+		
+		if(order.getOrderedArticles().size() == 0) {
+			throw new NullArticlesException("Order must have at least 1 article");
+		}
+		
 		List<Article> articles = order.getOrderedArticles().stream()
 				.map(article -> articleRepository.findById(article).get()).collect(Collectors.toList());
 		List<OrderedArticle> orderedArticles = articles.stream()
@@ -105,17 +124,19 @@ public class OrderService implements IOrderService {
 				.collect(Collectors.toList());
 		Order createdOrder = new Order(order.getDescription(), order.getTableNumber(), order.getOrderDate(), employee);
 		
-		if(order.getOrderedArticles().size() == 0 || order.getOrderedArticles() == null) {
-			throw new NullArticlesException("Order must have at least 1 article");
-		}
-		
 		for (OrderedArticle o : orderedArticles) {
 			createdOrder.addOrderedArticle(o);
 		}
+		
 		Order savedOrder = orderRepository.save(createdOrder);
+		notifyCooksAndBarmen(savedOrder);
 		return new OrderDTO(savedOrder);
 	}
-
+	
+	public void notifyCooksAndBarmen(Order order) {
+		template.convertAndSend("/orders/new-order", new OrderDTO(order));
+	}
+	
 	@Override
 	public OrderDTO update(int id, OrderDTO order) {
 		// TODO Auto-generated method stub
@@ -123,7 +144,7 @@ public class OrderService implements IOrderService {
 		if (oldOrderData.isEmpty()) {
 			return null;
 		}
-		if(order.getOrderedArticles().size() == 0 || order.getOrderedArticles() == null) {
+		if(order.getArticles().size() == 0 || order.getArticles() == null) {
 			throw new NullArticlesException("Updated order must have at least 1 article");
 		}
 		Order oldOrder = oldOrderData.get();
@@ -138,7 +159,7 @@ public class OrderService implements IOrderService {
 		oldOrder.setTableNumber(order.getTableNumber());
 		  
 		  
-		List<Article> articles = order.getOrderedArticles().stream().map(article -> articleRepository.findById(article).get()).collect(Collectors.toList());
+		List<Article> articles = order.getArticles().stream().map(article -> articleRepository.findById(article).get()).collect(Collectors.toList());
 		List<OrderedArticle> orderedArticles = articles.stream().map(orderedArticle -> new OrderedArticle(ArticleStatus.NOT_TAKEN,orderedArticle)).collect(Collectors.toList());
 		for (OrderedArticle orderedArticle : orderedArticles) {
 			oldOrder.addOrderedArticle(orderedArticle);
@@ -181,6 +202,7 @@ public class OrderService implements IOrderService {
 				throw new IncompatibleEmployeeTypeException("An employee of type " + employee.getEmployeeType().toString() +" can't start to prepare an article that is a type of " + orderedArticle.getArticle().getType().equals(ArticleType.DRINK));
 			}
 			orderedArticle.setStatus(ArticleStatus.PREPARING);
+			notifyWaiters(orderedArticle);
 			break;
 		case PREPARING:
 			if(employee.getId() != orderedArticle.getTakenByEmployee().getId()) {
@@ -190,6 +212,7 @@ public class OrderService implements IOrderService {
 				throw new IncompatibleEmployeeTypeException("An employee of type " + employee.getEmployeeType().toString() +" can't start to prepare an article that is a type of " + orderedArticle.getArticle().getType().equals(ArticleType.DRINK));
 			}
 			orderedArticle.setStatus(ArticleStatus.FINISHED);
+			notifyWaiters(orderedArticle);
 			break;
 		default:
 			throw new ChangeFinishedStateException("Can't change status of order that is finished");
@@ -198,6 +221,78 @@ public class OrderService implements IOrderService {
 		return new OrderedArticleDTO(orderedArticleRepository.save(orderedArticle));
 	}
 
+
+	public void notifyWaiters(OrderedArticle orderedArticle) {
+		template.convertAndSend("/orders/article-status-changed", new OrderedArticleDTO(orderedArticle));
+	}
+
+	@Override
+	public OrderedArticleDTO createArticleForOrder(OrderedArticleDTO article, int orderId) {
+		// TODO Auto-generated method stub
+		Optional<Article> articleData = articleRepository.findById(article.getArticleId());
+		if(articleData == null) {
+			return null;
+		}
+		Article newArticle = articleData.get();
+		Optional<Order> orderData = orderRepository.findById(orderId);
+		if(orderData == null) {
+			return null;
+		}
+		Order order = orderData.get();
+		OrderedArticle orderedArticle = new OrderedArticle(ArticleStatus.NOT_TAKEN, newArticle, order, article.getDescription());
+		OrderedArticle savedArticle = orderedArticleRepository.save(orderedArticle);
+		notifyCooksAndBarmenArticleCreated(savedArticle);
+		return new OrderedArticleDTO(savedArticle);
+	}
+	
+	public void notifyCooksAndBarmenArticleCreated(OrderedArticle orderedArticle) {
+		template.convertAndSend("/orders/article-status-changed", "New article" + new OrderedArticleDTO(orderedArticle));
+	}
+	
+	@Override
+	public OrderedArticleDTO deleteArticleForOrder(int articleId) {
+		// TODO Auto-generated method stub
+		Optional<OrderedArticle> orderedArticleData = orderedArticleRepository.findById(articleId);
+		if(orderedArticleData == null) {
+			return null;
+		}
+		OrderedArticle orderedArticle = orderedArticleData.get();
+		if(!orderedArticle.getStatus().equals(ArticleStatus.NOT_TAKEN)) {
+			throw new OrderAlreadyTakenException("Can't delete ordered article with id " + orderedArticle.getId() + " because it is already taken");
+		}
+		orderedArticle.setDeleted(true);
+		notifyCooksAndBarmenArticleDeleted(orderedArticle);
+		return new OrderedArticleDTO(orderedArticleRepository.save(orderedArticle));
+	}
+	
+	public void notifyCooksAndBarmenArticleDeleted(OrderedArticle orderedArticle) {
+		template.convertAndSend("/orders/article-status-changed", "Deleted article" + new OrderedArticleDTO(orderedArticle));
+	}
+	
+	@Override
+	public OrderedArticleDTO updateArticleForOrder(int articleId, OrderedArticleDTO article) {
+		// TODO Auto-generated method stub
+		Optional<OrderedArticle> orderedArticleData = orderedArticleRepository.findById(articleId);
+		if(orderedArticleData == null) {
+			return null;
+		}
+		Optional<Article> articleData = articleRepository.findById(article.getArticleId());
+		if(articleData == null) {
+			return null;
+		}
+		OrderedArticle orderedArticle = orderedArticleData.get();
+		if(!orderedArticle.getStatus().equals(ArticleStatus.NOT_TAKEN)) {
+			throw new OrderAlreadyTakenException("Can't update ordered article with id " + orderedArticle.getId() + " because it is already taken");
+		}
+		orderedArticle.setDescription(article.getDescription());
+		orderedArticle.setArticle(articleRepository.findById(article.getArticleId()).get());
+		notifyCooksAndBarmenArticleUpdated(orderedArticle);
+		return new OrderedArticleDTO(orderedArticleRepository.save(orderedArticle));
+	}
+	
+	public void notifyCooksAndBarmenArticleUpdated(OrderedArticle orderedArticle) {
+		template.convertAndSend("/orders/article-status-changed", "Updated article" + new OrderedArticleDTO(orderedArticle));
+	}
 
 
 }
