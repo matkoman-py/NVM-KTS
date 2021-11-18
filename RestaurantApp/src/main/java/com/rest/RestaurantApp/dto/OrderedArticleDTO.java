@@ -5,29 +5,34 @@ import com.rest.RestaurantApp.domain.enums.ArticleStatus;
 
 public class OrderedArticleDTO {
 
-	private ArticleDTO article;
+	private int id;
+	private int articleId;
 	private ArticleStatus status;
 	private int orderId;
-	public OrderedArticleDTO(ArticleDTO article, ArticleStatus status, int orderId) {
+	private String description;
+	public OrderedArticleDTO(int articleId, ArticleStatus status, int orderId, String description) {
 		super();
-		this.article = article;
+		this.articleId = articleId;
 		this.status = status;
 		this.orderId = orderId;
+		this.description = description;
 	}
 	public OrderedArticleDTO() {
 		super();
 	}
 	public OrderedArticleDTO(OrderedArticle orderedArticle) {
 		super();
-		this.article = new ArticleDTO(orderedArticle.getArticle());
+		this.id = orderedArticle.getId();
+		this.articleId = orderedArticle.getArticle().getId();
 		this.status = orderedArticle.getStatus();
 		this.orderId = orderedArticle.getOrder().getId();
+		this.description = orderedArticle.getDescription();
 	}
-	public ArticleDTO getArticle() {
-		return article;
+	public int getArticleId() {
+		return articleId;
 	}
-	public void setArticle(ArticleDTO article) {
-		this.article = article;
+	public void setArticleId(int articleId) {
+		this.articleId = articleId;
 	}
 	public ArticleStatus getStatus() {
 		return status;
@@ -41,6 +46,21 @@ public class OrderedArticleDTO {
 	public void setOrderId(int orderId) {
 		this.orderId = orderId;
 	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	
+	
 	
 	
 	

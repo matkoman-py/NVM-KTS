@@ -53,7 +53,7 @@ public class Article extends BaseEntity{
 		@JoinColumn(name = "menu_id", nullable = true)
 		private Menu menu;
 		
-		@OneToMany(mappedBy = "article")
+		@OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
 		private Set<OrderedArticle> orderedArticles;
 
 		public Article(String name, String description, ArticleType type) {

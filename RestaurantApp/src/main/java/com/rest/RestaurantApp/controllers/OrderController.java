@@ -118,13 +118,40 @@ public class OrderController {
 		return new ResponseEntity<OrderDTO>(updateOrder, HttpStatus.OK);
 	}
 	
-	@PutMapping(value = "article/{id}/{pin}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(value = "article/{id}/{pin}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<OrderedArticleDTO> changeArticleStatus(@PathVariable("id") int id, @PathVariable("pin") int pin) {
 		OrderedArticleDTO article = orderService.changeStatusOfArticle(pin, id);
 		if(article == null) {
 			return new ResponseEntity<OrderedArticleDTO>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<OrderedArticleDTO>(article, HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "addArticle/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<OrderedArticleDTO> addArticle(@RequestBody OrderedArticleDTO article, @PathVariable("id") int orderId) {
+		OrderedArticleDTO orderedArticle = orderService.createArticleForOrder(article, orderId);
+		if(orderedArticle == null) {
+			return new ResponseEntity<OrderedArticleDTO>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<OrderedArticleDTO>(orderedArticle, HttpStatus.OK);
+	}
+	
+	@DeleteMapping(value = "removeArticle/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<OrderedArticleDTO> removeArticle(@PathVariable("id") int orderId) {
+		OrderedArticleDTO orderedArticle = orderService.deleteArticleForOrder(orderId);
+		if(orderedArticle == null) {
+			return new ResponseEntity<OrderedArticleDTO>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<OrderedArticleDTO>(orderedArticle, HttpStatus.OK);
+	}
+	
+	@PutMapping(value = "updateArticle/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<OrderedArticleDTO> updateArticle(@RequestBody OrderedArticleDTO article, @PathVariable("id") int orderId) {
+		OrderedArticleDTO orderedArticle = orderService.updateArticleForOrder(orderId, article);
+		if(orderedArticle == null) {
+			return new ResponseEntity<OrderedArticleDTO>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<OrderedArticleDTO>(orderedArticle, HttpStatus.OK);
 	}
 	
 
