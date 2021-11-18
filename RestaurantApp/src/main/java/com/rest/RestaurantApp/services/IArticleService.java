@@ -11,7 +11,6 @@ public interface IArticleService {
 	
 	ArticleDTO getOne(int id);
 	
-	
 	ArticleDTO delete(int id);
 	
 	ArticleDTO create(ArticleCreationDTO article);

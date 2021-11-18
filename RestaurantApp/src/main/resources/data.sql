@@ -1,9 +1,15 @@
 INSERT INTO users (type, birthday, email, name, surname, privileged_type, username, password) VALUES
   ('PRIVILEGED_USER', '1999-10-29', 'petarns99@yahoo.com', 'Petar', 'Markovic', 'MANAGER', 'markuza99', '$2a$04$61poZhk/GGJk.oqrZSJSB.GN.eMJbq71kiGbqF.2EO26/z80MhzcG'),
   ('PRIVILEGED_USER', '1999-10-29', 'petarns999@yahoo.com', 'Petar', 'Markovic', 'OWNER', 'markuza999', 'petar123');
+
 INSERT INTO menu (id) VALUES
   ('420');
-INSERT INTO article (name, description, type, menu_id) VALUES
+
+  INSERT INTO suggested_article (name, description, suggested_making_price, suggested_selling_price, type) VALUES
+  ('Nova torta', 'Jako fina', 100, 350, 'APPETIZER'),
+  ('Nova krofna', 'Ubica', 120, 410, 'APPETIZER');
+
+  INSERT INTO article (name, description, type, menu_id) VALUES
   ('Dobos torta', 'Jako fina', 'APPETIZER', 420),
   ('Princes krofna', 'Ubica', 'APPETIZER', 420);
   
@@ -21,16 +27,19 @@ INSERT INTO salaries (from_date, to_date, status, value, user_id) VALUES
   ('2003-5-6', '2003-5-6', 'ACTIVE', 23000, 6),
   ('2003-5-6', '2003-5-6', 'ACTIVE', 23000, 7);
   
-  
 INSERT INTO orders (description, order_date, table_number, employee_id) VALUES
   ('No ketchup', '2021-11-3 12:43:33', 1, 3),
   ('Extra mayo', '2021-12-3 15:21:00', 3, 3);
-
   
 INSERT INTO ingredient (name, is_allergen) VALUES
   ('Vanila', FALSE),
   ('Cokolada', TRUE),
   ('Badem', TRUE);
+
+INSERT INTO suggested_article_ingredient (suggested_article_id, ingredient_id) VALUES
+  (1, 1),
+  (1, 2),
+  (2, 1);
   
 INSERT INTO article_ingredient (article_id, ingredient_id) VALUES
   (1, 1),
