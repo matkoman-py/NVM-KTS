@@ -124,8 +124,6 @@ public class OrderService implements IOrderService {
 				.collect(Collectors.toList());
 		Order createdOrder = new Order(order.getDescription(), order.getTableNumber(), order.getOrderDate(), employee);
 		
-		
-		
 		for (OrderedArticle o : orderedArticles) {
 			createdOrder.addOrderedArticle(o);
 		}
@@ -146,7 +144,7 @@ public class OrderService implements IOrderService {
 		if (oldOrderData.isEmpty()) {
 			return null;
 		}
-		if(order.getOrderedArticles().size() == 0 || order.getOrderedArticles() == null) {
+		if(order.getArticles().size() == 0 || order.getArticles() == null) {
 			throw new NullArticlesException("Updated order must have at least 1 article");
 		}
 		Order oldOrder = oldOrderData.get();
@@ -161,7 +159,7 @@ public class OrderService implements IOrderService {
 		oldOrder.setTableNumber(order.getTableNumber());
 		  
 		  
-		List<Article> articles = order.getOrderedArticles().stream().map(article -> articleRepository.findById(article).get()).collect(Collectors.toList());
+		List<Article> articles = order.getArticles().stream().map(article -> articleRepository.findById(article).get()).collect(Collectors.toList());
 		List<OrderedArticle> orderedArticles = articles.stream().map(orderedArticle -> new OrderedArticle(ArticleStatus.NOT_TAKEN,orderedArticle)).collect(Collectors.toList());
 		for (OrderedArticle orderedArticle : orderedArticles) {
 			oldOrder.addOrderedArticle(orderedArticle);
@@ -223,8 +221,64 @@ public class OrderService implements IOrderService {
 		return new OrderedArticleDTO(orderedArticleRepository.save(orderedArticle));
 	}
 
+
 	public void notifyWaiters(OrderedArticle orderedArticle) {
 		template.convertAndSend("/orders/article-status-changed", new OrderedArticleDTO(orderedArticle));
 	}
+
+	@Override
+	public OrderedArticleDTO createArticleForOrder(OrderedArticleDTO article, int orderId) {
+		// TODO Auto-generated method stub
+		Optional<Article> articleData = articleRepository.findById(article.getArticleId());
+		if(articleData == null) {
+			return null;
+		}
+		Article newArticle = articleData.get();
+		Optional<Order> orderData = orderRepository.findById(orderId);
+		if(orderData == null) {
+			return null;
+		}
+		Order order = orderData.get();
+		OrderedArticle orderedArticle = new OrderedArticle(ArticleStatus.NOT_TAKEN, newArticle, order, article.getDescription());
+		return new OrderedArticleDTO(orderedArticleRepository.save(orderedArticle));
+	}
+
+	@Override
+	public OrderedArticleDTO deleteArticleForOrder(int articleId) {
+		// TODO Auto-generated method stub
+		Optional<OrderedArticle> orderedArticleData = orderedArticleRepository.findById(articleId);
+		if(orderedArticleData == null) {
+			return null;
+		}
+		OrderedArticle orderedArticle = orderedArticleData.get();
+		if(!orderedArticle.getStatus().equals(ArticleStatus.NOT_TAKEN)) {
+			throw new OrderAlreadyTakenException("Can't delete ordered article with id " + orderedArticle.getId() + " because it is already taken");
+		}
+		orderedArticle.setDeleted(true);
+		
+		return new OrderedArticleDTO(orderedArticleRepository.save(orderedArticle));
+	}
+
+	@Override
+	public OrderedArticleDTO updateArticleForOrder(int articleId, OrderedArticleDTO article) {
+		// TODO Auto-generated method stub
+		Optional<OrderedArticle> orderedArticleData = orderedArticleRepository.findById(articleId);
+		if(orderedArticleData == null) {
+			return null;
+		}
+		Optional<Article> articleData = articleRepository.findById(article.getArticleId());
+		if(articleData == null) {
+			return null;
+		}
+		OrderedArticle orderedArticle = orderedArticleData.get();
+		if(!orderedArticle.getStatus().equals(ArticleStatus.NOT_TAKEN)) {
+			throw new OrderAlreadyTakenException("Can't update ordered article with id " + orderedArticle.getId() + " because it is already taken");
+		}
+		orderedArticle.setDescription(article.getDescription());
+		orderedArticle.setArticle(articleRepository.findById(article.getArticleId()).get());
+		return new OrderedArticleDTO(orderedArticleRepository.save(orderedArticle));
+	}
+
+
 
 }

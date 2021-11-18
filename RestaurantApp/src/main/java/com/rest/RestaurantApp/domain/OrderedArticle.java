@@ -27,15 +27,19 @@ public class OrderedArticle extends BaseEntity{
 	@JoinColumn(name = "employee_id")
 	private Employee takenByEmployee;
 	
+	@Column
+	private String description;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "order_id", nullable = false)
 	private Order order;
 
-	public OrderedArticle(ArticleStatus status, Article article, Order order) {
+	public OrderedArticle(ArticleStatus status, Article article, Order order, String description) {
 		super();
 		this.status = status;
 		this.article = article;
 		this.order = order;
+		this.description = description;
 	}
 	
 	public OrderedArticle(ArticleStatus status, Article article) {
@@ -79,6 +83,15 @@ public class OrderedArticle extends BaseEntity{
 	public void setOrder(Order order) {
 		this.order = order;
 	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
 	
 	
 }

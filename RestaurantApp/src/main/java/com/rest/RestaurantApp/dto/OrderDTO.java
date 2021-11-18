@@ -14,6 +14,7 @@ public class OrderDTO {
 	private boolean deleted;
 	private String description;
 	private LocalDateTime orderDate;
+	private List<Integer> articles;
 	private List<Integer> orderedArticles;
 	private int tableNumber;
 	private int employeeId;
@@ -40,7 +41,8 @@ public class OrderDTO {
 		this.orderDate = order.getOrderDate();
 		this.tableNumber = order.getTableNumber();
 		this.employeeId = order.getEmployee().getId();
-		this.orderedArticles = order.getOrderedArticles().stream().map(article -> article.getArticle().getId()).collect(Collectors.toList());
+		this.articles = order.getOrderedArticles().stream().map(article -> article.getArticle().getId()).collect(Collectors.toList());
+		this.orderedArticles = order.getOrderedArticles().stream().map(article -> article.getId()).collect(Collectors.toList());
 	}
 	
 	
@@ -52,7 +54,7 @@ public class OrderDTO {
 		this.deleted = deleted;
 		this.description = description;
 		this.orderDate = orderDate;
-		this.orderedArticles = orderedArticles;
+		this.articles = orderedArticles;
 		this.tableNumber = tableNumber;
 		this.employeeId = employeeId;
 	}
@@ -82,12 +84,12 @@ public class OrderDTO {
 	}
 
 	
-	public List<Integer> getOrderedArticles() {
-		return orderedArticles;
+	public List<Integer> getArticles() {
+		return articles;
 	}
 
-	public void setOrderedArticles(List<Integer> orderedArticles) {
-		this.orderedArticles = orderedArticles;
+	public void setArticles(List<Integer> orderedArticles) {
+		this.articles = orderedArticles;
 	}
 
 	public LocalDateTime getOrderDate() {
@@ -113,6 +115,16 @@ public class OrderDTO {
 	public void setEmployeeId(int employeeId) {
 		this.employeeId = employeeId;
 	}
+
+	public List<Integer> getOrderedArticles() {
+		return orderedArticles;
+	}
+
+	public void setOrderedArticles(List<Integer> orderedArticles) {
+		this.orderedArticles = orderedArticles;
+	}
+	
+	
 	
 	
 	
