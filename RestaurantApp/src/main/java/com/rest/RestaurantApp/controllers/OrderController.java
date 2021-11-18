@@ -118,7 +118,7 @@ public class OrderController {
 		return new ResponseEntity<OrderDTO>(updateOrder, HttpStatus.OK);
 	}
 	
-	@PutMapping(value = "article/{id}/{pin}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(value = "article/{id}/{pin}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<OrderedArticleDTO> changeArticleStatus(@PathVariable("id") int id, @PathVariable("pin") int pin) {
 		OrderedArticleDTO article = orderService.changeStatusOfArticle(pin, id);
 		if(article == null) {
