@@ -240,9 +240,15 @@ public class OrderService implements IOrderService {
 		}
 		Order order = orderData.get();
 		OrderedArticle orderedArticle = new OrderedArticle(ArticleStatus.NOT_TAKEN, newArticle, order, article.getDescription());
-		return new OrderedArticleDTO(orderedArticleRepository.save(orderedArticle));
+		OrderedArticle savedArticle = orderedArticleRepository.save(orderedArticle);
+		notifyCooksAndBarmenArticleCreated(savedArticle);
+		return new OrderedArticleDTO(savedArticle);
 	}
-
+	
+	public void notifyCooksAndBarmenArticleCreated(OrderedArticle orderedArticle) {
+		template.convertAndSend("/orders/article-status-changed", "New article" + new OrderedArticleDTO(orderedArticle));
+	}
+	
 	@Override
 	public OrderedArticleDTO deleteArticleForOrder(int articleId) {
 		// TODO Auto-generated method stub
@@ -255,10 +261,14 @@ public class OrderService implements IOrderService {
 			throw new OrderAlreadyTakenException("Can't delete ordered article with id " + orderedArticle.getId() + " because it is already taken");
 		}
 		orderedArticle.setDeleted(true);
-		
+		notifyCooksAndBarmenArticleDeleted(orderedArticle);
 		return new OrderedArticleDTO(orderedArticleRepository.save(orderedArticle));
 	}
-
+	
+	public void notifyCooksAndBarmenArticleDeleted(OrderedArticle orderedArticle) {
+		template.convertAndSend("/orders/article-status-changed", "Deleted article" + new OrderedArticleDTO(orderedArticle));
+	}
+	
 	@Override
 	public OrderedArticleDTO updateArticleForOrder(int articleId, OrderedArticleDTO article) {
 		// TODO Auto-generated method stub
@@ -276,9 +286,13 @@ public class OrderService implements IOrderService {
 		}
 		orderedArticle.setDescription(article.getDescription());
 		orderedArticle.setArticle(articleRepository.findById(article.getArticleId()).get());
+		notifyCooksAndBarmenArticleUpdated(orderedArticle);
 		return new OrderedArticleDTO(orderedArticleRepository.save(orderedArticle));
 	}
-
+	
+	public void notifyCooksAndBarmenArticleUpdated(OrderedArticle orderedArticle) {
+		template.convertAndSend("/orders/article-status-changed", "Updated article" + new OrderedArticleDTO(orderedArticle));
+	}
 
 
 }

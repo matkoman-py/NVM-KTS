@@ -91,8 +91,6 @@ public class OrderController {
 		
 	}
 	
-	
-	
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity delete(@PathVariable("id") int id) {
 		OrderDTO order = orderService.delete(id);
@@ -137,8 +135,8 @@ public class OrderController {
 	}
 	
 	@DeleteMapping(value = "removeArticle/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<OrderedArticleDTO> removeArticle(@PathVariable("id") int orderId) {
-		OrderedArticleDTO orderedArticle = orderService.deleteArticleForOrder(orderId);
+	public ResponseEntity<OrderedArticleDTO> removeArticle(@PathVariable("id") int articleId) {
+		OrderedArticleDTO orderedArticle = orderService.deleteArticleForOrder(articleId);
 		if(orderedArticle == null) {
 			return new ResponseEntity<OrderedArticleDTO>(HttpStatus.NOT_FOUND);
 		}
