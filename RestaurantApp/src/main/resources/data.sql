@@ -23,8 +23,8 @@ INSERT INTO salaries (from_date, to_date, status, value, user_id) VALUES
   
   
 INSERT INTO orders (description, order_date, table_number, employee_id) VALUES
-  ('No ketchup', '2021-11-3 12:43:33', 1, 4),
-  ('Extra mayo', '2021-12-3 15:21:00', 3, 4);
+  ('No ketchup', '2021-11-3 12:43:33', 1, 3),
+  ('Extra mayo', '2021-12-3 15:21:00', 3, 3);
 
   
 INSERT INTO ingredient (name, is_allergen) VALUES
