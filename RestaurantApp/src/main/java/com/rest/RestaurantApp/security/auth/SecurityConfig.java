@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -41,8 +42,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.userAuthService = userAuthService;
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//    @Override
+    @Autowired
+    protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userAuthService).passwordEncoder(passwordEncoder());
     }
 
@@ -53,8 +55,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http = http.cors().and().csrf().disable();
-
         http = http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and();
@@ -66,7 +66,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers("/api/auth/**").permitAll()
-                .anyRequest().authenticated().and().formLogin().loginProcessingUrl("/api/auth/login");
+                .antMatchers("/api/employee/**").permitAll()
+                .antMatchers("/api/article/**").permitAll()
+                .antMatchers("/api/menu/**").permitAll()
+                .antMatchers("/api/order/**").permitAll()
+                .antMatchers("/api/ingredient").permitAll()
+                .antMatchers("/api/privilegedUser/**").permitAll()
+
+                .anyRequest().authenticated().and().formLogin().loginProcessingUrl("/api/auth/login").and()
+
+                .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, userAuthService), BasicAuthenticationFilter.class);
+        http.cors().and().csrf().disable();
+
     }
 
 }

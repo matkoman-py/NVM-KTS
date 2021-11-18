@@ -28,10 +28,9 @@ public class TokenUtils {
 
     private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
 
-    public String generateToken(String id, String role) {
+    public String generateToken(String id) {
         return Jwts.builder()
                 .setIssuer(APP_NAME)
-                .claim("role", role)
                 .setSubject(id)
                 .setAudience(AUDIENCE_WEB)
                 .setIssuedAt(new Date())
@@ -52,14 +51,12 @@ public class TokenUtils {
 
     public String getRoleFromToken(String token) {
         String role;
-
         try {
             final Claims claims = this.getAllClaimsFromToken(token);
             role = claims.getSubject().split(",")[1];
         } catch (Exception e) {
             role = null;
         }
-
         return role;
     }
 

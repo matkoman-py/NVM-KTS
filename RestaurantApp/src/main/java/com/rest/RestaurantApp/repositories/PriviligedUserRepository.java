@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface PriviligedUserRepository extends AbstractUserRepository<PrivilegedUser>{
 
 
-    @Query("select pu from PrivilegedUser pu where pu.username = :username")
+    @Query("select pu from PrivilegedUser pu join fetch pu.roles pur where pu.username = :username")
     PrivilegedUser findByUsername(String username);
 }

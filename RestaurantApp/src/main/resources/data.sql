@@ -1,6 +1,6 @@
 INSERT INTO users (type, birthday, email, name, surname, privileged_type, username, password) VALUES
-  ('PRIVILEGED_USER', '1999-10-29', 'petarns99@yahoo.com', 'Petar', 'Markovic', 'OWNER', 'markuza99', '$2a$04$YDxc20QTMQ2mo68b/yo4VuWKdiz27bbU2xDimhcNflva95FBjAt8G'),
-  ('PRIVILEGED_USER', '1999-10-29', 'petarns999@yahoo.com', 'Petar', 'Markovic', 'MANAGER', 'markuza999', 'petar123');
+  ('PRIVILEGED_USER', '1999-10-29', 'petarns99@yahoo.com', 'Petar', 'Markovic', 'MANAGER', 'markuza99', '$2a$04$YDxc20QTMQ2mo68b/yo4VuWKdiz27bbU2xDimhcNflva95FBjAt8G'),
+  ('PRIVILEGED_USER', '1999-10-29', 'petarns999@yahoo.com', 'Petar', 'Markovic', 'OWNER', 'markuza999', 'petar123');
 INSERT INTO menu (id) VALUES
   ('420');
 INSERT INTO article (name, description, type, menu_id) VALUES
@@ -41,3 +41,11 @@ INSERT INTO prices (from_date, making_price, selling_price, status, to_date, art
   ('2003-5-6', 200, 350, 'ACTIVE', NULL, 1),
   ('2002-11-23', 100, 200, 'EXPIRED', '2003-5-6', 1),
   ('2002-11-23', 100, 200, 'ACTIVE', NULL, 2);
+
+INSERT INTO roles (name) values
+  ('ROLE_MANAGER'),
+  ('ROLE_OWNER');
+
+INSERT INTO user_role (username, role_id) values
+  ('markuza99', 1),
+  ('markuza999', 2);

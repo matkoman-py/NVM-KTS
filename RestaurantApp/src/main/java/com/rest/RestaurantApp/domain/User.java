@@ -1,32 +1,27 @@
 package com.rest.RestaurantApp.domain;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Where;
 
 import com.rest.RestaurantApp.domain.enums.PriceStatus;
 import com.rest.RestaurantApp.domain.enums.SalaryStatus;
 import com.rest.RestaurantApp.domain.enums.UserType;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 @Where(clause = "deleted = false")
-public class User extends BaseEntity{
+public class User extends BaseEntity {
 	
 	@OneToMany(mappedBy = "user")
 	private List<SalaryInfo> salaries;
@@ -46,6 +41,8 @@ public class User extends BaseEntity{
 	@Enumerated(EnumType.STRING)
 	@Column(name = "type", insertable = false, updatable = false)
 	private UserType type;
+
+
 
 	public User(String email, String name, String surname, Date birthday, UserType type) {
 		super();
@@ -121,5 +118,4 @@ public class User extends BaseEntity{
 	public void setSalaries(List<SalaryInfo> salaries) {
 		this.salaries = salaries;
 	}
-	
 }

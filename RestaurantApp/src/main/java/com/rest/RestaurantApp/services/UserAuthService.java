@@ -31,9 +31,8 @@ public class UserAuthService implements UserDetailsService {
 //        if(user != null) return user;
 
         user = privilegedUserRepository.findByUsername(username);
-
         if(user != null) {
-            return new User(username, user.getPassword(), new ArrayList<>());
+            return new User(username, user.getPassword(), user.getAuthorities());
         }
         throw new UsernameNotFoundException("Could not find user");
 //        return null;

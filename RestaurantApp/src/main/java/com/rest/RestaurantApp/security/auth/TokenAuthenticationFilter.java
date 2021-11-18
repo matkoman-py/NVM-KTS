@@ -1,5 +1,7 @@
 package com.rest.RestaurantApp.security.auth;
 
+import com.rest.RestaurantApp.domain.Role;
+import com.rest.RestaurantApp.services.UserAuthService;
 import com.rest.RestaurantApp.util.TokenUtils;
 import com.sun.istack.NotNull;
 import org.apache.commons.logging.Log;
@@ -22,12 +24,12 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private TokenUtils tokenUtils;
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserAuthService userDetailsService;
 
     @Autowired
     protected final Log LOGGER = LogFactory.getLog(getClass());
 
-    public TokenAuthenticationFilter(TokenUtils tokenHelper, UserDetailsService userDetailsService) {
+    public TokenAuthenticationFilter(TokenUtils tokenHelper, UserAuthService userDetailsService) {
         this.tokenUtils = tokenHelper;
         this.userDetailsService = userDetailsService;
     }
@@ -37,11 +39,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         String identity;
         String authToken = tokenUtils.getToken(request);
-
-
         if(authToken != null) {
             identity = tokenUtils.getIdentityFromToken(authToken);
-
             if(identity != null) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(identity);
 
@@ -49,6 +48,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                     TokenBasedAuthentication authentication = new TokenBasedAuthentication(userDetails);
                     authentication.setToken(authToken);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+                    System.out.println(userDetails.getAuthorities().toArray()[0].toString());
                 }
             }
         }
