@@ -61,6 +61,19 @@ public class ReportService implements IReportService {
         return calcArticlesEarnings(orderedArticles);
     }
 
+    @Override
+    public ArticleReportDTO articleProfitQuarterReport(int year, int quarter) {
+        ArrayList<OrderedArticle> orderedArticles = new ArrayList<>(orderedArticleRepository.findAllWithOrder());
+
+        orderedArticles = orderedArticles.stream().filter(article -> compareQuarters(article, year, quarter)).collect(Collectors.toCollection(ArrayList::new));
+
+        return calcArticlesEarnings(orderedArticles);    }
+
+    private boolean compareQuarters(OrderedArticle article, int year, int quarter) {
+        LocalDateTime ldt = article.getOrder().getOrderDate();
+        return (ldt.getYear() == year) && (ldt.getMonthValue() <= quarter * 3) && (ldt.getMonthValue() >= (quarter - 1) * 3);
+    }
+
     private boolean compareYears(OrderedArticle article, int year) {
         LocalDateTime ldt = article.getOrder().getOrderDate();
         return (ldt.getYear() == year);

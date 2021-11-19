@@ -23,6 +23,9 @@ public class ReportController {
     public ResponseEntity<ArticleReportDTO> articleProfitDayReport(@PathVariable("year") int year,
                                                 @PathVariable("month") int month, @PathVariable("day") int day) {
         ArticleReportDTO articleReport = reportService.articleProfitDayReport(year, month, day);
+
+        if(articleReport.getArticleProfits().isEmpty())
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(articleReport, HttpStatus.OK);
     }
 
@@ -30,12 +33,28 @@ public class ReportController {
     public ResponseEntity<ArticleReportDTO> articleProfitDayReport(@PathVariable("year") int year,
                                                                    @PathVariable("month") int month) {
         ArticleReportDTO articleReport = reportService.articleProfitMonthReport(year, month);
+
+        if(articleReport.getArticleProfits().isEmpty())
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(articleReport, HttpStatus.OK);
     }
 
     @GetMapping("/articleProfitYear/{year}")
     public ResponseEntity<ArticleReportDTO> articleProfitYearReport(@PathVariable("year") int year) {
         ArticleReportDTO articleReport = reportService.articleProfitYearReport(year);
+
+        if(articleReport.getArticleProfits().isEmpty())
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(articleReport, HttpStatus.OK);
+    }
+
+    @GetMapping("/articleProfitQuarter/{year}/{quarter}")
+    public ResponseEntity<ArticleReportDTO> articleProfitQuarterReport(@PathVariable("year") int year,
+                                                                       @PathVariable("quarter") int quarter) {
+        ArticleReportDTO articleReport = reportService.articleProfitQuarterReport(year, quarter);
+
+        if(articleReport.getArticleProfits().isEmpty())
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(articleReport, HttpStatus.OK);
     }
 }
