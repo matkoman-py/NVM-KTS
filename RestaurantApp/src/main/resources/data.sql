@@ -4,8 +4,16 @@ INSERT INTO users (type, birthday, email, name, surname, privileged_type, userna
 INSERT INTO menu (id) VALUES
   ('420');
 INSERT INTO article (name, description, type, menu_id) VALUES
-  ('Dobos torta', 'Jako fina', 'APPETIZER', 420),
-  ('Princes krofna', 'Ubica', 'APPETIZER', 420);
+  ('Dobos torta', 'Jako fina', 'DESSERT', 420),
+  ('Jagnjetina', 'Vruca', 'MAIN_COURSE', 420),
+  ('Mesano meso', '1kg mesa sa rostilja', 'MAIN_COURSE', 420),
+  ('Meze', 'Taze meze', 'APPETIZER', 420),
+  ('Pohovana piletina', 'Jako fina', 'MAIN_COURSE', 420),
+  ('Krempita', 'Jako fina', 'DESSERT', 420),
+  ('Cezar salata', 'Jako fina', 'MAIN_COURSE', 420),
+  ('Espreso', 'Kafa', 'DRINK', 420),
+  ('Coca cola', 'sokic', 'DRINK', 420),
+  ('Princes krofna', 'Ubica', 'DESSERT', 420);
   
 INSERT INTO users (type, birthday, email, name, surname, employee_type, pincode) VALUES
   ('EMPLOYEE', '1999-8-21 ', 'mateja99@yahoo.com', 'Mateja', 'Cosovic', 'WAITER', 1234),
@@ -23,9 +31,35 @@ INSERT INTO salaries (from_date, to_date, status, value, user_id) VALUES
   
   
 INSERT INTO orders (description, order_date, table_number, employee_id) VALUES
+  ('No ketchup', '2021-1-3 12:43:33', 1, 3),
+  ('No ketchup', '2021-1-13 12:43:33', 1, 3),
+  ('No ketchup', '2021-5-3 12:43:33', 1, 3),
+  ('No ketchup', '2021-6-3 12:43:33', 1, 3),
+  ('No ketchup', '2021-7-3 12:43:33', 1, 3),
+  ('No ketchup', '2021-9-3 12:43:33', 1, 3),
   ('No ketchup', '2021-11-3 12:43:33', 1, 3),
+
+  ('No ketchup', '2021-11-3 12:43:33', 1, 3),
+  ('No ketchup', '2021-11-3 12:43:33', 1, 3),
+  ('No ketchup', '2021-11-3 12:43:33', 1, 3),
+  ('No ketchup', '2021-11-3 12:43:33', 1, 3),
+  ('No ketchup', '2021-11-3 12:43:33', 1, 3),
+
   ('Extra mayo', '2021-12-3 15:21:00', 3, 3);
 
+INSERT INTO ordered_article (description, status, order_id, article_id, employee_id) VALUES
+  ('bez buta', 'FINISHED', 1, 2, 6),
+  ('bez cevapa', 'FINISHED', 1, 3, 7),
+  ('bez sira', 'FINISHED', 1, 4, 6),
+  ('duza sa mlekom', 'FINISHED', 2, 8, 4),
+  ('zero', 'FINISHED', 2, 9, 5),
+  ('bez buta', 'FINISHED', 2, 2, 7),
+  ('bez kobasica', 'FINISHED', 3, 3, 6),
+  ('bez sira', 'FINISHED', 4, 4, 7),
+  ('kraca bez mleka', 'FINISHED', 5, 8, 4),
+  (NULL, 'FINISHED', 6, 9, 4),
+  ('duza bez', 'FINISHED', 6, 8, 5),
+  (NULL, 'FINISHED', 7, 9, 5);
   
 INSERT INTO ingredient (name, is_allergen) VALUES
   ('Vanila', FALSE),
@@ -40,7 +74,15 @@ INSERT INTO article_ingredient (article_id, ingredient_id) VALUES
 INSERT INTO prices (from_date, making_price, selling_price, status, to_date, article_id) VALUES
   ('2003-5-6', 200, 350, 'ACTIVE', NULL, 1),
   ('2002-11-23', 100, 200, 'EXPIRED', '2003-5-6', 1),
-  ('2002-11-23', 100, 200, 'ACTIVE', NULL, 2);
+  ('2002-11-23', 800, 1800, 'ACTIVE', NULL, 2),
+  ('2002-11-23', 600, 1500, 'ACTIVE', NULL, 3),
+  ('2002-11-23', 700, 1600, 'ACTIVE', NULL, 4),
+  ('2002-11-23', 400, 800, 'ACTIVE', NULL, 5),
+  ('2002-11-23', 100, 250, 'ACTIVE', NULL, 6),
+  ('2002-11-23', 200, 500, 'ACTIVE', NULL, 7),
+  ('2002-11-23', 30, 150, 'ACTIVE', NULL, 8),
+  ('2002-11-23', 60, 150, 'ACTIVE', NULL, 9),
+  ('2002-11-23', 100, 200, 'ACTIVE', NULL, 10);
 
 INSERT INTO roles (name) values
   ('ROLE_MANAGER'),
