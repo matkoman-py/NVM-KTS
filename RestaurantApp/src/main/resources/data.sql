@@ -1,6 +1,7 @@
 INSERT INTO users (type, birthday, email, name, surname, privileged_type, username, password) VALUES
   ('PRIVILEGED_USER', '1999-10-29', 'petarns99@yahoo.com', 'Petar', 'Markovic', 'MANAGER', 'markuza99', '$2a$04$61poZhk/GGJk.oqrZSJSB.GN.eMJbq71kiGbqF.2EO26/z80MhzcG'),
   ('PRIVILEGED_USER', '1999-10-29', 'petarns999@yahoo.com', 'Petar', 'Markovic', 'OWNER', 'markuza999', 'petar123');
+
 INSERT INTO menu (id) VALUES
   ('420');
 INSERT INTO article (name, description, type, menu_id) VALUES
@@ -14,6 +15,11 @@ INSERT INTO article (name, description, type, menu_id) VALUES
   ('Espreso', 'Kafa', 'DRINK', 420),
   ('Coca cola', 'sokic', 'DRINK', 420),
   ('Princes krofna', 'Ubica', 'DESSERT', 420);
+
+
+  INSERT INTO suggested_article (name, description, suggested_making_price, suggested_selling_price, type) VALUES
+  ('Nova torta', 'Jako fina', 100, 350, 'APPETIZER'),
+  ('Nova krofna', 'Ubica', 120, 410, 'APPETIZER');
   
 INSERT INTO users (type, birthday, email, name, surname, employee_type, pincode) VALUES
   ('EMPLOYEE', '1999-8-21 ', 'mateja99@yahoo.com', 'Mateja', 'Cosovic', 'WAITER', 1234),
@@ -28,7 +34,6 @@ INSERT INTO salaries (from_date, to_date, status, value, user_id) VALUES
   ('2003-5-6', '2003-5-6', 'ACTIVE', 23000, 5),
   ('2003-5-6', '2003-5-6', 'ACTIVE', 23000, 6),
   ('2003-5-6', '2003-5-6', 'ACTIVE', 23000, 7);
-  
   
 INSERT INTO orders (description, order_date, table_number, employee_id) VALUES
   ('No ketchup', '2021-1-3 12:43:33', 1, 3),
@@ -60,11 +65,17 @@ INSERT INTO ordered_article (description, status, order_id, article_id, employee
   (NULL, 'FINISHED', 6, 9, 4),
   ('duza bez', 'FINISHED', 6, 8, 5),
   (NULL, 'FINISHED', 7, 9, 5);
+
   
 INSERT INTO ingredient (name, is_allergen) VALUES
   ('Vanila', FALSE),
   ('Cokolada', TRUE),
   ('Badem', TRUE);
+
+INSERT INTO suggested_article_ingredient (suggested_article_id, ingredient_id) VALUES
+  (1, 1),
+  (1, 2),
+  (2, 1);
   
 INSERT INTO article_ingredient (article_id, ingredient_id) VALUES
   (1, 1),
