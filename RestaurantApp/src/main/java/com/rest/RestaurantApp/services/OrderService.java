@@ -75,7 +75,6 @@ public class OrderService implements IOrderService {
 		if (order.isEmpty()) {
 			return null;
 		}
-		System.out.println("DASIKDL:ASKJD:LASKD:LSAK" + order.get().getOrderedArticles().size());
 		return new OrderDTO(order.get());
 	}
 
