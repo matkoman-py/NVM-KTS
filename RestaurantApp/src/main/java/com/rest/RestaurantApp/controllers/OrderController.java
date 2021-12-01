@@ -23,6 +23,7 @@ import com.rest.RestaurantApp.dto.OrderDTO;
 import com.rest.RestaurantApp.dto.OrderedArticleDTO;
 import com.rest.RestaurantApp.exceptions.ChangeFinishedStateException;
 import com.rest.RestaurantApp.exceptions.IncompatibleEmployeeTypeException;
+import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.exceptions.NullArticlesException;
 import com.rest.RestaurantApp.exceptions.OrderAlreadyTakenException;
 import com.rest.RestaurantApp.exceptions.OrderTakenByWrongEmployeeTypeException;
@@ -63,6 +64,11 @@ public class OrderController {
         return new ResponseEntity(nullArticlesException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 	
+	@ExceptionHandler(value = NotFoundException.class)
+	public ResponseEntity handleNullArticlesException(NotFoundException notFoundException) {
+        return new ResponseEntity(notFoundException.getMessage(), HttpStatus.NOT_FOUND);
+    }
+	
 	@ExceptionHandler(value = OrderTakenByWrongEmployeeTypeException.class)
 	public ResponseEntity handleOrderTakenByWrongEmployeeTypeException(OrderTakenByWrongEmployeeTypeException orderTakenByWrongEmployeeTypeException) {
         return new ResponseEntity(orderTakenByWrongEmployeeTypeException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -94,9 +100,6 @@ public class OrderController {
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity delete(@PathVariable("id") int id) {
 		OrderDTO order = orderService.delete(id);
-		if(order == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
 		return new ResponseEntity<>("order with id " + id + " deleted successfully", HttpStatus.OK);
 
 	}
@@ -110,45 +113,30 @@ public class OrderController {
 	@PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<OrderDTO> update(@PathVariable("id") int id, @RequestBody OrderDTO order) {
 		OrderDTO updateOrder = orderService.update(id, order);
-		if(updateOrder == null) {
-			return new ResponseEntity<OrderDTO>(HttpStatus.NOT_FOUND);
-		}
 		return new ResponseEntity<OrderDTO>(updateOrder, HttpStatus.OK);
 	}
 	
 	@PutMapping(value = "article/{id}/{pin}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<OrderedArticleDTO> changeArticleStatus(@PathVariable("id") int id, @PathVariable("pin") int pin) {
 		OrderedArticleDTO article = orderService.changeStatusOfArticle(pin, id);
-		if(article == null) {
-			return new ResponseEntity<OrderedArticleDTO>(HttpStatus.NOT_FOUND);
-		}
 		return new ResponseEntity<OrderedArticleDTO>(article, HttpStatus.OK);
 	}
 	
 	@PostMapping(value = "addArticle/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<OrderedArticleDTO> addArticle(@RequestBody OrderedArticleDTO article, @PathVariable("id") int orderId) {
 		OrderedArticleDTO orderedArticle = orderService.createArticleForOrder(article, orderId);
-		if(orderedArticle == null) {
-			return new ResponseEntity<OrderedArticleDTO>(HttpStatus.NOT_FOUND);
-		}
 		return new ResponseEntity<OrderedArticleDTO>(orderedArticle, HttpStatus.OK);
 	}
 	
 	@DeleteMapping(value = "removeArticle/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<OrderedArticleDTO> removeArticle(@PathVariable("id") int articleId) {
 		OrderedArticleDTO orderedArticle = orderService.deleteArticleForOrder(articleId);
-		if(orderedArticle == null) {
-			return new ResponseEntity<OrderedArticleDTO>(HttpStatus.NOT_FOUND);
-		}
 		return new ResponseEntity<OrderedArticleDTO>(orderedArticle, HttpStatus.OK);
 	}
 	
 	@PutMapping(value = "updateArticle/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<OrderedArticleDTO> updateArticle(@RequestBody OrderedArticleDTO article, @PathVariable("id") int orderId) {
 		OrderedArticleDTO orderedArticle = orderService.updateArticleForOrder(orderId, article);
-		if(orderedArticle == null) {
-			return new ResponseEntity<OrderedArticleDTO>(HttpStatus.NOT_FOUND);
-		}
 		return new ResponseEntity<OrderedArticleDTO>(orderedArticle, HttpStatus.OK);
 	}
 	

@@ -24,6 +24,7 @@ import com.rest.RestaurantApp.dto.OrderDTO;
 import com.rest.RestaurantApp.dto.OrderedArticleDTO;
 import com.rest.RestaurantApp.exceptions.ChangeFinishedStateException;
 import com.rest.RestaurantApp.exceptions.IncompatibleEmployeeTypeException;
+import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.exceptions.NullArticlesException;
 import com.rest.RestaurantApp.exceptions.OrderAlreadyTakenException;
 import com.rest.RestaurantApp.exceptions.OrderTakenByWrongEmployeeTypeException;
@@ -73,7 +74,7 @@ public class OrderService implements IOrderService {
 		// TODO Auto-generated method stub
 		Optional<Order> order = orderRepository.findById(id);
 		if (order.isEmpty()) {
-			return null;
+			throw new NotFoundException("Order with id " + id + " was not found");
 		}
 		return new OrderDTO(order.get());
 	}
@@ -83,7 +84,7 @@ public class OrderService implements IOrderService {
 		// TODO Auto-generated method stub
 		Optional<Order> orderData = orderRepository.findById(id);
 		if (orderData.isEmpty()) {
-			return null;
+			throw new NotFoundException("Order with id " + id + " was not found");
 		}
 		Order order = orderData.get();
 		order.setDeleted(true);
@@ -141,7 +142,7 @@ public class OrderService implements IOrderService {
 		// TODO Auto-generated method stub
 		Optional<Order> oldOrderData = orderRepository.findById(id);
 		if (oldOrderData.isEmpty()) {
-			return null;
+			throw new NotFoundException("Order with id " + id + " was not found");
 		}
 		if(order.getArticles().size() == 0 || order.getArticles() == null) {
 			throw new NullArticlesException("Updated order must have at least 1 article");
@@ -173,7 +174,7 @@ public class OrderService implements IOrderService {
 		// TODO Auto-generated method stub
 		Optional<Order> oldOrderData = orderRepository.findById(id);
 		if (oldOrderData.isEmpty()) {
-			return null;
+			throw new NotFoundException("Order with id " + id + " was not found");
 		}
 		Order order = oldOrderData.get();
 		List<OrderedArticleDTO> orderedArticles = order.getOrderedArticles().stream().map(article -> new OrderedArticleDTO(article)).collect(Collectors.toList());
@@ -185,6 +186,7 @@ public class OrderService implements IOrderService {
 		// TODO Auto-generated method stub
 		OrderedArticle orderedArticle = orderedArticleRepository.findById(articleId).get();
 		Employee employee = employeeRepository.findByPincode(employeePin);
+
 		switch(orderedArticle.getStatus()) {
 		case NOT_TAKEN:
 			if((employee.getEmployeeType().equals(EmployeeType.WAITER)) || (employee.getEmployeeType().equals(EmployeeType.BARMAN) && !orderedArticle.getArticle().getType().equals(ArticleType.DRINK)) || (employee.getEmployeeType().equals(EmployeeType.COOK) && orderedArticle.getArticle().getType().equals(ArticleType.DRINK))) {
@@ -194,22 +196,24 @@ public class OrderService implements IOrderService {
 			orderedArticle.setStatus(ArticleStatus.TAKEN);
 			break;
 		case TAKEN:
-			if(employee.getId() != orderedArticle.getTakenByEmployee().getId()) {
-				throw new OrderAlreadyTakenException("Ordered Article with id " + orderedArticle.getId() + " and name " + orderedArticle.getArticle().getName() + " has already been taken by employee " + orderedArticle.getTakenByEmployee().getName() + " " + orderedArticle.getTakenByEmployee().getSurname());
-			}
 			if((employee.getEmployeeType().equals(EmployeeType.WAITER)) || (employee.getEmployeeType().equals(EmployeeType.BARMAN) && !orderedArticle.getArticle().getType().equals(ArticleType.DRINK)) || (employee.getEmployeeType().equals(EmployeeType.COOK) && orderedArticle.getArticle().getType().equals(ArticleType.DRINK))) {
 				throw new IncompatibleEmployeeTypeException("An employee of type " + employee.getEmployeeType().toString() +" can't start to prepare an article that is a type of " + orderedArticle.getArticle().getType().equals(ArticleType.DRINK));
 			}
+			if(employee.getId() != orderedArticle.getTakenByEmployee().getId()) {
+				throw new OrderAlreadyTakenException("Ordered Article with id " + orderedArticle.getId() + " and name " + orderedArticle.getArticle().getName() + " has already been taken by employee " + orderedArticle.getTakenByEmployee().getName() + " " + orderedArticle.getTakenByEmployee().getSurname());
+			}
+			
 			orderedArticle.setStatus(ArticleStatus.PREPARING);
 			notifyWaiters(orderedArticle);
 			break;
 		case PREPARING:
-			if(employee.getId() != orderedArticle.getTakenByEmployee().getId()) {
-				throw new OrderAlreadyTakenException("Ordered Article with id " + orderedArticle.getId() + " and name " + orderedArticle.getArticle().getName() + " has already been taken by employee " + orderedArticle.getTakenByEmployee().getName() + " " + orderedArticle.getTakenByEmployee().getSurname());
-			}
 			if((employee.getEmployeeType().equals(EmployeeType.WAITER)) || (employee.getEmployeeType().equals(EmployeeType.BARMAN) && !orderedArticle.getArticle().getType().equals(ArticleType.DRINK)) || (employee.getEmployeeType().equals(EmployeeType.COOK) && orderedArticle.getArticle().getType().equals(ArticleType.DRINK))) {
 				throw new IncompatibleEmployeeTypeException("An employee of type " + employee.getEmployeeType().toString() +" can't start to prepare an article that is a type of " + orderedArticle.getArticle().getType().equals(ArticleType.DRINK));
 			}
+			if(employee.getId() != orderedArticle.getTakenByEmployee().getId()) {
+				throw new OrderAlreadyTakenException("Ordered Article with id " + orderedArticle.getId() + " and name " + orderedArticle.getArticle().getName() + " has already been taken by employee " + orderedArticle.getTakenByEmployee().getName() + " " + orderedArticle.getTakenByEmployee().getSurname());
+			}
+			
 			orderedArticle.setStatus(ArticleStatus.FINISHED);
 			notifyWaiters(orderedArticle);
 			break;
