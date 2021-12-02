@@ -97,6 +97,12 @@ public class OrderController {
 		
 	}
 	
+	@GetMapping(value = "/test", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> test() {
+		return new ResponseEntity<String>("hejoo", HttpStatus.OK);
+		
+	}
+	
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity delete(@PathVariable("id") int id) {
 		OrderDTO order = orderService.delete(id);
