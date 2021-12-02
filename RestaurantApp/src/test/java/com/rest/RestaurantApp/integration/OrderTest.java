@@ -1,39 +1,41 @@
 package com.rest.RestaurantApp.integration;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.hamcrest.Matchers.hasSize;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import com.rest.RestaurantApp.dto.OrderDTO;
+import com.rest.RestaurantApp.services.OrderService;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest
-@AutoConfigureMockMvc
-@TestPropertySource(locations = "classpath:application-test.properties")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource("classpath:application-test.properties")
 public class OrderTest {
 	
-	@Autowired
-	private MockMvc mvc;
 	
+	@Autowired
+	private TestRestTemplate restTemplate;
+	
+	
+	@Autowired
+	private OrderService orderService;
+
 	
 	@Test
 	void test() throws Exception {
-		//MockMvcRequestBuilders
-		mvc.perform(get("/api/order")
-				.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$", hasSize(13)));
+		ResponseEntity<OrderDTO[]> responseEntity = restTemplate.getForEntity(
+				"/api/order", OrderDTO[].class);
+
+		
+		OrderDTO[] categories = responseEntity.getBody();
+		System.out.println(categories[0]);
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		assertEquals(1, categories.length);
 		
 	}
 	
