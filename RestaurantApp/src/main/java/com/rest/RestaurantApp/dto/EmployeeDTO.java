@@ -27,9 +27,9 @@ public class EmployeeDTO {
 	
 	private EmployeeType employeeType;
 
-	private List<OrderDTO> orders;
+	//private List<OrderDTO> orders;
 	
-	private List<OrderedArticleDTO> takenArticles;
+	//private List<OrderedArticleDTO> takenArticles;
 	
 	public EmployeeDTO(Integer id, double salary, String email, String name, String surname, Date birthday, UserType type, int pincode, EmployeeType employeeType,
 			List<OrderDTO> orders, List<OrderedArticleDTO> takenArticles) {
@@ -43,8 +43,8 @@ public class EmployeeDTO {
 		this.type = type;
 		this.pincode = pincode;
 		this.employeeType = employeeType;
-		this.orders = orders;
-		this.takenArticles = takenArticles;
+		//this.orders = orders;
+		//this.takenArticles = takenArticles;
 	}
 	
 	public EmployeeDTO(Employee employee) {
@@ -58,8 +58,8 @@ public class EmployeeDTO {
 		this.type = employee.getType();
 		this.pincode = employee.getPincode();
 		this.employeeType = employee.getEmployeeType();
-		this.orders = employee.getOrders().stream().map(order -> new OrderDTO(order)).collect(Collectors.toList());
-		this.takenArticles = employee.getTakenArticles().stream().map(orderedArticle -> new OrderedArticleDTO(orderedArticle)).collect(Collectors.toList());
+		//this.orders = employee.getOrders().stream().map(order -> new OrderDTO(order)).collect(Collectors.toList());
+		//this.takenArticles = employee.getTakenArticles().stream().map(orderedArticle -> new OrderedArticleDTO(orderedArticle)).collect(Collectors.toList());
 	}
 	
 	public Integer getId() {
@@ -133,7 +133,7 @@ public class EmployeeDTO {
 	public void setEmployeeType(EmployeeType employeeType) {
 		this.employeeType = employeeType;
 	}
-
+	/*
 	public List<OrderDTO> getOrders() {
 		return orders;
 	}
@@ -149,4 +149,5 @@ public class EmployeeDTO {
 	public void setTakenArticles(List<OrderedArticleDTO> takenArticles) {
 		this.takenArticles = takenArticles;
 	}
+	*/
 }

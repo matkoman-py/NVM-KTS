@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.rest.RestaurantApp.domain.Employee;
 import com.rest.RestaurantApp.domain.SalaryInfo;
 import com.rest.RestaurantApp.dto.EmployeeDTO;
+import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.repositories.EmployeeRepository;
 import com.rest.RestaurantApp.repositories.OrderRepository;
 import com.rest.RestaurantApp.repositories.OrderedArticleRepository;
@@ -24,19 +25,13 @@ public class EmployeeService implements IEmployeeService{
 	private EmployeeRepository employeeRepository;
 	
 	private SalaryInfoRepository salaryInfoRepository;
-	
-	private OrderRepository orderRepository;
-	
-	private OrderedArticleRepository orderedArticleRepository;
+
 
 	@Autowired
 	public EmployeeService(EmployeeRepository employeeRepository, SalaryInfoRepository salaryInfoRepository, OrderRepository orderRepository,
 			OrderedArticleRepository orderedArticleRepository) {
 		this.employeeRepository = employeeRepository;
 		this.salaryInfoRepository = salaryInfoRepository;
-		this.orderRepository = orderRepository;
-		this.orderedArticleRepository = orderedArticleRepository;
-		
 	}
 	
 	@Override
@@ -48,7 +43,7 @@ public class EmployeeService implements IEmployeeService{
 	public EmployeeDTO getOne(int id) {
 		Optional<Employee> employee =  employeeRepository.findById(id);
 		if(employee.isEmpty()) {
-			return null;
+			throw new NotFoundException("Employee with id " + id + " was not found");
 		}
 		return new EmployeeDTO(employee.get());
 	}
@@ -95,7 +90,6 @@ public class EmployeeService implements IEmployeeService{
 			oldEmployee.setNewSalary(newSalaryInfo);
 		}
 		
-		//TREBA ZA ORDERS I TAKEN ARTICLES DODATI
 		return new EmployeeDTO(employeeRepository.save(oldEmployee));
 	}
 
