@@ -66,7 +66,6 @@ public class ArticleService implements IArticleService {
 	
 	@Override
 	public ArticleDTO create(ArticleCreationDTO article) {
-		
 		Article newArticle = new Article(article.getName(), article.getDescription(),article.getType());
 		Article savedArticle = articleRepository.save(newArticle);
 		PriceInfo priceInfo = new PriceInfo(new Date(), article.getMakingPrice(), article.getSellingPrice(), savedArticle);

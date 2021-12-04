@@ -108,6 +108,7 @@ public class Article extends BaseEntity{
 		}
 		
 		public void setNewPrice(PriceInfo priceInfo) {
+			System.out.println("UDJEm");
 			if(prices.size() > 0) {
 				PriceInfo oldPrice = prices.stream().filter(price -> price.getStatus().equals(PriceStatus.ACTIVE)).findAny().orElse(null);
 				oldPrice.setToDate(new Date());
