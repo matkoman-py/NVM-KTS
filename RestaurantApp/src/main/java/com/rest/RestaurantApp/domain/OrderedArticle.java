@@ -1,5 +1,7 @@
 package com.rest.RestaurantApp.domain;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -92,6 +94,46 @@ public class OrderedArticle extends BaseEntity{
 		this.description = description;
 	}
 	
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        OrderedArticle orderedArticle = (OrderedArticle) o;
+        if (orderedArticle.getId() == null || this.getId() == null) {
+        	if(orderedArticle.getStatus() == null || this.getStatus() == null) {
+        		if(orderedArticle.getOrder() == null || this.getOrder() == null) {
+        			if(orderedArticle.getArticle().getId() == this.getArticle().getId()) {
+        				return true;
+        			}
+        			return false;
+        		} else {
+        			if((orderedArticle.getArticle().getId() == this.getArticle().getId()) && (orderedArticle.getOrder().getId() == this.getOrder().getId())) {
+        				return true;
+        			}
+        			return false;
+        		}
+        	} else {
+        		if(orderedArticle.getOrder() == null || this.getOrder() == null) {
+        			if((orderedArticle.getArticle().getId() == this.getArticle().getId()) && (orderedArticle.getStatus().equals(this.getStatus()))) {
+        				return true;
+        			}
+        			return false;
+        		} else {
+        			if((orderedArticle.getArticle().getId() == this.getArticle().getId()) && (orderedArticle.getOrder().getId() == this.getOrder().getId()) && (orderedArticle.getStatus().equals(this.getStatus()))) {
+        				return true;
+        			}
+        			return false;
+        		}
+        	}
+        	
+            
+        }
+        return Objects.equals(this.getId(), orderedArticle.getId());
+    }
 	
 	
 }

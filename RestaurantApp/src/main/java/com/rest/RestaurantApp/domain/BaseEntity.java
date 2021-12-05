@@ -1,5 +1,7 @@
 package com.rest.RestaurantApp.domain;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,6 +11,7 @@ import javax.persistence.MappedSuperclass;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Where;
+
 
 @MappedSuperclass
 @Where(clause = "deleted = false")
@@ -36,4 +39,5 @@ public class BaseEntity {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+	
 }
