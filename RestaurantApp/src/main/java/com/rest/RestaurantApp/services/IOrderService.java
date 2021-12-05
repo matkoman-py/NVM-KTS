@@ -10,22 +10,22 @@ import com.rest.RestaurantApp.dto.OrderedArticleDTO;
 
 public interface IOrderService {
 	
-	List<OrderDTO> getAll();
+	List<OrderDTO> getAll(); //+++++
 	
-	OrderDTO getOne(int id);
+	OrderDTO getOne(int id); //+++++
 	
 	
-	OrderDTO delete(int id);
+	OrderDTO delete(int id); //+++++
 	
-	OrderDTO create(OrderDTO order);
+	OrderDTO create(OrderDTO order); //+++++
 	
-	OrderDTO update(int id, OrderDTO order);
+	OrderDTO update(int id, OrderDTO order); //+++++
 	
-	List<OrderedArticleDTO> getArticlesForOrder(int id);
+	List<OrderedArticleDTO> getArticlesForOrder(int id); //+++++
 	
-	OrderedArticleDTO changeStatusOfArticle(int employeePin, int articleId);
+	OrderedArticleDTO changeStatusOfArticle(int employeePin, int articleId); //++++++
 	
-	OrderedArticleDTO createArticleForOrder(OrderedArticleDTO article, int orderId);
+	OrderedArticleDTO createArticleForOrder(OrderedArticleDTO article, int orderId); //++++
 	
 	OrderedArticleDTO deleteArticleForOrder(int articleId);
 	
