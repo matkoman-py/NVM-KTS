@@ -15,6 +15,7 @@ import com.rest.RestaurantApp.domain.Ingredient;
 import com.rest.RestaurantApp.domain.PriceInfo;
 import com.rest.RestaurantApp.dto.ArticleCreationDTO;
 import com.rest.RestaurantApp.dto.ArticleDTO;
+import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.repositories.ArticleRepository;
 import com.rest.RestaurantApp.repositories.IngredientRepository;
 import com.rest.RestaurantApp.repositories.PriceInfoRepository;
@@ -46,7 +47,7 @@ public class ArticleService implements IArticleService {
 	public ArticleDTO getOne(int id) {
 		Optional<Article> article =  articleRepository.findById(id);
 		if(article.isEmpty()) {
-			return null;
+			throw new NotFoundException("There is no article with the given id: " + id);
 		}
 		return new ArticleDTO(article.get());
 	}
@@ -56,7 +57,7 @@ public class ArticleService implements IArticleService {
 	public ArticleDTO delete(int id) {
 		Optional<Article> articleData =  articleRepository.findById(id);
 		if(articleData.isEmpty()) {
-			return null;
+			throw new NotFoundException("There is no article with the given id: " + id);
 		}
 		Article article = articleData.get();
 		article.setDeleted(true);
@@ -80,7 +81,7 @@ public class ArticleService implements IArticleService {
 	public ArticleDTO update(int id, ArticleDTO article) {
 		Optional<Article> oldArticleData = articleRepository.findById(id);
 		if(oldArticleData.isEmpty()) {
-			return null;
+			throw new NotFoundException("There is no article with the given id: " + id);
 		}
 		Article oldArticle = oldArticleData.get();
 		oldArticle.setName(article.getName());

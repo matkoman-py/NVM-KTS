@@ -1,6 +1,7 @@
 package com.rest.RestaurantApp.unit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,6 +17,7 @@ import com.rest.RestaurantApp.domain.PriceInfo;
 import com.rest.RestaurantApp.domain.enums.ArticleType;
 import com.rest.RestaurantApp.dto.ArticleCreationDTO;
 import com.rest.RestaurantApp.dto.ArticleDTO;
+import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.repositories.ArticleRepository;
 import com.rest.RestaurantApp.repositories.IngredientRepository;
 import com.rest.RestaurantApp.repositories.PriceInfoRepository;
@@ -85,10 +87,9 @@ public class ArticleServiceTest {
 	
 	@Test
 	void testFindOne_InvalidId() {
-		
-		ArticleDTO result = articleService.getOne(4);
-		
-		assertEquals(result, null);
+		assertThrows(NotFoundException.class, ()->{
+			ArticleDTO result = articleService.getOne(4);
+            });
 	}
 	
 	@Test
@@ -100,28 +101,57 @@ public class ArticleServiceTest {
 	}
 	
 	@Test
-	void delete_ValidId() {
+	void testDelete_ValidId() {
 		
 		ArticleDTO result = articleService.delete(1);
 		
 		assertEquals(result.getName(), "kola");
 	}
 	
-	//PREPRAVI DA BACA NULL 
 	@Test
-	void delete_InvalidId() {
-		
-		ArticleDTO result = articleService.delete(4);
-		
-		assertEquals(result, null);
+	void testDelete_InvalidId() {
+		assertThrows(NotFoundException.class, ()->{
+			ArticleDTO result = articleService.delete(4);
+            });
 	}
 	
-	//OVU METODU PREPRAVI
 	@Test
-	void create() {
+	void testCreate() {
 		
 		ArticleDTO result = articleService.create(new ArticleCreationDTO(new ArrayList<>(),"novi",500,600,"hladna",ArticleType.DRINK));
 		
 		assertEquals(result.getId(), 5);
+	}
+	
+	@Test
+	void testUpdate_ValidId() {
+		
+		ArticleDTO newArticle = new ArticleDTO();
+		newArticle.setName("kola");
+		newArticle.setDescription("bas dobar");
+		newArticle.setMakingPrice(700);
+		newArticle.setSellingPrice(800);
+		newArticle.setIngredients(new ArrayList<>());
+		
+		ArticleDTO result = articleService.update(1, newArticle);
+		assertEquals(result.getName(), "kola");
+		assertEquals(result.getDescription(), "bas dobar");
+		assertEquals(result.getSellingPrice(), 800);
+		assertEquals(result.getMakingPrice(), 700);
+	}
+	
+	
+	@Test
+	void testUpdate_InvalidId() {
+		
+		ArticleDTO newArticle = new ArticleDTO();
+		newArticle.setName("kola");
+		newArticle.setDescription("bas dobar");
+		newArticle.setMakingPrice(700);
+		newArticle.setSellingPrice(800);
+		newArticle.setIngredients(new ArrayList<>());
+		assertThrows(NotFoundException.class, ()->{
+			ArticleDTO result = articleService.update(15, newArticle);
+            });
 	}
 }
