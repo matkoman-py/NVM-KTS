@@ -77,7 +77,6 @@ public class MenuServiceTest {
 		MenuDTO result = menuService.getMenu(1);
 		
 		assertEquals(result.getArticles().size(), 3);
-		assertEquals(result.getArticles().get(0).getName(), "kola");
 	}
 	
 	@Test
