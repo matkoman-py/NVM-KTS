@@ -9,7 +9,7 @@ INSERT INTO article (name, description, type, menu_id) VALUES
   ('Jagnjetina', 'Vruca', 'MAIN_COURSE', 420),
   ('Mesano meso', '1kg mesa sa rostilja', 'MAIN_COURSE', 420),
   ('Meze', 'Taze meze', 'APPETIZER', 420),
-  ('Pohovana piletina', 'Jako fina', 'MAIN_COURSE', 420),
+  ('Pohovana piletina', 'Jako fina', 'MAIN_COURSE', 420), 
   ('Krempita', 'Jako fina', 'DESSERT', 420),
   ('Cezar salata', 'Jako fina', 'MAIN_COURSE', 420),
   ('Espreso', 'Kafa', 'DRINK', 420),
@@ -36,7 +36,7 @@ INSERT INTO salaries (from_date, to_date, status, value, user_id) VALUES
   ('2003-5-6', '2003-5-6', 'ACTIVE', 23000, 7);
   
 INSERT INTO orders (description, order_date, table_number, employee_id) VALUES
-  ('No ketchup', '2021-1-3 12:43:33', 1, 3),
+  ('No mustard', '2021-1-3 12:43:33', 1, 3),
   ('No ketchup', '2021-1-13 12:43:33', 1, 3),
   ('No ketchup', '2021-5-3 12:43:33', 1, 3),
   ('No ketchup', '2021-6-3 12:43:33', 1, 3),
@@ -59,12 +59,16 @@ INSERT INTO ordered_article (description, status, order_id, article_id, employee
   ('duza sa mlekom', 'FINISHED', 2, 8, 4),
   ('zero', 'FINISHED', 2, 9, 5),
   ('bez buta', 'FINISHED', 2, 2, 7),
-  ('bez kobasica', 'FINISHED', 3, 3, 6),
+  ('bez kobasica', 'TAKEN', 3, 3, 6),
   ('bez sira', 'FINISHED', 4, 4, 7),
   ('kraca bez mleka', 'FINISHED', 5, 8, 4),
   (NULL, 'FINISHED', 6, 9, 4),
   ('duza bez', 'FINISHED', 6, 8, 5),
   (NULL, 'FINISHED', 7, 9, 5);
+  
+  INSERT INTO ordered_article (description, status, order_id, article_id) VALUES
+  ('bez buta', 'NOT_TAKEN', 1, 2),
+  (NULL, 'NOT_TAKEN', 7, 1);
 
   
 INSERT INTO ingredient (name, is_allergen) VALUES
