@@ -256,8 +256,8 @@ public class OrderService implements IOrderService {
 	public OrderedArticleDTO deleteArticleForOrder(int articleId) {
 		// TODO Auto-generated method stub
 		Optional<OrderedArticle> orderedArticleData = orderedArticleRepository.findById(articleId);
-		if(orderedArticleData == null) {
-			return null;
+		if(orderedArticleData.isEmpty()) {
+			throw new NotFoundException("Ordered article with id " + articleId + " was not found");
 		}
 		OrderedArticle orderedArticle = orderedArticleData.get();
 		if(!orderedArticle.getStatus().equals(ArticleStatus.NOT_TAKEN)) {
