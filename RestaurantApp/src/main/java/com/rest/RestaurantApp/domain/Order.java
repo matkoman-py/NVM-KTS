@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -17,6 +18,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Where;
+
+
 
 @Entity
 @Table(name = "orders")
@@ -101,6 +104,25 @@ public class Order extends BaseEntity{
 	public void setOrderedArticles(List<OrderedArticle> orderedArticles) {
 		this.orderedArticles = orderedArticles;
 	}
+	
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Order order = (Order) o;
+        if (order.getId() == null || this.getId() == null) {
+            if(order.getOrderDate().equals(this.getOrderDate()) && order.getTableNumber() == this.getTableNumber()){
+                return true;
+            }
+            return false;
+        }
+        return Objects.equals(this.getId(), order.getId());
+    }
+	
 	
 	
 	

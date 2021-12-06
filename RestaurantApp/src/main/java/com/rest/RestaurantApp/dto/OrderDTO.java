@@ -28,7 +28,18 @@ public class OrderDTO {
 		this.tableNumber = tableNumber;
 		this.employeeId = employeeId;
 	}
+	
 
+	public OrderDTO(boolean deleted, String description, LocalDateTime orderDate, List<Integer> articles,
+			int tableNumber, int employeeId) {
+		super();
+		this.deleted = deleted;
+		this.description = description;
+		this.orderDate = orderDate;
+		this.articles = articles;
+		this.tableNumber = tableNumber;
+		this.employeeId = employeeId;
+	}
 	public OrderDTO() {
 		super();
 	}

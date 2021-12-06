@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -18,6 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Where;
+
 
 import com.rest.RestaurantApp.domain.enums.ArticleType;
 import com.rest.RestaurantApp.domain.enums.PriceStatus;
@@ -108,6 +110,7 @@ public class Article extends BaseEntity{
 		}
 		
 		public void setNewPrice(PriceInfo priceInfo) {
+			System.out.println("UDJEm");
 			if(prices.size() > 0) {
 				PriceInfo oldPrice = prices.stream().filter(price -> price.getStatus().equals(PriceStatus.ACTIVE)).findAny().orElse(null);
 				oldPrice.setToDate(new Date());
@@ -141,5 +144,21 @@ public class Article extends BaseEntity{
 		}
 		
 		
-		
+		@Override
+	    public boolean equals(Object o) {
+	        if (this == o) {
+	            return true;
+	        }
+	        if (o == null || getClass() != o.getClass()) {
+	            return false;
+	        }
+	        Article article = (Article) o;
+	        if (article.getId() == null || this.getId() == null) {
+	            if(article.getName().equals(this.getName())){
+	                return true;
+	            }
+	            return false;
+	        }
+	        return Objects.equals(this.getId(), article.getId());
+	    }
 }
