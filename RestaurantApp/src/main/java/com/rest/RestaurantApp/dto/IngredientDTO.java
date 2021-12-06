@@ -6,6 +6,7 @@ public class IngredientDTO {
 	private Integer id;
 	private String name;
 	private boolean isAllergen;
+
 	public IngredientDTO(Integer id,String name, boolean isAllergen) {
 		super();
 		this.id = id;
