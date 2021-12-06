@@ -13,6 +13,11 @@ public class IngredientDTO {
 		this.name = name;
 		this.isAllergen = isAllergen;
 	}
+	public IngredientDTO(String name, boolean isAllergen) {
+		super();
+		this.name = name;
+		this.isAllergen = isAllergen;
+	}
 	public IngredientDTO(Ingredient ingredient) {
 		super();
 		this.id = ingredient.getId();

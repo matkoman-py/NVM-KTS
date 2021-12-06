@@ -7,6 +7,7 @@ import com.rest.RestaurantApp.dto.ArticleCreationDTO;
 import com.rest.RestaurantApp.dto.ArticleDTO;
 import com.rest.RestaurantApp.dto.IngredientDTO;
 import com.rest.RestaurantApp.dto.OrderDTO;
+import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.repositories.IngredientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,7 @@ public class IngredientService implements IIngredientService {
     public IngredientDTO getOne(int id) {
         Optional<Ingredient> ingredient =  ingredientRepository.findById(id);
         if(ingredient.isEmpty()) {
-            return null;
+            throw new NotFoundException("There is no ingredient with the given id: " + id);
         }
         return new IngredientDTO(ingredient.get());
     }
@@ -46,7 +47,7 @@ public class IngredientService implements IIngredientService {
     public IngredientDTO delete(int id) {
         Optional<Ingredient> ingredient =  ingredientRepository.findById(id);
         if(ingredient.isEmpty()) {
-            return null;
+            throw new NotFoundException("There is no ingredient with the given id: " + id);
         }
         Ingredient delIngredient = ingredient.get();
         delIngredient.setDeleted(true);
@@ -68,7 +69,7 @@ public class IngredientService implements IIngredientService {
     public IngredientDTO update(int id, IngredientDTO ingredientDTO) {
         Optional<Ingredient> oldIngredient = ingredientRepository.findById(id);
         if(oldIngredient.isEmpty()) {
-            return null;
+            throw new NotFoundException("There is no ingredient with the given id: " + id);
         }
 
         Ingredient ingredient = oldIngredient.get();
