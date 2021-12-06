@@ -52,7 +52,7 @@ public class EmployeeService implements IEmployeeService{
 	public EmployeeDTO delete(int id) {
 		Optional<Employee> employeeData =  employeeRepository.findById(id);
 		if(employeeData.isEmpty()) {
-			return null;
+			throw new NotFoundException("Employee with id " + id + " was not found");
 		}
 		Employee employee = employeeData.get();
 		employee.setDeleted(true);
@@ -74,7 +74,7 @@ public class EmployeeService implements IEmployeeService{
 	public EmployeeDTO update(int id, EmployeeDTO employee) {
 		Optional<Employee> oldEmployeeData = employeeRepository.findById(id);
 		if(oldEmployeeData.isEmpty()) {
-			return null;
+			throw new NotFoundException("Employee with id " + id + " was not found");
 		}
 		Employee oldEmployee = oldEmployeeData.get();
 		oldEmployee.setEmail(employee.getEmail());
@@ -103,7 +103,7 @@ public class EmployeeService implements IEmployeeService{
 	public EmployeeDTO getOneByPin(int pin) {
 		Optional<Employee> employee = Optional.ofNullable(employeeRepository.findByPincode(pin));
 		if(employee.isEmpty()) {
-			return null;
+			throw new NotFoundException("Employee with pin " + pin + " was not found");
 		}
 		return new EmployeeDTO(employee.get());
 	}

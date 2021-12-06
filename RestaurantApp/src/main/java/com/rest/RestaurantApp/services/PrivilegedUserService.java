@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.rest.RestaurantApp.domain.PrivilegedUser;
 import com.rest.RestaurantApp.domain.SalaryInfo;
 import com.rest.RestaurantApp.dto.PrivilegedUserDTO;
+import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.repositories.PriviligedUserRepository;
 import com.rest.RestaurantApp.repositories.SalaryInfoRepository;
 
@@ -42,7 +43,7 @@ public class PrivilegedUserService implements IPrivilegedUserService{
 	public PrivilegedUserDTO getOne(int id) {
 		Optional<PrivilegedUser> privilegedUser = privilegedUserRepository.findById(id);
 		if(privilegedUser.isEmpty()) {
-			return null;
+			throw new NotFoundException("Privileged user with id " + id + " was not found");
 		}
 		return new PrivilegedUserDTO(privilegedUser.get());
 	}
@@ -51,7 +52,7 @@ public class PrivilegedUserService implements IPrivilegedUserService{
 	public PrivilegedUserDTO delete(int id) {
 		Optional<PrivilegedUser> privilegedUserData = privilegedUserRepository.findById(id);
 		if(privilegedUserData.isEmpty()) {
-			return null;
+			throw new NotFoundException("Privileged user with id " + id + " was not found");
 		}
 		PrivilegedUser privilegedUser = privilegedUserData.get();
 		privilegedUser.setDeleted(true);
@@ -76,7 +77,7 @@ public class PrivilegedUserService implements IPrivilegedUserService{
 	public PrivilegedUserDTO update(int id, PrivilegedUserDTO privilegedUser) {
 		Optional<PrivilegedUser> oldPrivilegedUserData = privilegedUserRepository.findById(id);
 		if(oldPrivilegedUserData.isEmpty()) {
-			return null;
+			throw new NotFoundException("Privileged user with id " + id + " was not found");
 		}
 		PrivilegedUser oldPrivilegedUser = oldPrivilegedUserData.get();
 		oldPrivilegedUser.setEmail(privilegedUser.getEmail());

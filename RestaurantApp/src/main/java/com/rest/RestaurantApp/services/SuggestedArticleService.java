@@ -18,6 +18,7 @@ import com.rest.RestaurantApp.domain.SuggestedArticle;
 import com.rest.RestaurantApp.domain.enums.ArticleType;
 import com.rest.RestaurantApp.dto.ArticleDTO;
 import com.rest.RestaurantApp.dto.SuggestedArticleDTO;
+import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.repositories.ArticleRepository;
 import com.rest.RestaurantApp.repositories.IngredientRepository;
 import com.rest.RestaurantApp.repositories.PriceInfoRepository;
@@ -53,7 +54,7 @@ public class SuggestedArticleService implements ISuggestedArticleService{
 	public SuggestedArticleDTO getOne(int id) {
 		Optional<SuggestedArticle> suggestedArticle =  suggestedArticleRepository.findById(id);
 		if(suggestedArticle.isEmpty()) {
-			return null;
+			throw new NotFoundException("Suggested article with id " + id + " was not found");
 		}
 		return new SuggestedArticleDTO(suggestedArticle.get());
 	}
@@ -61,7 +62,7 @@ public class SuggestedArticleService implements ISuggestedArticleService{
 	public SuggestedArticleDTO approve(int id) {
 		Optional<SuggestedArticle> suggestedArticle =  suggestedArticleRepository.findById(id);
 		if(suggestedArticle.isEmpty()) {
-			return null;
+			throw new NotFoundException("Suggested article with id " + id + " was not found");
 		}
 		SuggestedArticle approvedArticle = suggestedArticle.get();
 		approvedArticle.setDeleted(true);
@@ -87,7 +88,7 @@ public class SuggestedArticleService implements ISuggestedArticleService{
 	public SuggestedArticleDTO delete(int id) {
 		Optional<SuggestedArticle> suggestedArticleData =  suggestedArticleRepository.findById(id);
 		if(suggestedArticleData.isEmpty()) {
-			return null;
+			throw new NotFoundException("Suggested article with id " + id + " was not found");
 		}
 		SuggestedArticle suggestedArticle = suggestedArticleData.get();
 		suggestedArticle.setDeleted(true);
@@ -111,7 +112,7 @@ public class SuggestedArticleService implements ISuggestedArticleService{
 	public SuggestedArticleDTO update(int id, SuggestedArticleDTO suggestedArticle) {
 		Optional<SuggestedArticle> oldSuggestedArticleData = suggestedArticleRepository.findById(id);
 		if(oldSuggestedArticleData.isEmpty()) {
-			return null;
+			throw new NotFoundException("Suggested article with id " + id + " was not found");
 		}
 		SuggestedArticle oldSuggestedArticle = oldSuggestedArticleData.get();
 		oldSuggestedArticle.setName(suggestedArticle.getName());

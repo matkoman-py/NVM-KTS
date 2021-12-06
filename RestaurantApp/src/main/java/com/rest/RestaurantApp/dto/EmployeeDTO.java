@@ -47,6 +47,10 @@ public class EmployeeDTO {
 		//this.takenArticles = takenArticles;
 	}
 	
+	public EmployeeDTO() {
+		super();
+	}
+
 	public EmployeeDTO(Employee employee) {
 		super();
 		this.id = employee.getId();
