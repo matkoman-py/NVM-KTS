@@ -18,4 +18,7 @@ public interface IEmployeeService {
 	EmployeeDTO update(int id, EmployeeDTO employee);
 
 	boolean checkPin(int pin, EmployeeType type);
+
+	EmployeeDTO getOneByPin(int pin);
+
 }

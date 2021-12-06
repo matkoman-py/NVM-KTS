@@ -106,6 +106,7 @@ public class EmployeeService implements IEmployeeService{
 		return e != null && e.getEmployeeType().equals(type);
 	}
 
+	@Override
 	public EmployeeDTO getOneByPin(int pin) {
 		Optional<Employee> employee = Optional.ofNullable(employeeRepository.findByPincode(pin));
 		if(employee.isEmpty()) {
