@@ -102,7 +102,7 @@ public class OrderService implements IOrderService {
 		// TODO Auto-generated method stub
 		// List<Article> articles = order.getOrderedArticles().stream().map(article ->
 		// article)
-		// dodati proveru jel sto slobodan 
+		// dodati proveru jel sto slobodan
 		Employee employee = employeeRepository.findById(order.getEmployeeId()).get();
 		
 		if(!employee.getEmployeeType().equals(EmployeeType.WAITER)) {
