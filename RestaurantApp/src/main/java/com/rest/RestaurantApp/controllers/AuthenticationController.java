@@ -1,13 +1,12 @@
 package com.rest.RestaurantApp.controllers;
 
-import com.rest.RestaurantApp.domain.Employee;
-import com.rest.RestaurantApp.domain.enums.EmployeeType;
+import com.rest.RestaurantApp.dto.EmployeeAuthDTO;
 import com.rest.RestaurantApp.dto.EmployeeDTO;
 import com.rest.RestaurantApp.dto.JwtAuthenticationRequest;
 import com.rest.RestaurantApp.dto.UserTokenState;
+import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.services.EmployeeService;
 import com.rest.RestaurantApp.util.TokenUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,26 +17,30 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-
-
 @RestController
 @RequestMapping(value = "/api/auth", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AuthenticationController {
 
-    @Autowired
-    private TokenUtils tokenUtils;
+    private final TokenUtils tokenUtils;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    private EmployeeService employeeService;
+    private final EmployeeService employeeService;
+
+    public AuthenticationController(TokenUtils tokenUtils, AuthenticationManager authenticationManager, EmployeeService employeeService) {
+        this.tokenUtils = tokenUtils;
+        this.authenticationManager = authenticationManager;
+        this.employeeService = employeeService;
+    }
+
+    @ExceptionHandler(value = NotFoundException.class)
+    public ResponseEntity handleNullEmployeeException(NotFoundException notFoundException) {
+        return new ResponseEntity(notFoundException.getMessage(), HttpStatus.FORBIDDEN);
+    }
 
     @PostMapping("/login")
     public ResponseEntity<UserTokenState> createAuthenticationToken(
-            @RequestBody JwtAuthenticationRequest authenticationRequest, HttpServletResponse response) {
+            @RequestBody JwtAuthenticationRequest authenticationRequest) {
 
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 authenticationRequest.getUsername(), authenticationRequest.getPassword()));
@@ -51,12 +54,10 @@ public class AuthenticationController {
         return ResponseEntity.ok(new UserTokenState(jwt));
     }
 
-    @GetMapping("login/{pin}")
-    public ResponseEntity<EmployeeDTO> loginPin(@PathVariable("pin") int pin) {
-        EmployeeDTO employee = employeeService.getOneByPin(pin);
+    @GetMapping(value = "login/{pin}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<EmployeeAuthDTO> loginPin(@PathVariable("pin") int pin) {
+        EmployeeAuthDTO employee = employeeService.getOneByPin(pin);
 
-        if(employee == null)
-            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
         return new ResponseEntity<>(employee, HttpStatus.OK);
     }
 }

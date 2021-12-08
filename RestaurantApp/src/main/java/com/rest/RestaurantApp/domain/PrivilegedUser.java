@@ -34,6 +34,7 @@ public class PrivilegedUser extends User implements UserDetails {
 		return this.roles;
 	}
 
+
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_role",
 			joinColumns = @JoinColumn(name = "username", referencedColumnName = "username"),

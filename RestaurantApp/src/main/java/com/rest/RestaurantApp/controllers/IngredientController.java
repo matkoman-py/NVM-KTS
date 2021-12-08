@@ -46,7 +46,7 @@ public class IngredientController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<IngredientDTO> create(@RequestBody IngredientDTO ingredientDTO) {
-        return new ResponseEntity<>(ingredientService.create(ingredientDTO), HttpStatus.OK);
+        return new ResponseEntity<>(ingredientService.create(ingredientDTO), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

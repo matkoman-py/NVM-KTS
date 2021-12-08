@@ -6,6 +6,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.rest.RestaurantApp.domain.enums.EmployeeType;
+import com.rest.RestaurantApp.dto.EmployeeAuthDTO;
+import com.rest.RestaurantApp.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -107,11 +109,12 @@ public class EmployeeService implements IEmployeeService{
 	}
 
 	@Override
-	public EmployeeDTO getOneByPin(int pin) {
+	public EmployeeAuthDTO getOneByPin(int pin) {
 		Optional<Employee> employee = Optional.ofNullable(employeeRepository.findByPincode(pin));
 		if(employee.isEmpty()) {
-			return null;
+			throw new NotFoundException("There is no employee with pin code: " + pin);
 		}
-		return new EmployeeDTO(employee.get());
+
+		return new EmployeeAuthDTO(employee.get());
 	}
 }

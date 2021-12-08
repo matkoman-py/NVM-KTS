@@ -12,6 +12,8 @@ import com.rest.RestaurantApp.dto.ArticleDTO;
 import com.rest.RestaurantApp.dto.IngredientDTO;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.services.IngredientService;
+import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +33,7 @@ import java.util.Optional;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-public class IngredientServiceUnitTest {
+public class IngredientServiceTest {
 
     @MockBean
     private IngredientRepository ingredientRepository;
@@ -101,7 +103,7 @@ public class IngredientServiceUnitTest {
 
     @Test
     public void testDelete_InvalidId() {
-        assertThrows(NotFoundException.class, ()->{
+        assertThrows(NotFoundException.class, ()-> {
             IngredientDTO result = ingredientService.delete(4);
         });
     }
@@ -120,7 +122,7 @@ public class IngredientServiceUnitTest {
     public void testUpdate_InvalidId() {
         IngredientDTO ingredient = new IngredientDTO("Milk", true);
 
-        assertThrows(NotFoundException.class, ()->{
+        assertThrows(NotFoundException.class, ()-> {
             IngredientDTO result = ingredientService.update(15, ingredient);
         });
     }
