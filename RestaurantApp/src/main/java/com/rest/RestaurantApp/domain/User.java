@@ -8,6 +8,9 @@ import java.util.List;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Where;
 
 import com.rest.RestaurantApp.domain.enums.PriceStatus;
@@ -21,6 +24,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 @Where(clause = "deleted = false")
+@Getter
+@Setter
+@NoArgsConstructor
 public class User extends BaseEntity {
 	
 	@OneToMany(mappedBy = "user")
@@ -53,10 +59,6 @@ public class User extends BaseEntity {
 		this.type = type;
 		this.salaries = new ArrayList<SalaryInfo>();
 	}
-
-	public User() {
-		
-	}
 	
 	public void setNewSalary(SalaryInfo salaryInfo) {
 		if(salaries.size() > 0) {
@@ -70,52 +72,5 @@ public class User extends BaseEntity {
 	public SalaryInfo getActiveSalary() {
 		return salaries.stream().filter(salary -> salary.getStatus().equals(SalaryStatus.ACTIVE)).findAny().orElse(null);
 	}
-	
-	public String getEmail() {
-		return email;
-	}
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getSurname() {
-		return surname;
-	}
-
-	public void setSurname(String surname) {
-		this.surname = surname;
-	}
-
-	public Date getBirthday() {
-		return birthday;
-	}
-
-	public void setBirthday(Date birthday) {
-		this.birthday = birthday;
-	}
-
-	public UserType getType() {
-		return type;
-	}
-
-	public void setType(UserType type) {
-		this.type = type;
-	}
-	
-	public List<SalaryInfo> getSalaries() {
-		return salaries;
-	}
-
-	public void setSalaries(List<SalaryInfo> salaries) {
-		this.salaries = salaries;
-	}
 }

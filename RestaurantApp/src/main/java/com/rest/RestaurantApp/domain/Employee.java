@@ -13,6 +13,9 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Where;
 import com.rest.RestaurantApp.domain.enums.EmployeeType;
 import com.rest.RestaurantApp.domain.enums.UserType;
@@ -20,6 +23,9 @@ import com.rest.RestaurantApp.domain.enums.UserType;
 @Entity
 @DiscriminatorValue("EMPLOYEE")
 @Where(clause = "deleted = false")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Employee extends User {
 	
 	//@Column(nullable = false)
@@ -43,51 +49,10 @@ public class Employee extends User {
 		this.orders = new ArrayList<>();
 		this.takenArticles = new ArrayList<>();
 	}
-
-	public Employee() {
-		super();
-	}
 	
 	public void addOrder(Order order) {
 		orders.add(order);
 		order.setEmployee(this);
 	}
-	
-	public void removeOrder(Order order) {
-		order.setDeleted(true);
-	}
-
-	public int getPincode() {
-		return pincode;
-	}
-
-	public void setPincode(int pincode) {
-		this.pincode = pincode;
-	}
-
-	public EmployeeType getEmployeeType() {
-		return employeeType;
-	}
-
-	public void setEmployeeType(EmployeeType employeeType) {
-		this.employeeType = employeeType;
-	}
-
-	public List<Order> getOrders() {
-		return orders;
-	}
-
-	public void setOrders(List<Order> orders) {
-		this.orders = orders;
-	}
-
-	public List<OrderedArticle> getTakenArticles() {
-		return takenArticles;
-	}
-
-	public void setTakenArticles(List<OrderedArticle> takenArticles) {
-		this.takenArticles = takenArticles;
-	}
-	
 	
 }

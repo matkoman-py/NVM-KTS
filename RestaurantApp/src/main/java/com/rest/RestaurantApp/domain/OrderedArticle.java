@@ -10,11 +10,17 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Where;
 import com.rest.RestaurantApp.domain.enums.ArticleStatus;
 
 @Entity
 @Where(clause = "deleted = false")
+@Getter
+@Setter
+@NoArgsConstructor
 public class OrderedArticle extends BaseEntity{
 	
 	@Enumerated(EnumType.STRING)
@@ -48,50 +54,6 @@ public class OrderedArticle extends BaseEntity{
 		super();
 		this.status = status;
 		this.article = article;
-	}
-
-	public OrderedArticle() {
-		super();
-	}
-
-	public ArticleStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(ArticleStatus status) {
-		this.status = status;
-	}
-
-	public Article getArticle() {
-		return article;
-	}
-
-	public void setArticle(Article article) {
-		this.article = article;
-	}
-
-	public Employee getTakenByEmployee() {
-		return takenByEmployee;
-	}
-
-	public void setTakenByEmployee(Employee takenByEmployee) {
-		this.takenByEmployee = takenByEmployee;
-	}
-
-	public Order getOrder() {
-		return order;
-	}
-
-	public void setOrder(Order order) {
-		this.order = order;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 	
 	@Override

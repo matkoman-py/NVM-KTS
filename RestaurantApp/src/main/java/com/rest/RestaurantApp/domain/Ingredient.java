@@ -7,10 +7,17 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Where;
 
 @Entity
 @Where(clause = "deleted = false")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Ingredient extends BaseEntity {
 	
 	@Column(nullable = false)
@@ -29,33 +36,4 @@ public class Ingredient extends BaseEntity {
 		this.articles = new HashSet<Article>();
 	}
 
-	public Ingredient() {
-		super();
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Set<Article> getArticles() {
-		return articles;
-	}
-
-	public void setArticles(Set<Article> articles) {
-		this.articles = articles;
-	}
-
-	public boolean isAllergen() {
-		return isAllergen;
-	}
-
-	public void setAllergen(boolean isAllergen) {
-		this.isAllergen = isAllergen;
-	}	
-	
-	
 }

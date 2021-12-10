@@ -4,10 +4,16 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Where;
 
 @Entity
 @Where(clause = "deleted = false")
+@Getter
+@Setter
 public class Menu extends BaseEntity{
 
 	@OneToMany(mappedBy = "menu")
@@ -17,15 +23,4 @@ public class Menu extends BaseEntity{
 		super();
 		this.articles = new HashSet<>();
 	}
-
-	public Set<Article> getArticles() {
-		return articles;
-	}
-
-	public void setArticles(Set<Article> articles) {
-		this.articles = articles;
-	}
-	
-	
-	
 }

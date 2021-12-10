@@ -17,6 +17,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Where;
 
 
@@ -24,6 +27,9 @@ import org.hibernate.annotations.Where;
 @Entity
 @Table(name = "orders")
 @Where(clause = "deleted = false")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Order extends BaseEntity{
 	
 	@Column(nullable = false)
@@ -51,10 +57,6 @@ public class Order extends BaseEntity{
 		this.orderedArticles = new ArrayList<>();
 	}
 
-	public Order() {
-		super();
-	}
-	
 	public void addOrderedArticle(OrderedArticle orderedArticle) {
         orderedArticles.add(orderedArticle);
         orderedArticle.setOrder(this);
@@ -64,46 +66,6 @@ public class Order extends BaseEntity{
         //orderedArticles.remove(orderedArticle);
         orderedArticle.setDeleted(true);
     }
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public int getTableNumber() {
-		return tableNumber;
-	}
-
-	public void setTableNumber(int tableNumber) {
-		this.tableNumber = tableNumber;
-	}
-
-	public LocalDateTime getOrderDate() {
-		return orderDate;
-	}
-
-	public void setOrderDate(LocalDateTime orderDate) {
-		this.orderDate = orderDate;
-	}
-
-	public Employee getEmployee() {
-		return employee;
-	}
-
-	public void setEmployee(Employee employee) {
-		this.employee = employee;
-	}
-
-	public List<OrderedArticle> getOrderedArticles() {
-		return orderedArticles;
-	}
-
-	public void setOrderedArticles(List<OrderedArticle> orderedArticles) {
-		this.orderedArticles = orderedArticles;
-	}
 	
 	@Override
     public boolean equals(Object o) {

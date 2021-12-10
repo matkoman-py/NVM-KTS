@@ -1,12 +1,18 @@
 package com.rest.RestaurantApp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name="roles")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Role implements GrantedAuthority {
 
     private static final long serialVersionUID = 1L;
@@ -25,21 +31,9 @@ public class Role implements GrantedAuthority {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
     @JsonIgnore
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     @Override

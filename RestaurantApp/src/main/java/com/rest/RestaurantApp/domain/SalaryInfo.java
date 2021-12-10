@@ -11,6 +11,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Where;
 
 import com.rest.RestaurantApp.domain.enums.SalaryStatus;
@@ -18,6 +21,9 @@ import com.rest.RestaurantApp.domain.enums.SalaryStatus;
 @Entity
 @Table(name = "salaries")
 @Where(clause = "deleted = false")
+@Getter
+@Setter
+@NoArgsConstructor
 public class SalaryInfo extends BaseEntity {
 	
 	
@@ -46,49 +52,4 @@ public class SalaryInfo extends BaseEntity {
 		this.user = user;
 	}
 
-	public SalaryInfo() {
-		
-	}
-
-	public Date getFromDate() {
-		return fromDate;
-	}
-
-	public void setFromDate(Date from) {
-		this.fromDate = from;
-	}
-
-	public Date getToDate() {
-		return toDate;
-	}
-
-	public void setToDate(Date to) {
-		this.toDate = to;
-	}
-
-	public double getValue() {
-		return value;
-	}
-
-	public void setValue(double value) {
-		this.value = value;
-	}
-	
-	public SalaryStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(SalaryStatus status) {
-		this.status = status;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-	
-	
 }

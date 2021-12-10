@@ -11,6 +11,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Where;
 
 import com.rest.RestaurantApp.domain.enums.PriceStatus;
@@ -18,6 +21,9 @@ import com.rest.RestaurantApp.domain.enums.PriceStatus;
 @Entity
 @Table(name = "prices")
 @Where(clause = "deleted = false")
+@Getter
+@Setter
+@NoArgsConstructor
 public class PriceInfo extends BaseEntity {
 	
 	@Column(nullable = false)
@@ -49,55 +55,4 @@ public class PriceInfo extends BaseEntity {
 		this.article = article;
 	}
 
-	public PriceInfo() {
-		super();
-	}
-
-	public Date getFromDate() {
-		return fromDate;
-	}
-
-	public void setFromDate(Date fromDate) {
-		this.fromDate = fromDate;
-	}
-
-	public Date getToDate() {
-		return toDate;
-	}
-
-	public void setToDate(Date toDate) {
-		this.toDate = toDate;
-	}
-
-	public double getMakingPrice() {
-		return makingPrice;
-	}
-
-	public void setMakingPrice(double makingPrice) {
-		this.makingPrice = makingPrice;
-	}
-
-	public double getSellingPrice() {
-		return sellingPrice;
-	}
-
-	public void setSellingPrice(double sellingPrice) {
-		this.sellingPrice = sellingPrice;
-	}
-
-	public PriceStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(PriceStatus status) {
-		this.status = status;
-	}
-
-	public Article getArticle() {
-		return article;
-	}
-
-	public void setArticle(Article article) {
-		this.article = article;
-	}
 }

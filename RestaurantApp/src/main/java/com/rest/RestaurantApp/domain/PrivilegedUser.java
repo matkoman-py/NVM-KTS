@@ -7,6 +7,9 @@ import java.util.List;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Where;
 
 import com.rest.RestaurantApp.domain.enums.PrivilegedUserType;
@@ -17,6 +20,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Entity
 @DiscriminatorValue("PRIVILEGED_USER")
 @Where(clause = "deleted = false")
+@Getter
+@Setter
+@NoArgsConstructor
 public class PrivilegedUser extends User implements UserDetails {
 	
 	//@Column(nullable = false)
@@ -41,20 +47,12 @@ public class PrivilegedUser extends User implements UserDetails {
 			inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
 	private List<Role> roles;
 
-	public PrivilegedUser() {
-		super();
-	}
-
 	public PrivilegedUser(String email, String name, String surname, Date birthday, UserType type, String username,
 			String password, PrivilegedUserType privilegedType) {
 		super(email, name, surname, birthday, type);
 		this.username = username;
 		this.password = password;
 		this.privilegedType = privilegedType;
-	}
-
-	public String getUsername() {
-		return username;
 	}
 
 	@Override
@@ -77,31 +75,4 @@ public class PrivilegedUser extends User implements UserDetails {
 		return !this.deleted;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public PrivilegedUserType getPrivilegedType() {
-		return privilegedType;
-	}
-
-	public void setPrivilegedType(PrivilegedUserType privilegedType) {
-		this.privilegedType = privilegedType;
-	}
-
-	public List<Role> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(List<Role> roles) {
-		this.roles = roles;
-	}
 }

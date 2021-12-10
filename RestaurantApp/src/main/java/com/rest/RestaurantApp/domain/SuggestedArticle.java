@@ -11,11 +11,18 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Where;
 import com.rest.RestaurantApp.domain.enums.ArticleType;
 
 @Entity
 @Where(clause = "deleted = false")
+@Getter
+@Setter
+@NoArgsConstructor
 public class SuggestedArticle extends BaseEntity{
 	
 	@ManyToMany(cascade = { CascadeType.ALL })
@@ -49,58 +56,6 @@ public class SuggestedArticle extends BaseEntity{
 		this.description = description;
 		this.suggestedMakingPrice = suggestedMakingPrice;
 		this.suggestedSellingPrice = suggestedSellingPrice;	
-		this.type = type;
-	}
-
-	public SuggestedArticle() {
-		super();
-	}
-
-	public Set<Ingredient> getIngredients() {
-		return ingredients;
-	}
-
-	public void setIngredients(Set<Ingredient> ingredients) {
-		this.ingredients = ingredients;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	
-	public double getSuggestedMakingPrice() {
-		return suggestedMakingPrice;
-	}
-
-	public void setSuggestedMakingPrice(double suggestedMakingPrice) {
-		this.suggestedMakingPrice = suggestedMakingPrice;
-	}
-
-	public double getSuggestedSellingPrice() {
-		return suggestedSellingPrice;
-	}
-
-	public void setSuggestedSellingPrice(double suggestedSellingPrice) {
-		this.suggestedSellingPrice = suggestedSellingPrice;
-	}
-
-	public ArticleType getType() {
-		return type;
-	}
-
-	public void setType(ArticleType type) {
 		this.type = type;
 	}
 

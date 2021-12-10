@@ -18,6 +18,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Where;
 
 
@@ -28,6 +31,7 @@ import javax.persistence.JoinColumn;
 
 @Entity
 @Where(clause = "deleted = false")
+@Getter @Setter @NoArgsConstructor
 public class Article extends BaseEntity{
 	 
 		@ManyToMany(cascade = { CascadeType.ALL })
@@ -67,42 +71,6 @@ public class Article extends BaseEntity{
 			this.type = type;
 			this.orderedArticles = new HashSet<>();
 		}
-
-		public Article() {
-			super();
-		}
-
-		public Set<Ingredient> getIngredients() {
-			return ingredients;
-		}
-
-		public void setIngredients(Set<Ingredient> ingredients) {
-			this.ingredients = ingredients;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		public String getDescription() {
-			return description;
-		}
-
-		public void setDescription(String description) {
-			this.description = description;
-		}
-
-		public List<PriceInfo> getPrices() {
-			return prices;
-		}
-
-		public void setPrices(List<PriceInfo>  prices) {
-			this.prices = prices;
-		}
 		
 		public PriceInfo getActivePrice() {
 			return prices.stream().filter(price -> price.getStatus().equals(PriceStatus.ACTIVE)).findAny().orElse(null);
@@ -118,32 +86,8 @@ public class Article extends BaseEntity{
 			}
 			prices.add(priceInfo);
 		}
-		
-		public ArticleType getType() {
-			return type;
-		}
 
-		public void setType(ArticleType type) {
-			this.type = type;
-		}
 
-		public Menu getMenu() {
-			return menu;
-		}
-
-		public void setMenu(Menu menu) {
-			this.menu = menu;
-		}
-
-		public Set<OrderedArticle> getOrderedArticles() {
-			return orderedArticles;
-		}
-
-		public void setOrderedArticles(Set<OrderedArticle> orderedArticles) {
-			this.orderedArticles = orderedArticles;
-		}
-		
-		
 		@Override
 	    public boolean equals(Object o) {
 	        if (this == o) {
