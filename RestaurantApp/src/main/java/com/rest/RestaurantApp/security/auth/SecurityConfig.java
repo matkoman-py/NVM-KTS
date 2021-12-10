@@ -13,7 +13,9 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -48,6 +50,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userAuthService).passwordEncoder(passwordEncoder());
     }
 
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        auth.inMemoryAuthentication()
+                .passwordEncoder(encoder)
+                .withUser("manager_test")
+                .password(encoder.encode("test"))
+                .roles("MANAGER");
+
+        auth.inMemoryAuthentication()
+                .passwordEncoder(encoder)
+                .withUser("owner_test")
+                .password(encoder.encode("test"))
+                .roles("OWNER");
+    }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -71,7 +89,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/menu/**").permitAll()
                 .antMatchers("/api/order/**").permitAll()
                 .antMatchers("/api/ingredient").permitAll()
-                .antMatchers("/api/privilegedUser/**").permitAll().and()
+                .antMatchers("/api/privilegedUser/**").permitAll().and().httpBasic().and()
 
 //                .anyRequest().authenticated().and().formLogin().loginProcessingUrl("/api/auth/loging").and()
 

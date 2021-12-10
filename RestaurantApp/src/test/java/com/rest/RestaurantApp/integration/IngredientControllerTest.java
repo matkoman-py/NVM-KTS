@@ -33,7 +33,8 @@ public class IngredientControllerTest {
 
     @Test
     void testGetAll() {
-        ResponseEntity<IngredientDTO[]> response = restTemplate.getForEntity("/api/ingredient", IngredientDTO[].class);
+        ResponseEntity<IngredientDTO[]> response = restTemplate.withBasicAuth("manager_test", "test")
+                .getForEntity("/api/ingredient", IngredientDTO[].class);
 
         IngredientDTO[] ingredients = response.getBody();
 

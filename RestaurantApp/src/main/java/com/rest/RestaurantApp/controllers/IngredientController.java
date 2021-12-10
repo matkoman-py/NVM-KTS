@@ -34,7 +34,7 @@ public class IngredientController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-//    @PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<List<IngredientDTO>> getAll() {
         return ResponseEntity.ok(ingredientService.getAll()); }
 
