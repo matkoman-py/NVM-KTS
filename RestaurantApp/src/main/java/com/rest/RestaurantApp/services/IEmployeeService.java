@@ -3,6 +3,7 @@ package com.rest.RestaurantApp.services;
 import java.util.List;
 
 import com.rest.RestaurantApp.domain.enums.EmployeeType;
+import com.rest.RestaurantApp.dto.EmployeeAuthDTO;
 import com.rest.RestaurantApp.dto.EmployeeDTO;
 
 public interface IEmployeeService {
@@ -19,6 +20,6 @@ public interface IEmployeeService {
 
 	boolean checkPin(int pin, EmployeeType type);
 
-	EmployeeDTO getOneByPin(int pin);
+	EmployeeAuthDTO getOneByPin(int pin);
 
 }

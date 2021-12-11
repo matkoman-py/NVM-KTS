@@ -34,7 +34,7 @@ public class IngredientController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-//    @PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<List<IngredientDTO>> getAll() {
         return ResponseEntity.ok(ingredientService.getAll()); }
 
@@ -46,7 +46,7 @@ public class IngredientController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<IngredientDTO> create(@RequestBody IngredientDTO ingredientDTO) {
-        return new ResponseEntity<>(ingredientService.create(ingredientDTO), HttpStatus.OK);
+        return new ResponseEntity<>(ingredientService.create(ingredientDTO), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

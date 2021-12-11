@@ -61,8 +61,12 @@ public class EmployeeDTO {
 		this.orders = employee.getOrders().stream().map(order -> new OrderDTO(order)).collect(Collectors.toList());
 		this.takenArticles = employee.getTakenArticles().stream().map(orderedArticle -> new OrderedArticleDTO(orderedArticle)).collect(Collectors.toList());
 	}
-	
-	public Integer getId() {
+
+    public EmployeeDTO() {
+
+    }
+
+    public Integer getId() {
 		return id;
 	}
 
