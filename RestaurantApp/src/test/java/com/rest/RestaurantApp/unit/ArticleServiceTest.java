@@ -88,7 +88,7 @@ public class ArticleServiceTest {
 	@Test
 	void testFindOne_InvalidId() {
 		assertThrows(NotFoundException.class, ()->{
-			ArticleDTO result = articleService.getOne(4);
+			articleService.getOne(4);
             });
 	}
 	
@@ -111,7 +111,7 @@ public class ArticleServiceTest {
 	@Test
 	void testDelete_InvalidId() {
 		assertThrows(NotFoundException.class, ()->{
-			ArticleDTO result = articleService.delete(4);
+			articleService.delete(4);
             });
 	}
 	
@@ -151,7 +151,7 @@ public class ArticleServiceTest {
 		newArticle.setSellingPrice(800);
 		newArticle.setIngredients(new ArrayList<>());
 		assertThrows(NotFoundException.class, ()->{
-			ArticleDTO result = articleService.update(15, newArticle);
+			articleService.update(15, newArticle);
             });
 	}
 }

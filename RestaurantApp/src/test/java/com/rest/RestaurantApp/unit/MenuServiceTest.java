@@ -98,7 +98,7 @@ public class MenuServiceTest {
 	@Test
 	void testAddArticle_InvalidId() {
 		assertThrows(NotFoundException.class, ()->{
-			MenuDTO result = menuService.addArticle(1,5);
+			menuService.addArticle(1,5);
             });
 	}
 }

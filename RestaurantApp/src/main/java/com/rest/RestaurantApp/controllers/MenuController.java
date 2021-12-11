@@ -35,12 +35,12 @@ public class MenuController {
 	}
 	
 	
-	@PutMapping(path = "delete-article/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(path = "delete-article/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<MenuDTO> deleteArticle(@PathVariable("id") int id) {
 		return ResponseEntity.ok(menuService.deleteArticle(420,id));
 	}
 	
-	@PutMapping(path = "add-article/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(path = "add-article/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<MenuDTO> addArticle(@PathVariable("id") int id) {
 		return ResponseEntity.ok(menuService.addArticle(420,id));
 	}
