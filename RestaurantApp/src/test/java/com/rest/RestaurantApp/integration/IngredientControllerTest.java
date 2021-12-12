@@ -1,8 +1,6 @@
 package com.rest.RestaurantApp.integration;
 
-import com.rest.RestaurantApp.domain.Ingredient;
 import com.rest.RestaurantApp.dto.IngredientDTO;
-import com.rest.RestaurantApp.dto.OrderDTO;
 import com.rest.RestaurantApp.services.IngredientService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,9 +12,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;

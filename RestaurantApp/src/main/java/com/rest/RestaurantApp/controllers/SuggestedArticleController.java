@@ -38,33 +38,18 @@ public class SuggestedArticleController {
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<SuggestedArticleDTO> getOne(@PathVariable("id") int id) {
 		SuggestedArticleDTO suggestedArticle = suggestedArticleService.getOne(id);
-		/*
-		if(suggestedArticle == null) {
-			return new ResponseEntity<SuggestedArticleDTO>(HttpStatus.NOT_FOUND);
-		}
-		*/
 		return new ResponseEntity<SuggestedArticleDTO>(suggestedArticle, HttpStatus.OK);	
 	}
-	////
+
 	@GetMapping(value = "/approve/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<SuggestedArticleDTO> approve(@PathVariable("id") int id) {
 		SuggestedArticleDTO suggestedArticle = suggestedArticleService.approve(id);
-		/*
-		if(suggestedArticle == null) {
-			return new ResponseEntity<SuggestedArticleDTO>(HttpStatus.NOT_FOUND);
-		}
-		*/
 		return new ResponseEntity<SuggestedArticleDTO>(suggestedArticle, HttpStatus.OK);	
 	}
-	////
+	
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity delete(@PathVariable("id") int id) {
 		SuggestedArticleDTO suggestedArticle = suggestedArticleService.delete(id);
-		/*
-		if(suggestedArticle == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-		*/
 		return new ResponseEntity<>("Suggested article with id " + id + " successfully deleted", HttpStatus.OK);	
 	}
 	
@@ -77,11 +62,6 @@ public class SuggestedArticleController {
 	@PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<SuggestedArticleDTO> update(@PathVariable("id") int id, @RequestBody SuggestedArticleDTO suggestedArticle) {
 		SuggestedArticleDTO updateSuggestedArticle = suggestedArticleService.update(id, suggestedArticle);
-		/*
-		if(updateSuggestedArticle == null) {
-			return new ResponseEntity<SuggestedArticleDTO>(HttpStatus.NOT_FOUND);
-		}
-		*/
 		return new ResponseEntity<SuggestedArticleDTO>(updateSuggestedArticle, HttpStatus.OK);
 	}
 	

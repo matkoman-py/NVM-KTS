@@ -29,6 +29,8 @@ INSERT INTO users (type, birthday, email, name, surname, employee_type, pincode)
   ('EMPLOYEE', '1999-11-25 ', 'maric@yahoo.com', 'Marko', 'Maric', 'COOK', 2910);
   
 INSERT INTO salaries (from_date, to_date, status, value, user_id) VALUES
+  ('2003-5-6', '2003-5-6', 'ACTIVE', 23000, 1),
+  ('2003-5-6', '2003-5-6', 'ACTIVE', 23000, 2),
   ('2003-5-6', '2003-5-6', 'ACTIVE', 23000, 3),
   ('2003-5-6', '2003-5-6', 'ACTIVE', 23000, 4),
   ('2003-5-6', '2003-5-6', 'ACTIVE', 23000, 5),
