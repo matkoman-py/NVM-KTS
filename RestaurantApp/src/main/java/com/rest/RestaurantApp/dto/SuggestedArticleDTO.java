@@ -17,6 +17,10 @@ public class SuggestedArticleDTO {
 	
 	private double suggestedMakingPrice;
 	
+	public SuggestedArticleDTO() {
+		super();
+	}
+
 	private double suggestedSellingPrice;
 	
 	private ArticleType type;

@@ -56,6 +56,9 @@ public class PrivilegedUserDTO {
 		this.privilegedType = priviligedUser.getPrivilegedType();
 		}
 
+	public PrivilegedUserDTO() {
+	}
+
 	public Integer getId() {
 		return id;
 	}
