@@ -58,10 +58,6 @@ public class EmployeeDTO {
 		this.employeeType = employee.getEmployeeType();
 	}
 
-    public EmployeeDTO() {
-
-    }
-
     public Integer getId() {
 		return id;
 	}
