@@ -61,7 +61,9 @@ public class IngredientServiceTest {
 
         given(ingredientRepository.findAll()).willReturn(ingredients);
         given(ingredientRepository.findById(0)).willReturn(Optional.of(ingredient1));
+        given(ingredientRepository.findById(1)).willReturn(Optional.of(ingredient2));
         given(ingredientRepository.save(ingredient1)).willReturn(ingredient1);
+        given(ingredientRepository.save(ingredient2)).willReturn(ingredient2);
 
 
         Ingredient newIngredient = new Ingredient("Cheese", false);
@@ -89,9 +91,9 @@ public class IngredientServiceTest {
 
     @Test
     public void testGetOne_InvalidId() {
-        IngredientDTO ingredient = ingredientService.getOne(4);
-
-        assertNull(ingredient);
+        assertThrows(NotFoundException.class, ()-> {
+            IngredientDTO result = ingredientService.getOne(4);
+        });
     }
 
     @Test

@@ -64,6 +64,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .withUser("owner_test")
                 .password(encoder.encode("test"))
                 .roles("OWNER");
+
+        auth.userDetailsService(userAuthService).passwordEncoder(passwordEncoder());
     }
 
     @Bean

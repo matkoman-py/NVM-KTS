@@ -81,6 +81,8 @@ public class IngredientControllerTest {
         assertEquals(ingredients.size(), size + 1);
         assertEquals(ingredients.get(ingredients.size() - 1).getName(), "Sastojak 1");
         assertFalse(ingredients.get(ingredients.size() - 1).isAllergen());
+
+        ingredientService.delete(createdIngredient.getId());
     }
 
     @Test

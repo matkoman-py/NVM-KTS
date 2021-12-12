@@ -80,6 +80,8 @@ public class IngredientService implements IIngredientService {
         ingredient.setAllergen(ingredientDTO.isAllergen());
 
         Ingredient updatedIngredient = ingredientRepository.save(ingredient);
+
+
         return new IngredientDTO(updatedIngredient);
     }
 }

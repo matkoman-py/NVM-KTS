@@ -14,6 +14,9 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.net.http.HttpRequest;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
@@ -51,7 +54,7 @@ public class AuthenticationControllerTest {
         request.setUsername("markuza99");
         request.setPassword("invalidpassword");
 
-        ResponseEntity<UserTokenState> response = restTemplate.postForEntity("/api/auth/login", request, UserTokenState.class);
+        ResponseEntity<Object> response = restTemplate.postForEntity("/api/auth/login", request, Object.class);
 
         assertEquals(response.getStatusCode(), HttpStatus.UNAUTHORIZED);
     }
