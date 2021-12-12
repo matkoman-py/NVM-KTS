@@ -52,7 +52,7 @@ public class PrivilegedUserServiceTest {
 	void testDelete_ValidId() {
 		
 		List<PrivilegedUserDTO> result1 = privilegedUserService.getAll();
-		PrivilegedUserDTO employee = privilegedUserService.delete(1);
+		PrivilegedUserDTO employee = privilegedUserService.delete(2);
 		List<PrivilegedUserDTO> result2 = privilegedUserService.getAll();
 		
 		assertNotEquals(result1.size(),result2.size());

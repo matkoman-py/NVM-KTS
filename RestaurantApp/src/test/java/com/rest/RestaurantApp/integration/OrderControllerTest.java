@@ -235,10 +235,10 @@ class OrderControllerTest {
 	void testChangeArticleStatus_InvalidArticle_IncompatibleEmployee() {
 		
 		ResponseEntity<String> responseEntity = restTemplate.exchange(
-				"/api/order/article/14/4322", HttpMethod.PUT, null, String.class);
+				"/api/order/article/13/4322", HttpMethod.PUT, null, String.class);
 		
 		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
-		assertEquals(responseEntity.getBody(), "An employee of type BARMAN can't take an article that is a type of DESSERT");
+		assertEquals(responseEntity.getBody(), "An employee of type BARMAN can't take an article that is a type of MAIN_COURSE");
 
 	}
 	

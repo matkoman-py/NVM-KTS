@@ -7,10 +7,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.rest.RestaurantApp.dto.EmployeeDTO;
@@ -49,15 +51,15 @@ public class EmployeeServiceTest {
 		assertEquals(result.size(), 4);
 	}
 	
-	@Test
-	void testDelete_ValidId() {
-		
-		List<EmployeeDTO> result1 = employeeService.getAll();
-		EmployeeDTO employee = employeeService.delete(5);
-		List<EmployeeDTO> result2 = employeeService.getAll();
-		
-		assertNotEquals(result1.size(),result2.size());
-	}
+//	@Test
+//	void testDelete_ValidId() {
+//		
+//		List<EmployeeDTO> result1 = employeeService.getAll();
+//		EmployeeDTO employee = employeeService.delete(5);
+//		List<EmployeeDTO> result2 = employeeService.getAll();
+//		
+//		assertNotEquals(result1.size(),result2.size());
+//	}
 	
 	@Test
 	void testDelete_InvalidId() {
