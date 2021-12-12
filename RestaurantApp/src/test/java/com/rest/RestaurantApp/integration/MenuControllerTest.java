@@ -45,7 +45,6 @@ public class MenuControllerTest {
 		MenuDTO menu = responseEntity.getBody();
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 		assertEquals(10, menu.getArticles().size());
-		
 	}
 	
 	@Test

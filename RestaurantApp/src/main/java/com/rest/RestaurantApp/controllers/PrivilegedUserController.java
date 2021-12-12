@@ -40,22 +40,12 @@ public class PrivilegedUserController {
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<PrivilegedUserDTO> getOne(@PathVariable("id") int id) {
 		PrivilegedUserDTO privilegedUser = privilegedUserService.getOne(id);
-		/*
-		if(privilegedUser == null) {
-			return new ResponseEntity<PrivilegedUserDTO>(HttpStatus.NOT_FOUND);
-		}
-		*/
 		return new ResponseEntity<PrivilegedUserDTO>(privilegedUser, HttpStatus.OK);	
 	}
 	
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity delete(@PathVariable("id") int id) {
 		PrivilegedUserDTO privilegedUser = privilegedUserService.delete(id);
-		/*
-		if(privilegedUser == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-		*/
 		return new ResponseEntity<>("PrivilegedUser with id " + id + " successfully deleted", HttpStatus.OK);	
 	}
 	
@@ -68,11 +58,6 @@ public class PrivilegedUserController {
 	@PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<PrivilegedUserDTO> update(@PathVariable("id") int id, @RequestBody PrivilegedUserDTO privilegedUser) {
 		PrivilegedUserDTO updatedPrivilegedUser = privilegedUserService.update(id, privilegedUser);
-		/*
-		if(updatedPrivilegedUser == null) {
-			return new ResponseEntity<PrivilegedUserDTO>(HttpStatus.NOT_FOUND);
-		}
-		*/
 		return new ResponseEntity<PrivilegedUserDTO>(updatedPrivilegedUser, HttpStatus.OK);
 	}
 	
