@@ -57,8 +57,12 @@ public class EmployeeDTO {
 		this.pincode = employee.getPincode();
 		this.employeeType = employee.getEmployeeType();
 	}
-	
-	public Integer getId() {
+
+    public EmployeeDTO() {
+
+    }
+
+    public Integer getId() {
 		return id;
 	}
 

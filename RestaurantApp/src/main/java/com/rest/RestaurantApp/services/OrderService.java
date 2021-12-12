@@ -102,22 +102,22 @@ public class OrderService implements IOrderService {
 		// TODO Auto-generated method stub
 		// List<Article> articles = order.getOrderedArticles().stream().map(article ->
 		// article)
-		// dodati proveru jel sto slobodan 
-		Employee employee = employeeRepository.getById(order.getEmployeeId());
+		// dodati proveru jel sto slobodan
+		Employee employee = employeeRepository.findById(order.getEmployeeId()).get();
 		
 		if(!employee.getEmployeeType().equals(EmployeeType.WAITER)) {
 			throw new OrderTakenByWrongEmployeeTypeException("An employee of type " + employee.getEmployeeType().toString() +" can't create a new order");
 		}
 		
-		if(order.getOrderedArticles() == null) {
+		if(order.getArticles() == null) {
 			throw new NullArticlesException("Order must have at least 1 article");
 		}
 		
-		if(order.getOrderedArticles().size() == 0) {
+		if(order.getArticles().size() == 0) {
 			throw new NullArticlesException("Order must have at least 1 article");
 		}
 		
-		List<Article> articles = order.getOrderedArticles().stream()
+		List<Article> articles = order.getArticles().stream()
 				.map(article -> articleRepository.findById(article).get()).collect(Collectors.toList());
 		List<OrderedArticle> orderedArticles = articles.stream()
 				.map(orderedArticle -> new OrderedArticle(ArticleStatus.NOT_TAKEN, orderedArticle))
@@ -233,13 +233,13 @@ public class OrderService implements IOrderService {
 	public OrderedArticleDTO createArticleForOrder(OrderedArticleDTO article, int orderId) {
 		// TODO Auto-generated method stub
 		Optional<Article> articleData = articleRepository.findById(article.getArticleId());
-		if(articleData == null) {
-			return null;
+		if(articleData.isEmpty()) {
+			throw new NotFoundException("Article with id " + article.getArticleId() + " was not found");
 		}
 		Article newArticle = articleData.get();
 		Optional<Order> orderData = orderRepository.findById(orderId);
-		if(orderData == null) {
-			return null;
+		if(orderData.isEmpty()) {
+			throw new NotFoundException("Order with id " + orderId + " was not found");
 		}
 		Order order = orderData.get();
 		OrderedArticle orderedArticle = new OrderedArticle(ArticleStatus.NOT_TAKEN, newArticle, order, article.getDescription());
@@ -256,8 +256,8 @@ public class OrderService implements IOrderService {
 	public OrderedArticleDTO deleteArticleForOrder(int articleId) {
 		// TODO Auto-generated method stub
 		Optional<OrderedArticle> orderedArticleData = orderedArticleRepository.findById(articleId);
-		if(orderedArticleData == null) {
-			return null;
+		if(orderedArticleData.isEmpty()) {
+			throw new NotFoundException("Ordered article with id " + articleId + " was not found");
 		}
 		OrderedArticle orderedArticle = orderedArticleData.get();
 		if(!orderedArticle.getStatus().equals(ArticleStatus.NOT_TAKEN)) {

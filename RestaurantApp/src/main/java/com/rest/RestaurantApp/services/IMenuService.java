@@ -4,10 +4,10 @@ import com.rest.RestaurantApp.dto.MenuDTO;
 
 public interface IMenuService {
 	
-	MenuDTO getMenu();
+	MenuDTO getMenu(int menuId);
 	
-	MenuDTO deleteArticle(int id);
+	MenuDTO deleteArticle(int menuId, int id);
 	
-	MenuDTO addArticle(int id);
+	MenuDTO addArticle(int menuId, int id);
 	
 }

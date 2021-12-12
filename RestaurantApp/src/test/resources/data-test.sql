@@ -5,7 +5,7 @@ INSERT INTO users (type, birthday, email, name, surname, privileged_type, userna
 INSERT INTO menu (id) VALUES
   ('420');
 INSERT INTO article (name, description, type, menu_id) VALUES
-  ('Dobos torta', 'Jako fina', 'DESSERT', 420),
+  ('Dobos tortaaa', 'Jako fina', 'DESSERT', 420),
   ('Jagnjetina', 'Vruca', 'MAIN_COURSE', 420),
   ('Mesano meso', '1kg mesa sa rostilja', 'MAIN_COURSE', 420),
   ('Meze', 'Taze meze', 'APPETIZER', 420),

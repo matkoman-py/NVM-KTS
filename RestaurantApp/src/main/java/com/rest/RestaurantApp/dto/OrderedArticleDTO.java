@@ -9,6 +9,7 @@ public class OrderedArticleDTO {
 	private int articleId;
 	private ArticleStatus status;
 	private int orderId;
+	private boolean deleted;
 	private String description;
 	public OrderedArticleDTO(int articleId, ArticleStatus status, int orderId, String description) {
 		super();
@@ -17,6 +18,20 @@ public class OrderedArticleDTO {
 		this.orderId = orderId;
 		this.description = description;
 	}
+	
+	
+	public OrderedArticleDTO(int id, int articleId, ArticleStatus status, int orderId, boolean deleted,
+			String description) {
+		super();
+		this.id = id;
+		this.articleId = articleId;
+		this.status = status;
+		this.orderId = orderId;
+		this.deleted = deleted;
+		this.description = description;
+	}
+
+
 	public OrderedArticleDTO() {
 		super();
 	}
@@ -27,6 +42,13 @@ public class OrderedArticleDTO {
 		this.status = orderedArticle.getStatus();
 		this.orderId = orderedArticle.getOrder().getId();
 		this.description = orderedArticle.getDescription();
+		this.deleted = orderedArticle.isDeleted();
+	}
+	public boolean isDeleted() {
+		return deleted;
+	}
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 	public int getArticleId() {
 		return articleId;
