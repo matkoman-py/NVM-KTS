@@ -12,7 +12,7 @@ import com.rest.RestaurantApp.dto.ArticleDTO;
 import com.rest.RestaurantApp.dto.IngredientDTO;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.services.IngredientService;
-import org.junit.Assert;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import com.rest.RestaurantApp.repositories.IngredientRepository;
 
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
 
 import java.util.ArrayList;

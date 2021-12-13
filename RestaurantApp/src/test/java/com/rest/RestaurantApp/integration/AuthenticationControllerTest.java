@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -23,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("classpath:application-test.properties")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 public class AuthenticationControllerTest {
 
     @Autowired
@@ -63,12 +65,12 @@ public class AuthenticationControllerTest {
 
     @Test
     public void testLoginPin_ValidPin() {
-        ResponseEntity<EmployeeAuthDTO> response = restTemplate.getForEntity("/api/auth/login/1234", EmployeeAuthDTO.class);
+        ResponseEntity<EmployeeAuthDTO> response = restTemplate.getForEntity("/api/auth/login/4322", EmployeeAuthDTO.class);
 
         EmployeeAuthDTO employee = response.getBody();
 
-        assertEquals(employee.getEmployeeType(), EmployeeType.WAITER);
-        assertEquals(employee.getEmail(), "mateja99@yahoo.com");
+        assertEquals(employee.getEmployeeType(), EmployeeType.BARMAN);
+        assertEquals(employee.getEmail(), "suljak99@yahoo.com");
         assertEquals(response.getStatusCode(), HttpStatus.OK);
     }
 

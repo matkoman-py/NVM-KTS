@@ -9,17 +9,19 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("classpath:application-test.properties")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 public class IngredientServiceTest {
 
     @Autowired
@@ -49,15 +51,19 @@ public class IngredientServiceTest {
 
     @Test
     public void testDelete_ValidId() {
+        IngredientDTO createdIngredient = ingredientService.create(new IngredientDTO("Sastojak 3", false));
         int oldSize = ingredientService.getAll().size();
-        IngredientDTO ingredient = ingredientService.delete(1);
+        IngredientDTO ingredient = ingredientService.delete(createdIngredient.getId());
 
         List<IngredientDTO> ingredients = ingredientService.getAll();
         int newSize = ingredients.size();
 
         assertEquals(oldSize - 1, newSize);
-        assertEquals((int) ingredient.getId(), 1);
-        assertThrows(NoSuchElementException.class, () -> ingredients.stream().filter(i -> i.getId() == 1).findFirst().get());
+        assertEquals((int) ingredient.getId(), createdIngredient.getId());
+        assertThrows(NoSuchElementException.class, () -> ingredients.stream().filter(i -> i.getId() == createdIngredient.getId())
+                .findFirst().get());
+
+
     }
 
     @Test
@@ -78,9 +84,12 @@ public class IngredientServiceTest {
         List<IngredientDTO> ingredients = ingredientService.getAll();
         int newSize = ingredients.size();
 
+        ingredientService.delete(created.getId());
+
         assertEquals((int) created.getId(), 4);
         assertEquals(created.getName(), "Sastojak 1");
         assertEquals(oldSize + 1, newSize);
+
     }
 
     @Test
@@ -90,13 +99,15 @@ public class IngredientServiceTest {
         ingredientDTO.setAllergen(true);
         ingredientDTO.setName("Sastojak 1");
 
-        IngredientDTO updated = ingredientService.update(1, ingredientDTO);
+        IngredientDTO updated = ingredientService.update(2, ingredientDTO);
         List<IngredientDTO> ingredients = ingredientService.getAll();
         int newSize = ingredients.size();
 
-        assertEquals((int) updated.getId(), 1);
+        assertEquals((int) updated.getId(), 2);
         assertEquals(updated.getName(), "Sastojak 1");
         assertEquals(oldSize, newSize);
+
+//        ingredientService.update(2, new IngredientDTO("Cokolada", true));
     }
 
     @Test

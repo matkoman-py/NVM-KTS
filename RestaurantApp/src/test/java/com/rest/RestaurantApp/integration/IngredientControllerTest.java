@@ -11,6 +11,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.List;
@@ -20,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("classpath:application-test.properties")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 public class IngredientControllerTest {
 
     @Autowired
@@ -73,6 +75,7 @@ public class IngredientControllerTest {
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(createdIngredient.getName(), "Sastojak 1");
         assertFalse(createdIngredient.isAllergen());
+        assertEquals(createdIngredient.getId(), 4);
 
         List<IngredientDTO> ingredients = ingredientService.getAll();
         assertEquals(ingredients.size(), size + 1);

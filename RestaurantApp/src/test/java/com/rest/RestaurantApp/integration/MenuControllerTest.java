@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -13,7 +13,9 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.rest.RestaurantApp.domain.enums.ArticleType;
@@ -23,9 +25,10 @@ import com.rest.RestaurantApp.dto.MenuDTO;
 import com.rest.RestaurantApp.services.ArticleService;
 import com.rest.RestaurantApp.services.MenuService;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("classpath:application-test.properties")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 public class MenuControllerTest {
 	
 	@Autowired
@@ -58,6 +61,7 @@ public class MenuControllerTest {
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 		assertEquals(11, menu.getArticles().size());
 		menuService.deleteArticle(420, newArticle.getId());
+		articleService.delete(newArticle.getId());
 	}
 	
 	@Test
