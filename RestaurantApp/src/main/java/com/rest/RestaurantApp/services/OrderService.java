@@ -276,12 +276,12 @@ public class OrderService implements IOrderService {
 	public OrderedArticleDTO updateArticleForOrder(int articleId, OrderedArticleDTO article) {
 		// TODO Auto-generated method stub
 		Optional<OrderedArticle> orderedArticleData = orderedArticleRepository.findById(articleId);
-		if(orderedArticleData == null) {
-			return null;
+		if(orderedArticleData.isEmpty()) {
+			throw new NotFoundException("Ordered article with id " + articleId + " was not found");
 		}
 		Optional<Article> articleData = articleRepository.findById(article.getArticleId());
-		if(articleData == null) {
-			return null;
+		if(articleData.isEmpty()) {
+			throw new NotFoundException("Article with id " + articleId + " was not found");
 		}
 		OrderedArticle orderedArticle = orderedArticleData.get();
 		if(!orderedArticle.getStatus().equals(ArticleStatus.NOT_TAKEN)) {
