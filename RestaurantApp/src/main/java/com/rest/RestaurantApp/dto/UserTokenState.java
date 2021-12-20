@@ -1,21 +1,13 @@
 package com.rest.RestaurantApp.dto;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserTokenState {
     private String accessToken;
-
-    public UserTokenState() {
-        this.accessToken = null;
-    }
-
-    public UserTokenState(String accessToken) {
-        this.accessToken = accessToken;
-    }
-
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
 }

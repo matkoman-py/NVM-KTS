@@ -5,9 +5,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.rest.RestaurantApp.domain.BaseEntity;
 import com.rest.RestaurantApp.domain.Order;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderDTO {
 	
 	private Integer id;
@@ -18,17 +27,6 @@ public class OrderDTO {
 	private List<Integer> orderedArticles;
 	private int tableNumber;
 	private int employeeId;
-	
-	public OrderDTO(Integer id, boolean deleted, String description, LocalDateTime orderDate, int tableNumber, int employeeId) {
-		super();
-		this.id = id;
-		this.deleted = deleted;
-		this.description = description;
-		this.orderDate = orderDate;
-		this.tableNumber = tableNumber;
-		this.employeeId = employeeId;
-	}
-	
 
 	public OrderDTO(boolean deleted, String description, LocalDateTime orderDate, List<Integer> articles,
 			int tableNumber, int employeeId) {
@@ -40,10 +38,7 @@ public class OrderDTO {
 		this.tableNumber = tableNumber;
 		this.employeeId = employeeId;
 	}
-	public OrderDTO() {
-		super();
-	}
-	
+
 	public OrderDTO(Order order) {
 		super();
 		this.id = order.getId();
@@ -53,10 +48,8 @@ public class OrderDTO {
 		this.tableNumber = order.getTableNumber();
 		this.employeeId = order.getEmployee().getId();
 		this.articles = order.getOrderedArticles().stream().map(article -> article.getArticle().getId()).collect(Collectors.toList());
-		this.orderedArticles = order.getOrderedArticles().stream().map(article -> article.getId()).collect(Collectors.toList());
+		this.orderedArticles = order.getOrderedArticles().stream().map(BaseEntity::getId).collect(Collectors.toList());
 	}
-	
-	
 
 	public OrderDTO(Integer id, boolean deleted, String description, LocalDateTime orderDate,
 			List<Integer> orderedArticles, int tableNumber, int employeeId) {
@@ -70,73 +63,4 @@ public class OrderDTO {
 		this.employeeId = employeeId;
 	}
 
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	
-	public List<Integer> getArticles() {
-		return articles;
-	}
-
-	public void setArticles(List<Integer> orderedArticles) {
-		this.articles = orderedArticles;
-	}
-
-	public LocalDateTime getOrderDate() {
-		return orderDate;
-	}
-
-	public void setOrderDate(LocalDateTime orderDate) {
-		this.orderDate = orderDate;
-	}
-
-	public int getTableNumber() {
-		return tableNumber;
-	}
-
-	public void setTableNumber(int tableNumber) {
-		this.tableNumber = tableNumber;
-	}
-
-	public int getEmployeeId() {
-		return employeeId;
-	}
-
-	public void setEmployeeId(int employeeId) {
-		this.employeeId = employeeId;
-	}
-
-	public List<Integer> getOrderedArticles() {
-		return orderedArticles;
-	}
-
-	public void setOrderedArticles(List<Integer> orderedArticles) {
-		this.orderedArticles = orderedArticles;
-	}
-	
-	
-	
-	
-	
 }

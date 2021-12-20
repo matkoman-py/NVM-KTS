@@ -2,7 +2,15 @@ package com.rest.RestaurantApp.dto;
 
 import com.rest.RestaurantApp.domain.OrderedArticle;
 import com.rest.RestaurantApp.domain.enums.ArticleStatus;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderedArticleDTO {
 
 	private int id;
@@ -11,6 +19,7 @@ public class OrderedArticleDTO {
 	private int orderId;
 	private boolean deleted;
 	private String description;
+
 	public OrderedArticleDTO(int articleId, ArticleStatus status, int orderId, String description) {
 		super();
 		this.articleId = articleId;
@@ -18,23 +27,7 @@ public class OrderedArticleDTO {
 		this.orderId = orderId;
 		this.description = description;
 	}
-	
-	
-	public OrderedArticleDTO(int id, int articleId, ArticleStatus status, int orderId, boolean deleted,
-			String description) {
-		super();
-		this.id = id;
-		this.articleId = articleId;
-		this.status = status;
-		this.orderId = orderId;
-		this.deleted = deleted;
-		this.description = description;
-	}
 
-
-	public OrderedArticleDTO() {
-		super();
-	}
 	public OrderedArticleDTO(OrderedArticle orderedArticle) {
 		super();
 		this.id = orderedArticle.getId();
@@ -44,46 +37,4 @@ public class OrderedArticleDTO {
 		this.description = orderedArticle.getDescription();
 		this.deleted = orderedArticle.isDeleted();
 	}
-	public boolean isDeleted() {
-		return deleted;
-	}
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
-	public int getArticleId() {
-		return articleId;
-	}
-	public void setArticleId(int articleId) {
-		this.articleId = articleId;
-	}
-	public ArticleStatus getStatus() {
-		return status;
-	}
-	public void setStatus(ArticleStatus status) {
-		this.status = status;
-	}
-	public int getOrderId() {
-		return orderId;
-	}
-	public void setOrderId(int orderId) {
-		this.orderId = orderId;
-	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
-	
-	
-	
-	
-	
-	
 }

@@ -3,7 +3,15 @@ package com.rest.RestaurantApp.dto;
 import java.util.List;
 
 import com.rest.RestaurantApp.domain.enums.ArticleType;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ArticleCreationDTO {
 	
 	private List<IngredientDTO> ingredients;
@@ -18,67 +26,4 @@ public class ArticleCreationDTO {
 	
 	private ArticleType type;
 
-	public ArticleCreationDTO(List<IngredientDTO> ingredients, String name, double makingPrice, double sellingPrice,
-			String description, ArticleType type) {
-		super();
-		this.ingredients = ingredients;
-		this.name = name;
-		this.makingPrice = makingPrice;
-		this.sellingPrice = sellingPrice;
-		this.description = description;
-		this.type = type;
-	}
-
-	public ArticleCreationDTO() {
-		super();
-	}
-
-	public List<IngredientDTO> getIngredients() {
-		return ingredients;
-	}
-
-	public void setIngredients(List<IngredientDTO> ingredients) {
-		this.ingredients = ingredients;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public double getMakingPrice() {
-		return makingPrice;
-	}
-
-	public void setMakingPrice(double makingPrice) {
-		this.makingPrice = makingPrice;
-	}
-
-	public double getSellingPrice() {
-		return sellingPrice;
-	}
-
-	public void setSellingPrice(double sellingPrice) {
-		this.sellingPrice = sellingPrice;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public ArticleType getType() {
-		return type;
-	}
-
-	public void setType(ArticleType type) {
-		this.type = type;
-	}
-	
 }

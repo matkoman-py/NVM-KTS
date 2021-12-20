@@ -1,25 +1,15 @@
 package com.rest.RestaurantApp.dto;
 
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class MenuDTO {
 	private List<ArticleDTO> articles;
-
-	public MenuDTO(List<ArticleDTO> articles) {
-		super();
-		this.articles = articles;
-	}
-
-	public MenuDTO() {
-		super();
-	}
-
-	public List<ArticleDTO> getArticles() {
-		return articles;
-	}
-
-	public void setArticles(List<ArticleDTO> articles) {
-		this.articles = articles;
-	}
-	
 }
