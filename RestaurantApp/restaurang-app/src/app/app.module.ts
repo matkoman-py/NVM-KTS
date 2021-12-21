@@ -7,8 +7,17 @@ import { AppRoutingModule } from './app-routing/app-routing.module';
 import { MenubarModule } from 'primeng/menubar';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
+
+import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { LoginComponent } from './login/components/login.component';
+import { PasswordModule } from 'primeng/password';
+import { TabViewModule } from 'primeng/tabview'
+import { LoginService } from './login/services/login.service';
+import { HttpClientModule } from '@angular/common/http';
+
 @NgModule({
-  declarations: [AppComponent, NavbarComponent],
+  declarations: [AppComponent, NavbarComponent, LoginComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -16,8 +25,13 @@ import { ButtonModule } from 'primeng/button';
     MenubarModule,
     InputTextModule,
     ButtonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    PasswordModule,
+    TabViewModule,
+    HttpClientModule,
   ],
-  providers: [],
+  providers: [LoginService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
