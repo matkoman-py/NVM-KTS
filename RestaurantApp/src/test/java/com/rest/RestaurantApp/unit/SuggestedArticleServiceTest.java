@@ -22,7 +22,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import com.rest.RestaurantApp.domain.Article;
 import com.rest.RestaurantApp.domain.Employee;
+import com.rest.RestaurantApp.domain.Ingredient;
 import com.rest.RestaurantApp.domain.SalaryInfo;
 import com.rest.RestaurantApp.domain.SuggestedArticle;
 import com.rest.RestaurantApp.domain.enums.ArticleType;
@@ -62,34 +64,74 @@ public class SuggestedArticleServiceTest {
 	@BeforeEach
 	public void setup() {
 		List<SuggestedArticle> suggestedArticles = new ArrayList<>();
+		Set<Ingredient> ingredients1 = new HashSet<>();
+		Ingredient ingredient1 = new Ingredient("milk",true);
+		Ingredient ingredient2 = new Ingredient("butter",true);
+
+		ingredients1.add(ingredient1);
+		ingredients1.add(ingredient2);
 		SuggestedArticle suggestedArticle1 = new SuggestedArticle("kola", "hladna", 100, 200, ArticleType.DRINK);
 		SuggestedArticle suggestedArticle2 = new SuggestedArticle("kol1a", "hladna", 100, 200, ArticleType.DRINK);
 		SuggestedArticle suggestedArticle3 = new SuggestedArticle("kola2", "hladna", 100, 200, ArticleType.DRINK);
 		
+		suggestedArticle1.setIngredients(ingredients1);
+		suggestedArticle2.setIngredients(ingredients1);
+		suggestedArticle3.setIngredients(ingredients1);
+		
 		suggestedArticles.add(suggestedArticle1);
 		suggestedArticles.add(suggestedArticle2);
 		suggestedArticles.add(suggestedArticle3);
-		
+
 		given(suggestedArticleRepository.findAll()).willReturn(suggestedArticles);
 		given(suggestedArticleRepository.findById(1)).willReturn(java.util.Optional.of(suggestedArticle1));
 		given(suggestedArticleRepository.findById(2)).willReturn(java.util.Optional.of(suggestedArticle2));
 		given(suggestedArticleRepository.findById(3)).willReturn(java.util.Optional.of(suggestedArticle3));
 		given(suggestedArticleRepository.findById(4)).willReturn(Optional.empty());
 		given(suggestedArticleRepository.save(suggestedArticle1)).willReturn(suggestedArticle1);
+		
+		Article newArticle1 = new Article(suggestedArticle1.getName(), suggestedArticle1.getDescription(), suggestedArticle1.getType());
+		Article newArticle2 = new Article(suggestedArticle2.getName(), suggestedArticle2.getDescription(), suggestedArticle2.getType());
+		Article newArticle3 = new Article(suggestedArticle3.getName(), suggestedArticle3.getDescription(), suggestedArticle3.getType());
+
+		given(articleRepository.save(newArticle1)).willReturn(newArticle1);
+		given(articleRepository.save(newArticle2)).willReturn(newArticle2);
+		given(articleRepository.save(newArticle3)).willReturn(newArticle3);
+
+		given(ingredientRepository.findById(1)).willReturn(java.util.Optional.of(ingredient1));
+		given(ingredientRepository.findById(1)).willReturn(java.util.Optional.of(ingredient2));
+
+		SuggestedArticle newSuggestedArticle = new SuggestedArticle("kola", "hladna", 100, 200, ArticleType.DRINK);
+		newSuggestedArticle.setId(5);
+		newSuggestedArticle.setIngredients(new HashSet<>());
+		
+		given(suggestedArticleRepository.save(newSuggestedArticle)).willReturn(newSuggestedArticle);
 	}
+	
+//	@Test
+//	void testCreate() {
+//		SuggestedArticleDTO suggestedArticle = new SuggestedArticleDTO(5,new HashSet<>(),"kola", "hladna", 100, 200, ArticleType.DRINK);
+//
+//		SuggestedArticleDTO createdArticle = suggestedArticleService.create(suggestedArticle);
+//		
+//		assertEquals("kola", createdArticle.getName());
+//		assertEquals("hladna", createdArticle.getDescription());
+//		assertEquals("kola", createdArticle.getName());
+//		assertEquals(100, createdArticle.getSuggestedMakingPrice());
+//		assertEquals(200, createdArticle.getName());
+//		assertEquals(ArticleType.DRINK, createdArticle.getType());
+//	}
 	
 	@Test
 	void testFindOne_ValidId() {
 		
 		SuggestedArticleDTO result = suggestedArticleService.getOne(1);
-		
-		assertEquals(result.getName(), "kola");
+		assertEquals("kola", result.getName());
 	}
 	
 	@Test
 	void testFindOne_InvalidId() {
 		assertThrows(NotFoundException.class, ()->{
-			SuggestedArticleDTO result = suggestedArticleService.getOne(4);
+			suggestedArticleService.getOne(4);
             });
 	}
 	
@@ -98,7 +140,7 @@ public class SuggestedArticleServiceTest {
 		
 		List<SuggestedArticleDTO> returnedArticles = suggestedArticleService.getAll();
 		
-		assertEquals(returnedArticles.size(), 3);
+		assertEquals(3, returnedArticles.size());
 	}
 	
 	@Test
@@ -106,13 +148,13 @@ public class SuggestedArticleServiceTest {
 		
 		SuggestedArticleDTO result = suggestedArticleService.delete(1);
 		
-		assertEquals(result.getName(), "kola");
+		assertEquals("kola", result.getName());
 	}
 	
 	@Test
 	void testDelete_InvalidId() {
 		assertThrows(NotFoundException.class, ()->{
-			SuggestedArticleDTO result = suggestedArticleService.delete(4);
+			suggestedArticleService.delete(4);
             });
 	}
 	
@@ -125,19 +167,32 @@ public class SuggestedArticleServiceTest {
 		newArticle.setIngredients(new HashSet<IngredientDTO>());
 		
 		SuggestedArticleDTO result = suggestedArticleService.update(1, newArticle);
-		assertEquals(result.getName(), "kola");
-		assertEquals(result.getDescription(), "bas dobar");
+		assertEquals("kola", result.getName());
+		assertEquals("bas dobar", result.getDescription());
 	}
 	
 	@Test
 	void testUpdate_InvalidId() {
 		
 		SuggestedArticleDTO newArticle = new SuggestedArticleDTO();
-		newArticle.setName("kola");
-		newArticle.setDescription("bas dobar");
 
 		assertThrows(NotFoundException.class, ()->{
-			SuggestedArticleDTO result = suggestedArticleService.update(15, newArticle);
+			suggestedArticleService.update(15, newArticle);
             });
+	}
+	
+	@Test
+	void testApprove_InvalidId() {
+
+		assertThrows(NotFoundException.class, ()->{
+			suggestedArticleService.approve(11);
+            });
+	}
+	
+	@Test
+	void testApprove_ValidId() {
+		
+		SuggestedArticleDTO result = suggestedArticleService.approve(1);
+		assertEquals("kola", result.getName());
 	}
 }

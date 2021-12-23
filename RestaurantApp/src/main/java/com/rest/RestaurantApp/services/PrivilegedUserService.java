@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.rest.RestaurantApp.domain.Employee;
 import com.rest.RestaurantApp.domain.PrivilegedUser;
 import com.rest.RestaurantApp.domain.SalaryInfo;
+import com.rest.RestaurantApp.dto.EmployeeDTO;
 import com.rest.RestaurantApp.dto.PrivilegedUserDTO;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.repositories.PriviligedUserRepository;
@@ -64,15 +66,20 @@ public class PrivilegedUserService implements IPrivilegedUserService{
 	public PrivilegedUserDTO create(PrivilegedUserDTO privilegedUser) {
 		PrivilegedUser newPrivilegedUser = new PrivilegedUser(privilegedUser.getEmail(), privilegedUser.getName(), privilegedUser.getSurname(), 
 				privilegedUser.getBirthday(), privilegedUser.getType(), privilegedUser.getUsername(), privilegedUser.getPassword(), privilegedUser.getPrivilegedType());
+		
+		PrivilegedUser createdPrivilegedUser = privilegedUserRepository.save(newPrivilegedUser);
+		
 		SalaryInfo salaryInfo = new SalaryInfo(new Date(), privilegedUser.getSalary(), newPrivilegedUser);
 		salaryInfoRepository.save(salaryInfo);
-		newPrivilegedUser.setNewSalary(salaryInfo);
-		List<Role> roles = roleService.findByName("MANAGER");
-		newPrivilegedUser.setRoles(roles);
-		return new PrivilegedUserDTO(privilegedUserRepository.save(newPrivilegedUser));
+		createdPrivilegedUser.setNewSalary(salaryInfo);
+		
+		//List<Role> roles = roleService.findByName("MANAGER");
+		//createdPrivilegedUser.setRoles(roles);
+		
+		PrivilegedUser createdPrivilegedUserWithSalary = privilegedUserRepository.save(createdPrivilegedUser);
+		return new PrivilegedUserDTO(createdPrivilegedUserWithSalary);
 	}
-
-
+	
 	@Override
 	public PrivilegedUserDTO update(int id, PrivilegedUserDTO privilegedUser) {
 		Optional<PrivilegedUser> oldPrivilegedUserData = privilegedUserRepository.findById(id);
@@ -80,6 +87,9 @@ public class PrivilegedUserService implements IPrivilegedUserService{
 			throw new NotFoundException("Privileged user with id " + id + " was not found");
 		}
 		PrivilegedUser oldPrivilegedUser = oldPrivilegedUserData.get();
+		SalaryInfo salaryInfo = new SalaryInfo(new Date(), privilegedUser.getSalary(), oldPrivilegedUser);
+		salaryInfoRepository.save(salaryInfo);
+		oldPrivilegedUser.setNewSalary(salaryInfo);
 		oldPrivilegedUser.setEmail(privilegedUser.getEmail());
 		oldPrivilegedUser.setName(privilegedUser.getName());
 		oldPrivilegedUser.setSurname(privilegedUser.getSurname());
