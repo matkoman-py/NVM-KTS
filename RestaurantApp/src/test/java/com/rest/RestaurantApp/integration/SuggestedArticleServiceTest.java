@@ -56,17 +56,21 @@ public class SuggestedArticleServiceTest {
 		
 		List<SuggestedArticleDTO> result = suggestedArticleService.getAll();
 		
-		assertEquals(1, result.size());
+		assertEquals(2, result.size());
 	}
 	
 	@Test
 	void testDelete_ValidId() {
+		Set<IngredientDTO> ingredients = new HashSet<IngredientDTO>();
+		SuggestedArticleDTO suggestedArticle = new SuggestedArticleDTO(1,ingredients,"new cake","sehr gut",100,150,ArticleType.DESSERT);
+		
+		SuggestedArticleDTO createdSuggestedArticle = suggestedArticleService.create(suggestedArticle);
 		
 		List<SuggestedArticleDTO> result1 = suggestedArticleService.getAll();
-		SuggestedArticleDTO employee = suggestedArticleService.delete(1);
+		suggestedArticleService.delete(createdSuggestedArticle.getId());
 		List<SuggestedArticleDTO> result2 = suggestedArticleService.getAll();
 		
-		assertNotEquals(result1.size(),result2.size());
+		assertEquals(result1.size(),result2.size() + 1);
 	}
 	
 	@Test

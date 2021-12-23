@@ -2,6 +2,8 @@ package com.rest.RestaurantApp.integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Date;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,8 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.rest.RestaurantApp.domain.enums.EmployeeType;
+import com.rest.RestaurantApp.domain.enums.UserType;
 import com.rest.RestaurantApp.dto.EmployeeDTO;
 import com.rest.RestaurantApp.services.EmployeeService;
 
@@ -27,7 +31,7 @@ public class EmployeeControllerTest {
 
 	@Autowired
     private TestRestTemplate restTemplate;
-	
+
 	@Autowired
 	private EmployeeService employeeService;
 	
@@ -56,14 +60,88 @@ public class EmployeeControllerTest {
 		EmployeeDTO[] employees = responseEntity.getBody();
 		
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-		assertEquals(employees.length, 4);
+		assertEquals(4, employees.length);
 	}
 	
 	@Test
-	public void testDelete() { 
+	public void testDelete_ValidId() { 
 		ResponseEntity<String> responseEntity = restTemplate.exchange(
-				"/api/employee/3", HttpMethod.DELETE, new HttpEntity<Object>(null), String.class);
+				"/api/employee/6", HttpMethod.DELETE, new HttpEntity<Object>(null), String.class);
 
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+	}
+	
+	@Test
+	public void testDelete_InvalidId() { 
+		ResponseEntity<String> responseEntity = restTemplate.exchange(
+				"/api/employee/15", HttpMethod.DELETE, new HttpEntity<Object>(null), String.class);
+
+		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+	}
+	
+	@Test
+	public void testcheckIfWaiterPin_ValidPinAndValidEmployeeType() {
+		ResponseEntity<String> responseEntity = restTemplate.exchange(
+				"/api/employee/test_waiter/1234", HttpMethod.GET, new HttpEntity<Object>(null), String.class);
+		
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+	}
+	
+	@Test
+	public void testcheckIfWaiterPin_NonExistingPin() {
+		ResponseEntity<String> responseEntity = restTemplate.exchange(
+				"/api/employee/test_waiter/6666", HttpMethod.GET, new HttpEntity<Object>(null), String.class);
+		
+		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+	}
+	
+	@Test
+	public void testcheckIfWaiterPin_ValidPinAndInvalidEmployeeType() {
+		ResponseEntity<Boolean> responseEntity = restTemplate.exchange(
+				"/api/employee/test_waiter/2910", HttpMethod.GET, new HttpEntity<Object>(null), Boolean.class);
+		
+		assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
+	}
+	
+	@Test
+	public void testUpdate_InvalidId() {
+		EmployeeDTO employee = new EmployeeDTO(7,10000,"aca@gmail.com","Aleksa","Kekezovic",new Date(),UserType.EMPLOYEE, 1111, EmployeeType.COOK);
+
+		ResponseEntity<String> responseEntity = restTemplate.exchange(
+				"/api/employee/15", HttpMethod.PUT, new HttpEntity<EmployeeDTO>(employee), String.class);
+		
+		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+	}
+	
+	@Test
+	public void testUpdate_ValidId() {
+		EmployeeDTO employee = new EmployeeDTO(7,10000,"aca@gmail.com","Aleksa","Kekezovic",new Date(),UserType.EMPLOYEE, 1111, EmployeeType.COOK);
+
+		ResponseEntity<EmployeeDTO> responseEntity = restTemplate.exchange(
+				"/api/employee/4", HttpMethod.PUT, new HttpEntity<EmployeeDTO>(employee), EmployeeDTO.class);
+		
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		assertEquals("Aleksa", responseEntity.getBody().getName());
+		assertEquals("Kekezovic", responseEntity.getBody().getSurname());
+		assertEquals("aca@gmail.com", responseEntity.getBody().getEmail());
+		assertEquals(EmployeeType.COOK, responseEntity.getBody().getEmployeeType());
+		assertEquals(1111, responseEntity.getBody().getPincode());
+	}
+	
+	@Test
+	public void testCreate() {
+		EmployeeDTO employee = new EmployeeDTO(7,10000,"acafaca@gmail.com","Aleksa","Kekezovic",new Date(),UserType.EMPLOYEE, 1111, EmployeeType.COOK);
+
+		ResponseEntity<EmployeeDTO> responseEntity = restTemplate.exchange(
+				"/api/employee", HttpMethod.POST, new HttpEntity<EmployeeDTO>(employee), EmployeeDTO.class);
+		
+		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+		assertEquals("Aleksa", employeeService.getOne(responseEntity.getBody().getId()).getName());
+		assertEquals("Kekezovic", employeeService.getOne(responseEntity.getBody().getId()).getSurname());
+		assertEquals("acafaca@gmail.com", employeeService.getOne(responseEntity.getBody().getId()).getEmail());
+		assertEquals(EmployeeType.COOK, employeeService.getOne(responseEntity.getBody().getId()).getEmployeeType());
+		assertEquals(1111, employeeService.getOne(responseEntity.getBody().getId()).getPincode());
+	
+		employeeService.delete(responseEntity.getBody().getId());
 	}
 }
