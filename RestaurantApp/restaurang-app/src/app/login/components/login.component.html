@@ -1,0 +1,28 @@
+<div class="login-form">
+    <div class="border">
+        <h1 class="title">Welcome!</h1>
+        <p-tabView>
+            <p-tabPanel header="Priviledged User">
+                <span class="p-float-label p-input-icon-right username">
+                    <input id="float-input" type="text" pInputText [(ngModel)]="username"> 
+                    <label for="float-input">Username</label>
+                </span>
+
+                <span class="p-float-label">
+                    <p-password [(ngModel)]="password" [toggleMask]="true" [feedback]="false"></p-password>
+                    <label for="float-input">Password</label>
+                </span>
+
+                <button (click)="onPriviledgeLogin()" pButton pRipple type="button" label="Log In" class="p-button-rounded login-button"></button>
+            </p-tabPanel>
+
+            <p-tabPanel header="Employee">
+                <span class="p-float-label">
+                    <p-password [(ngModel)]="pincode" [toggleMask]="true" [feedback]="false"></p-password>
+                    <label for="float-input">Pincode</label>
+                </span>
+                <button (click)="onEmployeeLogin()" pButton pRipple type="button" label="Log In" class="p-button-rounded login-button"></button>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</div>
