@@ -19,8 +19,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Where;
 
-
-
 @Entity
 @Table(name = "orders")
 @Where(clause = "deleted = false")
