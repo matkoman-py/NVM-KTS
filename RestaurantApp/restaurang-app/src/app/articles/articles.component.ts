@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ArticlesService } from '../services/articles/articles.service';
 import { Article, ArticleType } from './article.model';
 import { MessageService, PrimeNGConfig } from 'primeng/api';
+
 @Component({
   selector: 'app-articles',
   templateUrl: './articles.component.html',
@@ -32,7 +33,11 @@ export class ArticlesComponent implements OnInit {
   }
 
   getArticles() {
-    this.articles = this.articlesService.getArticles();
+    this.articlesService.getArticles().subscribe((data) => {
+      this.articles = data;
+    });
+    // this.articles = this.articlesService.getArticles();
+    console.log(this.articlesService.getArticles());
   }
 
   next() {
@@ -78,6 +83,7 @@ export class ArticlesComponent implements OnInit {
       });
       return;
     }
+    this.articlesService.delete(this.selectedArticle._id);
   }
 
   isLastPage(): boolean {
