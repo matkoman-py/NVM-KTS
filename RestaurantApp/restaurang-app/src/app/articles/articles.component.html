@@ -15,6 +15,7 @@
         [options]="articleTypes"
         [(ngModel)]="selectedArticleType"
         optionLabel="name"
+        placeholder="Select a type"
       ></p-dropdown>
     </div>
     <button pButton type="button" label="Submit" (click)="search()"></button>
@@ -36,7 +37,7 @@
         <th>Selling price</th>
         <th>Description</th>
         <th>Type</th>
-        <th>Ingredients</th>
+        <!-- <th>Ingredients</th> -->
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-article>
@@ -46,7 +47,8 @@
         <td>{{ article.sellingPrice }}</td>
         <td>{{ article.description }}</td>
         <td>{{ article.type }}</td>
-        <td>{{ article.ingredients }}</td>
+        <!-- STA RADITI SA INGREDIENTS -->
+        <!-- <td>{{ article.ingredients }}</td> -->
       </tr>
     </ng-template>
     <ng-template pTemplate="paginatorleft"> </ng-template>

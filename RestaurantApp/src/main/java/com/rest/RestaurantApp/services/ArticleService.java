@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.rest.RestaurantApp.domain.Article;
 import com.rest.RestaurantApp.domain.Ingredient;
 import com.rest.RestaurantApp.domain.PriceInfo;
+import com.rest.RestaurantApp.domain.enums.ArticleType;
 import com.rest.RestaurantApp.dto.ArticleCreationDTO;
 import com.rest.RestaurantApp.dto.ArticleDTO;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
@@ -41,6 +42,14 @@ public class ArticleService implements IArticleService {
 	@Override
 	public List<ArticleDTO> getAll() {
 		return articleRepository.findAll().stream().map(article -> new ArticleDTO(article)).collect(Collectors.toList());
+	}
+	
+	@Override
+	public List<ArticleDTO> search(String type) {
+		if(type.equals("")) {
+			return articleRepository.findAll().stream().map(article -> new ArticleDTO(article)).collect(Collectors.toList());
+		}
+		return articleRepository.findByType(ArticleType.valueOf(type)).stream().map(article -> new ArticleDTO(article)).collect(Collectors.toList());
 	}
 	
 	@Override

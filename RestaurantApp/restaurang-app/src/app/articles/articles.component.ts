@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ArticlesService } from '../services/articles/articles.service';
-import { Article, ArticleType } from './article.model';
+import { ArticlesService } from './services/articles.service';
+import { Article, ArticleType } from '../modules/shared/models/article';
 import { MessageService, PrimeNGConfig } from 'primeng/api';
 
 @Component({
@@ -13,10 +13,12 @@ export class ArticlesComponent implements OnInit {
   articles: Article[] = [];
   selectedArticle: Article = {};
   articleTypes: ArticleType[] = [
-    { name: 'Dessert', value: 'DESSERT' },
-    { name: 'Drink', value: 'DRINK' },
+    { name: 'DESSERT', value: 'DESSERT' },
+    { name: 'DRINK', value: 'DRINK' },
+    { name: 'APPETIZER', value: 'APPETIZER' },
+    { name: 'MAIN_COURSE', value: 'MAIN_COURSE' },
   ];
-  selectedArticleType: ArticleType = {};
+  selectedArticleType: ArticleType = { name: '', value: '' };
   nameSearchParam = '';
   first = 0;
   rows = 10;
@@ -32,14 +34,6 @@ export class ArticlesComponent implements OnInit {
     this.getArticles();
   }
 
-  getArticles() {
-    this.articlesService.getArticles().subscribe((data) => {
-      this.articles = data;
-    });
-    // this.articles = this.articlesService.getArticles();
-    console.log(this.articlesService.getArticles());
-  }
-
   next() {
     this.first = this.first + this.rows;
   }
@@ -52,8 +46,18 @@ export class ArticlesComponent implements OnInit {
     this.first = 0;
   }
 
+  getArticles() {
+    this.articlesService.getArticles().subscribe((data) => {
+      this.articles = data;
+    });
+  }
+
   search() {
-    this.articlesService.search(this.selectedArticleType, this.nameSearchParam);
+    this.articlesService
+      .search(this.selectedArticleType, this.nameSearchParam)
+      .subscribe((data) => {
+        this.articles = data;
+      });
   }
 
   create() {
@@ -83,7 +87,16 @@ export class ArticlesComponent implements OnInit {
       });
       return;
     }
-    this.articlesService.delete(this.selectedArticle._id);
+    this.articlesService.delete(this.selectedArticle.id).subscribe((res) => {
+      this.messageService.add({
+        key: 'tc',
+        severity: 'success',
+        summary: 'Success',
+        detail: res.message,
+      });
+      this.selectedArticle = {};
+      this.getArticles();
+    });
   }
 
   isLastPage(): boolean {

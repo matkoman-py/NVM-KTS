@@ -9,6 +9,8 @@ public interface IArticleService {
 	
 	List<ArticleDTO> getAll();
 	
+	List<ArticleDTO> search(String type);
+	
 	ArticleDTO getOne(int id);
 	
 	ArticleDTO delete(int id);
