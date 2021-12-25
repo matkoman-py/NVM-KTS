@@ -36,12 +36,12 @@ public class EmployeeService implements IEmployeeService{
 		this.salaryInfoRepository = salaryInfoRepository;
 	}
 	
-	@Override
+	@Override//
 	public List<EmployeeDTO> getAll() {
 		return employeeRepository.findAll().stream().map(employee -> new EmployeeDTO(employee)).collect(Collectors.toList());
 	}
 
-	@Override
+	@Override//
 	public EmployeeDTO getOne(int id) {
 		Optional<Employee> employee =  employeeRepository.findById(id);
 		if(employee.isEmpty()) {
@@ -50,7 +50,7 @@ public class EmployeeService implements IEmployeeService{
 		return new EmployeeDTO(employee.get());
 	}
 
-	@Override
+	@Override//
 	public EmployeeDTO delete(int id) {
 		Optional<Employee> employeeData =  employeeRepository.findById(id);
 		if(employeeData.isEmpty()) {
@@ -62,23 +62,31 @@ public class EmployeeService implements IEmployeeService{
 		return new EmployeeDTO(employee);
 	}
 
-	@Override
+	@Override//
 	public EmployeeDTO create(EmployeeDTO employee) {
 		Employee newEmpolyee = new Employee(employee.getEmail(), employee.getName(), employee.getSurname(), 
 				employee.getBirthday(), employee.getType(), employee.getPincode(), employee.getEmployeeType());
+		Employee createdEmployee = employeeRepository.save(newEmpolyee);
+		
 		SalaryInfo salaryInfo = new SalaryInfo(new Date(), employee.getSalary(), newEmpolyee);
 		salaryInfoRepository.save(salaryInfo);
-		newEmpolyee.setNewSalary(salaryInfo);
-		return new EmployeeDTO(employeeRepository.save(newEmpolyee));
+		createdEmployee.setNewSalary(salaryInfo);
+		
+		Employee createdEmployeeWithSalary = employeeRepository.save(newEmpolyee);
+		
+		return new EmployeeDTO(createdEmployeeWithSalary);
 	}
 
-	@Override
+	@Override//
 	public EmployeeDTO update(int id, EmployeeDTO employee) {
 		Optional<Employee> oldEmployeeData = employeeRepository.findById(id);
 		if(oldEmployeeData.isEmpty()) {
 			throw new NotFoundException("Employee with id " + id + " was not found");
 		}
 		Employee oldEmployee = oldEmployeeData.get();
+		SalaryInfo salaryInfo = new SalaryInfo(new Date(), employee.getSalary(), oldEmployee);
+		salaryInfoRepository.save(salaryInfo);
+		oldEmployee.setNewSalary(salaryInfo);
 		oldEmployee.setEmail(employee.getEmail());
 		oldEmployee.setName(employee.getName());
 		oldEmployee.setSurname(employee.getSurname());
@@ -95,14 +103,18 @@ public class EmployeeService implements IEmployeeService{
 		return new EmployeeDTO(employeeRepository.save(oldEmployee));
 	}
 
-	@Override
+	@Override//
 	public boolean checkPin(int pin, EmployeeType type) {
-		Employee e = employeeRepository.findByPincode(pin);
-
-		return e != null && e.getEmployeeType().equals(type);
+		Optional<Employee> e = Optional.ofNullable(employeeRepository.findByPincode(pin));
+		
+		if(e.isEmpty()) {
+			throw new NotFoundException("Employee with pin " + pin + " was not found");
+		}
+		
+		return e != null && e.get().getEmployeeType().equals(type);
 	}
 
-	@Override
+	@Override//
 	public EmployeeAuthDTO getOneByPin(int pin) {
 		Optional<Employee> employee = Optional.ofNullable(employeeRepository.findByPincode(pin));
 		if(employee.isEmpty()) {

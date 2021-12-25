@@ -3,6 +3,7 @@ package com.rest.RestaurantApp.domain;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.*;
 
@@ -104,4 +105,22 @@ public class PrivilegedUser extends User implements UserDetails {
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
+	
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        PrivilegedUser privilegedUser = (PrivilegedUser) o;
+        if (privilegedUser.getId() == null || this.getId() == null) {
+            if(privilegedUser.getName().equals(this.getName())){
+                return true;
+            }
+            return false;
+        }
+        return Objects.equals(this.getId(), privilegedUser.getId());
+    }
 }

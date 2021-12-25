@@ -64,6 +64,7 @@ public class User extends BaseEntity {
 			oldPrice.setToDate(new Date());
 			oldPrice.setStatus(SalaryStatus.EXPIRED);
 		}
+		salaryInfo.setStatus(SalaryStatus.ACTIVE);
 		salaries.add(salaryInfo);
 	}
 	

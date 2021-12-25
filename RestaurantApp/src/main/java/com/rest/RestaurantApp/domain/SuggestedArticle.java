@@ -2,6 +2,7 @@ package com.rest.RestaurantApp.domain;
 
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -103,5 +104,21 @@ public class SuggestedArticle extends BaseEntity{
 	public void setType(ArticleType type) {
 		this.type = type;
 	}
-
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        SuggestedArticle suggestedArticle = (SuggestedArticle) o;
+        if (suggestedArticle.getId() == null || this.getId() == null) {
+            if(suggestedArticle.getName().equals(this.getName())){
+                return true;
+            }
+            return false;
+        }
+        return Objects.equals(this.getId(), suggestedArticle.getId());
+    }
 }

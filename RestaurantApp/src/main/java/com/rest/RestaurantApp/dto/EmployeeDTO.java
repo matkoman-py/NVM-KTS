@@ -27,8 +27,7 @@ public class EmployeeDTO {
 	
 	private EmployeeType employeeType;
 	
-	public EmployeeDTO(Integer id, double salary, String email, String name, String surname, Date birthday, UserType type, int pincode, EmployeeType employeeType,
-			List<OrderDTO> orders, List<OrderedArticleDTO> takenArticles) {
+	public EmployeeDTO(Integer id, double salary, String email, String name, String surname, Date birthday, UserType type, int pincode, EmployeeType employeeType) {
 		super();
 		this.id = id;
 		this.salary = salary;

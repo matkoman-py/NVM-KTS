@@ -31,18 +31,18 @@ public class PrivilegedUserController {
 	public PrivilegedUserController(PrivilegedUserService privilegedUserService) {
 		this.privilegedUserService = privilegedUserService;
 	}
-	
+	//
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<PrivilegedUserDTO>> getAll() {
 		return ResponseEntity.ok(privilegedUserService.getAll());
 	}
-	
+	//
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<PrivilegedUserDTO> getOne(@PathVariable("id") int id) {
 		PrivilegedUserDTO privilegedUser = privilegedUserService.getOne(id);
 		return new ResponseEntity<PrivilegedUserDTO>(privilegedUser, HttpStatus.OK);	
 	}
-	
+	//
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity delete(@PathVariable("id") int id) {
 		PrivilegedUserDTO privilegedUser = privilegedUserService.delete(id);
