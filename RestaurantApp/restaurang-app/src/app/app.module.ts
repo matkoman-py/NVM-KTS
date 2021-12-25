@@ -8,6 +8,7 @@ import { MenubarModule } from 'primeng/menubar';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { ArticlesComponent } from './articles/articles.component';
+import { EmployeesComponent } from './employees/employees.component';
 import { TableModule } from 'primeng/table';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
@@ -15,7 +16,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ToastModule } from 'primeng/toast';
 import { RippleModule } from 'primeng/ripple';
 @NgModule({
-  declarations: [AppComponent, NavbarComponent, ArticlesComponent],
+  declarations: [AppComponent, NavbarComponent, ArticlesComponent, EmployeesComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

@@ -22,6 +22,11 @@ export class NavbarComponent implements OnInit {
       icon: 'pi pi-fw pi-user',
       routerLink: '/articles',
     },
+    {
+      label: 'Employees',
+      icon: 'pi pi-fw pi-user',
+      routerLink: '/employees',
+    },
   ];
   constructor() {}
 
