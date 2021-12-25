@@ -60,6 +60,10 @@ public class ArticleServiceTest {
 		articles.add(article3);
 		
 		given(articleRepository.findAll()).willReturn(articles);
+		given(articleRepository.findByType(ArticleType.DRINK)).willReturn(new ArrayList<>(List.of(article1)));
+		given(articleRepository.findByNameContainingIgnoreCase("ic")).willReturn(new ArrayList<>(List.of(article2)));
+		given(articleRepository.findByTypeAndNameContainingIgnoreCase(ArticleType.DRINK,"ic")).willReturn(new ArrayList<>());
+		given(articleRepository.findAll()).willReturn(articles);
 		given(articleRepository.findById(1)).willReturn(java.util.Optional.of(article1));
 		given(articleRepository.findById(2)).willReturn(java.util.Optional.of(article2));
 		given(articleRepository.findById(3)).willReturn(java.util.Optional.of(article3));
@@ -101,11 +105,35 @@ public class ArticleServiceTest {
 	}
 	
 	@Test
-	void testDelete_ValidId() {
+	void testSearch_noParams() {
 		
-		ArticleDTO result = articleService.delete(1);
+		List<ArticleDTO> returnedArticles = articleService.search("","");
 		
-		assertEquals(result.getName(), "kola");
+		assertEquals(returnedArticles.size(), 3);
+	}
+	
+	@Test
+	void testSearch_nameParam() {
+		
+		List<ArticleDTO> result = articleService.search("","ic");
+		
+		assertEquals(result.size(), 1);
+	}
+	
+	@Test
+	void testSearch_typeParam() {
+		
+		List<ArticleDTO> result = articleService.search("DRINK","");
+		
+		assertEquals(result.size(), 1);
+	}
+	
+	@Test
+	void testSearch_typeAndNameParam() {
+		
+		List<ArticleDTO> result = articleService.search("DESSERT","ic");
+		
+		assertEquals(result.size(), 0);
 	}
 	
 	@Test

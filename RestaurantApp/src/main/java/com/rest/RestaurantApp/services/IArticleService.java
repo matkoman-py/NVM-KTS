@@ -9,7 +9,7 @@ public interface IArticleService {
 	
 	List<ArticleDTO> getAll();
 	
-	List<ArticleDTO> search(String type);
+	List<ArticleDTO> search(String type, String name);
 	
 	ArticleDTO getOne(int id);
 	
