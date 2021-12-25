@@ -81,6 +81,19 @@ public class EmployeeServiceTest {
 	}
 	
 	@Test
+	void testCreate() {
+		List<SalaryInfo> salary1 = new ArrayList<>();
+		SalaryInfo salaryInfo = new SalaryInfo(new Date(), 100000, employee);
+		salary1.add(salaryInfo);
+		employee.setSalaries(salary1);
+		
+		EmployeeDTO employee = new EmployeeDTO(null, 0, "petarns99@gmail.com", "Petar", "Markovic", new GregorianCalendar(1999, 10, 29).getTime(), UserType.EMPLOYEE, 1234, EmployeeType.WAITER);
+		
+		EmployeeDTO createdEmployee = employeeService.create(employee);
+		assertEquals("Petar", employeeService.getOne(createdEmployee.getId()).getName());
+	}
+	
+	@Test
 	void testGetAll() {
 		List<EmployeeDTO> returnedEmployees = employeeService.getAll();
 		assertEquals(3, returnedEmployees.size());

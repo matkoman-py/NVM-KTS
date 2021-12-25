@@ -84,6 +84,14 @@ public class PrivilegedUserServiceTest {
 	}
 	
 	@Test
+	void testCreate() {
+		PrivilegedUserDTO priviligedUser = new PrivilegedUserDTO(null, 0, "petarns99@gmail.com", "Petar", "Markovic", new GregorianCalendar(1999, 10, 29).getTime(),UserType.PRIVILEGED_USER,"user","pass",PrivilegedUserType.MANAGER);
+		
+		PrivilegedUserDTO createdPriviligedUser = privilegedUserService.create(priviligedUser);
+		assertEquals("Petar", privilegedUserService.getOne(createdPriviligedUser.getId()).getName());
+	}
+	
+	@Test
 	void testGetAll() {
 		List<PrivilegedUserDTO> returnedPrivilegedUsers = privilegedUserService.getAll();
 		assertEquals(3, returnedPrivilegedUsers.size());

@@ -70,7 +70,7 @@ public class SuggestedArticleServiceTest {
 
 		ingredients1.add(ingredient1);
 		ingredients1.add(ingredient2);
-		SuggestedArticle suggestedArticle1 = new SuggestedArticle("kola", "hladna", 100, 200, ArticleType.DRINK);
+		SuggestedArticle suggestedArticle1 = new SuggestedArticle("kola", "bas dobar", 100, 200, ArticleType.DRINK);
 		SuggestedArticle suggestedArticle2 = new SuggestedArticle("kol1a", "hladna", 100, 200, ArticleType.DRINK);
 		SuggestedArticle suggestedArticle3 = new SuggestedArticle("kola2", "hladna", 100, 200, ArticleType.DRINK);
 		
@@ -100,26 +100,25 @@ public class SuggestedArticleServiceTest {
 		given(ingredientRepository.findById(1)).willReturn(java.util.Optional.of(ingredient1));
 		given(ingredientRepository.findById(1)).willReturn(java.util.Optional.of(ingredient2));
 
-		SuggestedArticle newSuggestedArticle = new SuggestedArticle("kola", "hladna", 100, 200, ArticleType.DRINK);
+		SuggestedArticle newSuggestedArticle = new SuggestedArticle("kola", "bas dobar", 100, 200, ArticleType.DRINK);
 		newSuggestedArticle.setId(5);
 		newSuggestedArticle.setIngredients(new HashSet<>());
 		
 		given(suggestedArticleRepository.save(newSuggestedArticle)).willReturn(newSuggestedArticle);
 	}
 	
-//	@Test
-//	void testCreate() {
-//		SuggestedArticleDTO suggestedArticle = new SuggestedArticleDTO(5,new HashSet<>(),"kola", "hladna", 100, 200, ArticleType.DRINK);
-//
-//		SuggestedArticleDTO createdArticle = suggestedArticleService.create(suggestedArticle);
-//		
-//		assertEquals("kola", createdArticle.getName());
-//		assertEquals("hladna", createdArticle.getDescription());
-//		assertEquals("kola", createdArticle.getName());
-//		assertEquals(100, createdArticle.getSuggestedMakingPrice());
-//		assertEquals(200, createdArticle.getName());
-//		assertEquals(ArticleType.DRINK, createdArticle.getType());
-//	}
+	@Test
+	void testCreate() {
+		SuggestedArticleDTO suggestedArticle = new SuggestedArticleDTO(5,new HashSet<>(),"kola", "hladna", 100, 200, ArticleType.DRINK);
+
+		SuggestedArticleDTO createdArticle = suggestedArticleService.create(suggestedArticle);
+		
+		assertEquals("kola", createdArticle.getName());
+		assertEquals("bas dobar", createdArticle.getDescription());
+		assertEquals(100, createdArticle.getSuggestedMakingPrice());
+		assertEquals(200, createdArticle.getSuggestedSellingPrice());
+		assertEquals(ArticleType.DRINK, createdArticle.getType());
+	}
 	
 	@Test
 	void testFindOne_ValidId() {
@@ -166,7 +165,7 @@ public class SuggestedArticleServiceTest {
 		newArticle.setDescription("bas dobar");
 		newArticle.setIngredients(new HashSet<IngredientDTO>());
 		
-		SuggestedArticleDTO result = suggestedArticleService.update(1, newArticle);
+		SuggestedArticleDTO result = suggestedArticleService.update(2, newArticle);
 		assertEquals("kola", result.getName());
 		assertEquals("bas dobar", result.getDescription());
 	}
