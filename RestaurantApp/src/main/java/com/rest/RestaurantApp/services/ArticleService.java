@@ -45,11 +45,16 @@ public class ArticleService implements IArticleService {
 	}
 	
 	@Override
-	public List<ArticleDTO> search(String type) {
-		if(type.equals("")) {
+	public List<ArticleDTO> search(String type, String name) {
+		if(type.equals("") && name.equals("")) {
 			return articleRepository.findAll().stream().map(article -> new ArticleDTO(article)).collect(Collectors.toList());
 		}
-		return articleRepository.findByType(ArticleType.valueOf(type)).stream().map(article -> new ArticleDTO(article)).collect(Collectors.toList());
+		else if(type.equals("") && !name.equals("")) {
+			return articleRepository.findByNameContainingIgnoreCase(name).stream().map(article -> new ArticleDTO(article)).collect(Collectors.toList());
+		}else if(!type.equals("") && name.equals("")) {
+			return articleRepository.findByType(ArticleType.valueOf(type)).stream().map(article -> new ArticleDTO(article)).collect(Collectors.toList());
+		}
+		return articleRepository.findByTypeAndNameContainingIgnoreCase(ArticleType.valueOf(type), name).stream().map(article -> new ArticleDTO(article)).collect(Collectors.toList());
 	}
 	
 	@Override
