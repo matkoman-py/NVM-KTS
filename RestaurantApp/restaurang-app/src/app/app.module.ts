@@ -13,9 +13,14 @@ import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ToastModule } from 'primeng/toast';
+import {CheckboxModule} from 'primeng/checkbox';
+import {AutoCompleteModule} from 'primeng/autocomplete';
 import { RippleModule } from 'primeng/ripple';
+import {RadioButtonModule} from 'primeng/radiobutton';
+import { CreateArticleComponent } from './create-article/create-article.component';
+import {MultiSelectModule} from 'primeng/multiselect';
 @NgModule({
-  declarations: [AppComponent, NavbarComponent, ArticlesComponent],
+  declarations: [AppComponent, NavbarComponent, ArticlesComponent, CreateArticleComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -29,6 +34,10 @@ import { RippleModule } from 'primeng/ripple';
     DropdownModule,
     ToastModule,
     RippleModule,
+    CheckboxModule,
+    RadioButtonModule,
+    AutoCompleteModule,
+    MultiSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent],

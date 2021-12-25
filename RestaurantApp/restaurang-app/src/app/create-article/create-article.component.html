@@ -1,0 +1,39 @@
+<h2>Create Article</h2>
+<div class="p-fluid p-grid">
+    <div class="p-field p-col-12 p-md-4">
+        <span class="p-float-label">
+            <input id="float-input" type="text" [(ngModel)]="article.name" pInputText> 
+            <label for="float-input">Name</label>
+        </span>
+    </div>
+    <div class="p-field p-col-12 p-md-4">
+        <span class="p-float-label">
+            <input id="float-input" type="text" pInputText [(ngModel)]="article.description"> 
+            <label for="float-input">Description</label>
+        </span>
+    </div>
+    <div class="p-field p-col-12 p-md-4">
+        <p-dropdown [options]="articleTypes" placeholder="Select type of article" optionLabel="name" [showClear]="true" [(ngModel)]="selectedType" (onChange)="setType(selectedType)"></p-dropdown>
+    </div>
+    <div class="p-field p-col-12 p-md-6">
+        <span class="p-float-label p-input-icon-left">
+            <i class="pi pi-dollar"></i>
+            <input type="text" id="inputtext-left" [(ngModel)]="article.makingPrice" pInputText> 
+            <label for="inputtext-left">Making price</label>
+        </span>
+    </div>
+    <div class="p-field p-col-12 p-md-6">
+        <span class="p-float-label p-input-icon-left">
+            <i class="pi pi-dollar"></i>
+            <input type="text" id="inputtext-left" [(ngModel)]="article.sellingPrice" pInputText> 
+            <label for="inputtext-left">Selling price</label>
+        </span>
+    </div>
+    <div class="p-field p-col-12 p-md-12">
+        <p-multiSelect [options]="ingredients" [(ngModel)]="selectedIngredients" defaultLabel="Select an ingredient" optionLabel="name" selectedItemsLabel="{0} items selected"></p-multiSelect>
+    </div>
+    <div class="p-field p-col-12 p-md-4">
+        <button pButton type="button" label="Add article" (click)="postArticle()"></button>
+    </div>
+
+</div>

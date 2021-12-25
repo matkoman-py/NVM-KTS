@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ArticlesService } from './services/articles.service';
 import { Article, ArticleType } from '../modules/shared/models/article';
 import { MessageService, PrimeNGConfig } from 'primeng/api';
+import {Router} from "@angular/router"
+
 
 @Component({
   selector: 'app-articles',
@@ -26,7 +28,8 @@ export class ArticlesComponent implements OnInit {
   constructor(
     private articlesService: ArticlesService,
     private messageService: MessageService,
-    private primengConfig: PrimeNGConfig
+    private primengConfig: PrimeNGConfig,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -62,6 +65,7 @@ export class ArticlesComponent implements OnInit {
 
   create() {
     //redirect na markuzinu
+    this.router.navigate(['/create-article'])
   }
 
   update() {
