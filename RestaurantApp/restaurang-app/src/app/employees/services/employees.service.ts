@@ -15,4 +15,12 @@ export class EmployeesService {
   getEmployees(): Observable<Employee[]> {
     return this.http.get<Employee[]>('/api/employee');
   }
+
+  deleteEmployee(employeeId: number | undefined) : Observable<Employee>{
+    return this.http.delete<Employee>('/api/employee/' + employeeId);
+  }
+
+  updateEmployee(employeeData: Employee):Observable<Employee>{
+    return this.http.put<Employee>('/api/employee/' + employeeData.id,  employeeData );
+  }
 }

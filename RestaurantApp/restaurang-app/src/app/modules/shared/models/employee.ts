@@ -1,18 +1,15 @@
-import { SalaryInfo } from './salaryInfo';
-
 export interface Employee{
     id?: number;
-    email?: String;
-    name?: String;
-    surname?: String;
+    email?: string;
+    name?: string;
+    surname?: string;
     birthday?: Date;
-    type?: String;
-    salaries?: SalaryInfo[];
+    employeeType?: string;
+    salary?: number;
     pincode?: number;
+    type?: string;
 }
 
 export interface EmployeesDTO {
     employees: Employee[];
 }
-
-//employeeType

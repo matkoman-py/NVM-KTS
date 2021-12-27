@@ -43,9 +43,9 @@ public class EmployeeController {
 	}
 	//
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity delete(@PathVariable("id") int id) {
+	public ResponseEntity<EmployeeDTO> delete(@PathVariable("id") int id) {
 		EmployeeDTO employee = employeeService.delete(id);
-		return new ResponseEntity<>("Employee with id " + id + " successfully deleted", HttpStatus.OK);	
+		return new ResponseEntity<EmployeeDTO>(employee, HttpStatus.OK);	
 	}
 	//
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

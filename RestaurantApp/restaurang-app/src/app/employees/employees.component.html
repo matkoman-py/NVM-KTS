@@ -1,18 +1,77 @@
-<p-table  
-  [value]="employees"
-  >
-  <ng-template pTemplate="header">
-    <tr>
-      <th>Name</th>
-      <th>Surname</th>
-      <th>Email</th>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-employee>
-    <tr [pSelectableRow]="employee">
-      <td>{{ employee.name }}</td>
-      <td>{{ employee.surname }}</td>
-      <td>{{ employee.email }}</td>
-    </tr>
-  </ng-template>
-</p-table>
+<h2>Employees</h2>
+<div class="row">
+  <div class="col card special1">
+    <div class="p-formgroup-">
+      <div class="p-field p-grid">
+        <label styleClass="p-col-fixed" style="width:100px">Name:</label>
+        <input type="text" pInputText [(ngModel)]="nameInput" value="{{selectedEmployee.name}}"/>
+      </div>
+      <div class="p-field p-grid">
+        <label styleClass="p-col-fixed" style="width:100px">Surname:</label>
+        <input type="text" pInputText [(ngModel)]="surnameInput" value={{selectedEmployee.surname}} />
+      </div>
+      <div class="p-field p-grid">
+        <label styleClass="p-col-fixed" style="width:100px">Email:</label>
+        <input type="text"  pInputText [(ngModel)]="emailInput" value={{selectedEmployee.email}} />
+      </div>
+      <div class="p-field p-grid">
+        <label styleClass="p-col-fixed" style="width:100px">Role:</label>
+        <input type="text"  pInputText [(ngModel)]="roleInput" value={{selectedEmployee.employeeType}} />
+      </div>
+      <div class="p-field p-grid">
+        <label styleClass="p-col-fixed" style="width:100px">Salary:</label>
+        <input type="text"  pInputText [(ngModel)]="salaryInput" value={{selectedEmployee.salary}} />
+      </div>
+      <div class="p-field p-grid">
+        <label styleClass="p-col-fixed" style="width:100px">Pincode:</label>
+        <input type="text"  pInputText [(ngModel)]="pincodeInput" value={{selectedEmployee.pincode}} />
+      </div>
+      <div class="p-field">
+        <button pButton type="button" label="Update" (click)="updateEmployee()"></button>
+      </div>
+      <div class="p-field">
+        <button pButton type="button" label="Delete" class="p-button-danger" (click)="deleteEmployee()"></button>
+      </div>
+    </div>
+  </div>
+  <div class="col card special2">
+    <p-table selectionMode="single" [value]="employees" [(selection)]="selectedEmployee" >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Name</th>
+          <th>Surname</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Salary</th>
+          <th>Pincode</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-employee>
+        <tr [pSelectableRow]="employee">
+          <td>{{ employee.name }}</td>
+          <td>{{ employee.surname }}</td>
+          <td>{{ employee.email }}</td>
+          <td>{{ employee.employeeType }}</td>
+          <td>{{ employee.salary }}</td>
+          <td>{{ employee.pincode }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<!-- <div class="card">
+  <h5>Horizontal and Fixed Width</h5>
+  <div class="p-field p-grid">
+      <p:outputLabel for="firstname3" styleClass="p-col-fixed" style="width:100px" value="Firstname"/>
+      <div class="p-col">
+          <p:inputText id="firstname3"/>
+      </div>
+  </div>
+  <div class="p-field p-grid">
+      <p:outputLabel for="lastname3" styleClass="p-col-fixed" style="width:100px" value="Lastname"/>
+      <div class="p-col">
+          <p:inputText id="lastname3"/>
+      </div>
+  </div>
+</div> -->
