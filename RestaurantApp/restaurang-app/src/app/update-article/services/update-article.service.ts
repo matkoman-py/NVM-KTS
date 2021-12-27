@@ -11,13 +11,17 @@ import { Observable, throwError } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class CreateArticleService {
+export class UpdateArticleService {
 
   constructor(private http: HttpClient) { }
-  postArticle(article: Article): Observable<Article> {
-    return this.http.post<Article>('/api/article', article);
+
+  getArticle(id : number): Observable<Article> {
+    return this.http.get<Article>('/api/article/'+id);
   }
   getIngredients(): Observable<Ingredient[]> {
     return this.http.get<Ingredient[]>('/api/ingredient');
+  }
+  updateArticle(article: Article, id: number): Observable<Article> {
+    return this.http.put<Article>('/api/article/'+id, article);
   }
 }

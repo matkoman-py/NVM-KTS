@@ -19,8 +19,14 @@ import { RippleModule } from 'primeng/ripple';
 import {RadioButtonModule} from 'primeng/radiobutton';
 import { CreateArticleComponent } from './create-article/create-article.component';
 import {MultiSelectModule} from 'primeng/multiselect';
+import {MessagesModule} from 'primeng/messages';
+import {MessageModule} from 'primeng/message';
+import {InputNumberModule} from 'primeng/inputnumber';
+
+import { UpdateArticleComponent } from './update-article/update-article.component';
+
 @NgModule({
-  declarations: [AppComponent, NavbarComponent, ArticlesComponent, CreateArticleComponent],
+  declarations: [AppComponent, NavbarComponent, ArticlesComponent, CreateArticleComponent, UpdateArticleComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -37,9 +43,14 @@ import {MultiSelectModule} from 'primeng/multiselect';
     CheckboxModule,
     RadioButtonModule,
     AutoCompleteModule,
-    MultiSelectModule
+    MultiSelectModule,
+    MessageModule,
+    MessagesModule,
+    InputNumberModule
   ],
   providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
+
+//[disabled]="!validate

@@ -79,6 +79,7 @@ export class ArticlesComponent implements OnInit {
       return;
     }
     //redirect na markuzinu
+    this.router.navigate(['/update-article/'+this.selectedArticle.id]);
   }
 
   delete() {
