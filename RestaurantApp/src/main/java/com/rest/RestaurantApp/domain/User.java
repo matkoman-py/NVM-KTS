@@ -42,8 +42,6 @@ public class User extends BaseEntity {
 	@Column(name = "type", insertable = false, updatable = false)
 	private UserType type;
 
-
-
 	public User(String email, String name, String surname, Date birthday, UserType type) {
 		super();
 		this.email = email;

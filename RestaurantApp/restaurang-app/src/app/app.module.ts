@@ -8,6 +8,7 @@ import { MenubarModule } from 'primeng/menubar';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { ArticlesComponent } from './articles/articles.component';
+import { EmployeesComponent } from './employees/employees.component';
 import { TableModule } from 'primeng/table';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
@@ -34,7 +35,8 @@ import { UpdateArticleComponent } from './update-article/update-article.componen
     ArticlesComponent,
     NotificationBarComponent,
     CreateArticleComponent,
-    UpdateArticleComponent
+    UpdateArticleComponent,
+    EmployeesComponent
   ],
   imports: [
     BrowserModule,
@@ -63,5 +65,3 @@ import { UpdateArticleComponent } from './update-article/update-article.componen
   bootstrap: [AppComponent],
 })
 export class AppModule {}
-
-//[disabled]="!validate

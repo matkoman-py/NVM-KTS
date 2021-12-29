@@ -1,5 +1,6 @@
 package com.rest.RestaurantApp.services;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -122,5 +123,33 @@ public class EmployeeService implements IEmployeeService{
 		}
 
 		return new EmployeeAuthDTO(employee.get());
+	}
+
+	@Override
+	public List<EmployeeDTO> search(String name, String surname, String email, String pincode) {
+		List<EmployeeDTO> employees = getAll();
+		List<EmployeeDTO> employeesToCut;
+		if(name != "") {
+			employeesToCut = new ArrayList<>();
+			for(EmployeeDTO e:employees) {
+				if(!e.getName().toLowerCase().contains(name.toLowerCase())) employeesToCut.add(e);
+			}
+			employees.removeAll(employeesToCut);
+		}
+		if(surname != "") {
+			employeesToCut = new ArrayList<>();
+			for(EmployeeDTO e:employees) {
+				if(!e.getSurname().toLowerCase().contains(surname.toLowerCase())) employeesToCut.add(e);
+			}
+			employees.removeAll(employeesToCut);
+		}
+		if(email != "") {
+			employeesToCut = new ArrayList<>();
+			for(EmployeeDTO e:employees) {
+				if(!e.getEmail().toLowerCase().contains(email.toLowerCase())) employeesToCut.add(e);
+			}
+			employees.removeAll(employeesToCut);
+		}
+		return employees;
 	}
 }
