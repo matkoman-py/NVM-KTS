@@ -13,3 +13,8 @@ export interface Employee{
 export interface EmployeesDTO {
     employees: Employee[];
 }
+
+export interface EmployeeType {
+    name?: string;
+    value?: string;
+  }

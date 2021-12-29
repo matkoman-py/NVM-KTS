@@ -1,10 +1,11 @@
+<p-toast position="top-center" key="tc"></p-toast>
 <h2>Employees</h2>
 <div class="row">
   <div class="col card special1">
     <div class="p-formgroup-">
       <div class="p-field p-grid">
         <label styleClass="p-col-fixed" style="width:100px">Name:</label>
-        <input type="text" pInputText [(ngModel)]="nameInput" value="{{selectedEmployee.name}}"/>
+        <input type="text" pInputText [(ngModel)]="nameInput" value="{{selectedEmployee.name}}" />
       </div>
       <div class="p-field p-grid">
         <label styleClass="p-col-fixed" style="width:100px">Surname:</label>
@@ -12,30 +13,41 @@
       </div>
       <div class="p-field p-grid">
         <label styleClass="p-col-fixed" style="width:100px">Email:</label>
-        <input type="text"  pInputText [(ngModel)]="emailInput" value={{selectedEmployee.email}} />
+        <input type="text" pInputText [(ngModel)]="emailInput" value={{selectedEmployee.email}} />
       </div>
       <div class="p-field p-grid">
-        <label styleClass="p-col-fixed" style="width:100px">Role:</label>
-        <input type="text"  pInputText [(ngModel)]="roleInput" value={{selectedEmployee.employeeType}} />
+        <label styleClass="p-col-fixed" style="width:100px">Type:</label>
+        <p-dropdown
+          [options]="employeeTypes"
+          [(ngModel)]="typeInput"
+          optionLabel="name"
+          placeholder='Select a type'
+        ></p-dropdown>
       </div>
       <div class="p-field p-grid">
         <label styleClass="p-col-fixed" style="width:100px">Salary:</label>
-        <input type="text"  pInputText [(ngModel)]="salaryInput" value={{selectedEmployee.salary}} />
+        <input type="text" pInputText [(ngModel)]="salaryInput" value={{selectedEmployee.salary}} />
       </div>
       <div class="p-field p-grid">
         <label styleClass="p-col-fixed" style="width:100px">Pincode:</label>
-        <input type="text"  pInputText [(ngModel)]="pincodeInput" value={{selectedEmployee.pincode}} />
+        <input type="text" pInputText [(ngModel)]="pincodeInput" value={{selectedEmployee.pincode}} />
       </div>
-      <div class="p-field">
-        <button pButton type="button" label="Update" (click)="updateEmployee()"></button>
-      </div>
-      <div class="p-field">
-        <button pButton type="button" label="Delete" class="p-button-danger" (click)="deleteEmployee()"></button>
+      <div class="p-field p-grid">
+        <span class="p-buttonset">
+          <button pButton pRipple label="Create" [disabled]="isDataValid()" class="p-button-success" (click)="createEmployee()"></button>
+          <button pButton pRipple label="Update" [disabled]="isSelected()" (click)="updateEmployee()"></button>
+          <button pButton pRipple label="Delete" [disabled]="isSelected()" class="p-button-danger" (click)="deleteEmployee()"></button>
+        </span>
       </div>
     </div>
   </div>
   <div class="col card special2">
-    <p-table selectionMode="single" [value]="employees" [(selection)]="selectedEmployee" >
+    <p-table 
+      selectionMode="single" 
+      [value]="employees" 
+      [(selection)]="selectedEmployee"     
+      [paginator]="true"
+      [rows]="5">
       <ng-template pTemplate="header">
         <tr>
           <th>Name</th>
@@ -55,23 +67,9 @@
           <td>{{ employee.salary }}</td>
           <td>{{ employee.pincode }}</td>
         </tr>
+        <ng-template pTemplate="paginatorleft"> </ng-template>
+        <ng-template pTemplate="paginatorright"> </ng-template>
       </ng-template>
     </p-table>
   </div>
 </div>
-
-<!-- <div class="card">
-  <h5>Horizontal and Fixed Width</h5>
-  <div class="p-field p-grid">
-      <p:outputLabel for="firstname3" styleClass="p-col-fixed" style="width:100px" value="Firstname"/>
-      <div class="p-col">
-          <p:inputText id="firstname3"/>
-      </div>
-  </div>
-  <div class="p-field p-grid">
-      <p:outputLabel for="lastname3" styleClass="p-col-fixed" style="width:100px" value="Lastname"/>
-      <div class="p-col">
-          <p:inputText id="lastname3"/>
-      </div>
-  </div>
-</div> -->

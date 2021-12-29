@@ -23,4 +23,8 @@ export class EmployeesService {
   updateEmployee(employeeData: Employee):Observable<Employee>{
     return this.http.put<Employee>('/api/employee/' + employeeData.id,  employeeData );
   }
+
+  createEmployee(employeeData: Employee):Observable<Employee>{
+    return this.http.post<Employee>('/api/employee',  employeeData );
+  }
 }
