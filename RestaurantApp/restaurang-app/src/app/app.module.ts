@@ -14,8 +14,16 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ToastModule } from 'primeng/toast';
 import { RippleModule } from 'primeng/ripple';
+import { NotificationBarComponent } from './notification-bar/notification-bar.component';
+import { SidebarModule } from 'primeng/sidebar';
+import { BadgeModule } from 'primeng/badge';
 @NgModule({
-  declarations: [AppComponent, NavbarComponent, ArticlesComponent],
+  declarations: [
+    AppComponent,
+    NavbarComponent,
+    ArticlesComponent,
+    NotificationBarComponent,
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -29,6 +37,8 @@ import { RippleModule } from 'primeng/ripple';
     DropdownModule,
     ToastModule,
     RippleModule,
+    SidebarModule,
+    BadgeModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
