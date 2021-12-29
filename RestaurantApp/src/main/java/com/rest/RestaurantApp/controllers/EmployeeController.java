@@ -30,36 +30,36 @@ public class EmployeeController {
 	public EmployeeController(EmployeeService employeeService) {
 		this.employeeService = employeeService;
 	}
-	
+	//
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<EmployeeDTO>> getAll() {
 		return ResponseEntity.ok(employeeService.getAll());
 	}
-	
+	//
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<EmployeeDTO> getOne(@PathVariable("id") int id) {
 		EmployeeDTO employee = employeeService.getOne(id);
 		return new ResponseEntity<EmployeeDTO>(employee, HttpStatus.OK);	
 	}
-	
+	//
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity delete(@PathVariable("id") int id) {
 		EmployeeDTO employee = employeeService.delete(id);
 		return new ResponseEntity<>("Employee with id " + id + " successfully deleted", HttpStatus.OK);	
 	}
-	
+	//
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<EmployeeDTO> create(@RequestBody EmployeeDTO employee) {
 		EmployeeDTO createdEmployee = employeeService.create(employee);
 		return new ResponseEntity<EmployeeDTO>(createdEmployee, HttpStatus.CREATED);
 	}
-	
+	//
 	@PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<EmployeeDTO> update(@PathVariable("id") int id, @RequestBody EmployeeDTO employee) {
 		EmployeeDTO updatedEmployee = employeeService.update(id, employee);
 		return new ResponseEntity<EmployeeDTO>(updatedEmployee, HttpStatus.OK);
 	}
-
+	//
 	@GetMapping("/test_waiter/{pin}")
 	public ResponseEntity<Boolean> checkIfWaiterPin(@PathVariable("pin") int pin) {
 		boolean pinValid = employeeService.checkPin(pin, EmployeeType.WAITER);

@@ -1,5 +1,7 @@
 package com.rest.RestaurantApp.unit;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
@@ -19,6 +21,7 @@ import com.rest.RestaurantApp.domain.Employee;
 import com.rest.RestaurantApp.domain.SalaryInfo;
 import com.rest.RestaurantApp.domain.enums.EmployeeType;
 import com.rest.RestaurantApp.domain.enums.UserType;
+import com.rest.RestaurantApp.dto.EmployeeAuthDTO;
 import com.rest.RestaurantApp.dto.EmployeeDTO;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.repositories.EmployeeRepository;
@@ -58,7 +61,7 @@ public class EmployeeServiceTest {
 		salary2.add(new SalaryInfo(new Date(), 100000, employee1));
 		employee1.setSalaries(salary2);
 		
-		Employee employee2 = new Employee("alek1andar.epic@gmail.com", "Aleks1andar", "C1epic", new GregorianCalendar(1999, 6, 19).getTime(), UserType.EMPLOYEE, 2434, EmployeeType.WAITER);
+		Employee employee2 = new Employee("alek1andar.epic@gmail.com", "Aleks1andar", "C1epic", new GregorianCalendar(1999, 6, 19).getTime(), UserType.EMPLOYEE, 2435, EmployeeType.WAITER);
 		employee2.setId(3);
 		salary3.add(new SalaryInfo(new Date(), 100000, employee2));
 		employee2.setSalaries(salary3);
@@ -72,24 +75,40 @@ public class EmployeeServiceTest {
 		given(employeeRepository.findById(4)).willReturn(Optional.empty());
 		given(employeeRepository.findById(1)).willReturn(java.util.Optional.of(employee));
 		given(employeeRepository.save(employee)).willReturn(employee);
+		
+		given(employeeRepository.findByPincode(1234)).willReturn(employee);
+
+	}
+	
+	@Test
+	void testCreate() {
+		List<SalaryInfo> salary1 = new ArrayList<>();
+		SalaryInfo salaryInfo = new SalaryInfo(new Date(), 100000, employee);
+		salary1.add(salaryInfo);
+		employee.setSalaries(salary1);
+		
+		EmployeeDTO employee = new EmployeeDTO(null, 0, "petarns99@gmail.com", "Petar", "Markovic", new GregorianCalendar(1999, 10, 29).getTime(), UserType.EMPLOYEE, 1234, EmployeeType.WAITER);
+		
+		EmployeeDTO createdEmployee = employeeService.create(employee);
+		assertEquals("Petar", employeeService.getOne(createdEmployee.getId()).getName());
 	}
 	
 	@Test
 	void testGetAll() {
 		List<EmployeeDTO> returnedEmployees = employeeService.getAll();
-		assertEquals(returnedEmployees.size(), 3);
+		assertEquals(3, returnedEmployees.size());
 	}
 	
 	@Test
 	void testGetOne_ValidId() {
 		EmployeeDTO result = employeeService.getOne(1);
-		assertEquals(result.getName(), "Petar");
+		assertEquals("Petar", result.getName());
 	}
 	
 	@Test
 	void testGetOne_InvalidId() {
 		assertThrows(NotFoundException.class, ()->{
-			EmployeeDTO result = employeeService.getOne(4);
+			employeeService.getOne(4);
             });
 	}
 	
@@ -98,14 +117,14 @@ public class EmployeeServiceTest {
 		
 		EmployeeDTO result = employeeService.delete(1);
 		
-		assertEquals(result.getName(), "Petar");
+		assertEquals("Petar", result.getName());
 	}
 	
 	@Test
 	void testDelete_InvalidId() {
 		
 		assertThrows(NotFoundException.class, ()->{
-			EmployeeDTO result = employeeService.delete(4);
+			employeeService.delete(4);
             });
 	}
 	
@@ -126,12 +145,41 @@ public class EmployeeServiceTest {
 	void testUpdate_InvalidId() {
 		
 		EmployeeDTO newEmployee = new EmployeeDTO();
-		newEmployee.setName("Aca");
-		newEmployee.setSurname("Ceps");
 		
 		assertThrows(NotFoundException.class, ()->{
-			EmployeeDTO result = employeeService.update(15, newEmployee);
+			employeeService.update(15, newEmployee);
 	        });
+	}
+	
+	@Test
+	void getOneByPin_ValidPin() {
+		EmployeeAuthDTO employee = employeeService.getOneByPin(1234);
+		
+		assertEquals("petarns99@gmail.com", employee.getEmail());
+	}
+	
+	@Test
+	void getOneByPin_InvalidPin() {
+		assertThrows(NotFoundException.class, ()->{
+			employeeService.getOneByPin(3322);
+            });
+	}
+	
+	@Test
+	void checkPin_ValidCombination() {
+		assertTrue(employeeService.checkPin(1234, EmployeeType.WAITER));
+	}
+	
+	@Test
+	void checkPin_InvalidCombination() {
+		assertFalse(employeeService.checkPin(1234, EmployeeType.COOK));
+	}
+	
+	@Test
+	void checkPin_InvalidId() {
+		assertThrows(NotFoundException.class, ()->{
+			employeeService.checkPin(3322, EmployeeType.COOK);
+            });
 	}
 	
 }

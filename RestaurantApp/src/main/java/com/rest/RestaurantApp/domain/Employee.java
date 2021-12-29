@@ -4,6 +4,7 @@ package com.rest.RestaurantApp.domain;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -89,5 +90,21 @@ public class Employee extends User {
 		this.takenArticles = takenArticles;
 	}
 	
-	
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Employee employee = (Employee) o;
+        if (employee.getId() == null || this.getId() == null) {
+            if(employee.getName().equals(this.getName())){
+                return true;
+            }
+            return false;
+        }
+        return Objects.equals(this.getId(), employee.getId());
+    }
 }

@@ -46,6 +46,46 @@ public class ArticleServiceTest {
 	}
 	
 	@Test
+	void testSearch_noParams() {
+		
+		List<ArticleDTO> result = articleService.search("","");
+		
+		assertEquals(result.size(), 10);
+	}
+	
+	@Test
+	void testSearch_nameParam() {
+		
+		List<ArticleDTO> result = articleService.search("","ES");
+		
+		assertEquals(result.size(), 3);
+	}
+	
+	@Test
+	void testSearch_typeParam() {
+		
+		List<ArticleDTO> result = articleService.search("DESSERT","");
+		
+		assertEquals(result.size(), 3);
+	}
+	
+	@Test
+	void testSearch_typeAndNameParam_ExpectOne() {
+		
+		List<ArticleDTO> result = articleService.search("DESSERT","ES");
+		
+		assertEquals(result.size(), 1);
+	}
+	
+	@Test
+	void testSearch_typeAndNameParam_ExpectNone() {
+		
+		List<ArticleDTO> result = articleService.search("DESSERT","fapiofhaf");
+		
+		assertEquals(result.size(), 0);
+	}
+	
+	@Test
 	void testFindOne_InvalidId() {
 		assertThrows(NotFoundException.class, ()->{
 			articleService.getOne(54);

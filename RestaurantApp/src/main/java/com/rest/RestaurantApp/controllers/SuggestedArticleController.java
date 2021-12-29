@@ -29,30 +29,30 @@ public class SuggestedArticleController {
 	public SuggestedArticleController(SuggestedArticleService suggestedArticleService) {
 		this.suggestedArticleService = suggestedArticleService;
 	}
-	
+	//
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<SuggestedArticleDTO>> getAll() {
 		return ResponseEntity.ok(suggestedArticleService.getAll());
 	}
-	
+	//
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<SuggestedArticleDTO> getOne(@PathVariable("id") int id) {
 		SuggestedArticleDTO suggestedArticle = suggestedArticleService.getOne(id);
 		return new ResponseEntity<SuggestedArticleDTO>(suggestedArticle, HttpStatus.OK);	
 	}
-
+	//
 	@GetMapping(value = "/approve/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<SuggestedArticleDTO> approve(@PathVariable("id") int id) {
 		SuggestedArticleDTO suggestedArticle = suggestedArticleService.approve(id);
 		return new ResponseEntity<SuggestedArticleDTO>(suggestedArticle, HttpStatus.OK);	
 	}
-	
+	//
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity delete(@PathVariable("id") int id) {
-		SuggestedArticleDTO suggestedArticle = suggestedArticleService.delete(id);
+	public ResponseEntity<String> delete(@PathVariable("id") int id) {
+		suggestedArticleService.delete(id);
 		return new ResponseEntity<>("Suggested article with id " + id + " successfully deleted", HttpStatus.OK);	
 	}
-	
+	//
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<SuggestedArticleDTO> create(@RequestBody SuggestedArticleDTO suggestedArticle) {
 		SuggestedArticleDTO createdSuggestedArticle = suggestedArticleService.create(suggestedArticle);
