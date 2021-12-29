@@ -22,11 +22,20 @@ import {MultiSelectModule} from 'primeng/multiselect';
 import {MessagesModule} from 'primeng/messages';
 import {MessageModule} from 'primeng/message';
 import {InputNumberModule} from 'primeng/inputnumber';
-
+import { NotificationBarComponent } from './notification-bar/notification-bar.component';
+import { SidebarModule } from 'primeng/sidebar';
+import { BadgeModule } from 'primeng/badge';
 import { UpdateArticleComponent } from './update-article/update-article.component';
 
 @NgModule({
-  declarations: [AppComponent, NavbarComponent, ArticlesComponent, CreateArticleComponent, UpdateArticleComponent],
+  declarations: [
+    AppComponent,
+    NavbarComponent,
+    ArticlesComponent,
+    NotificationBarComponent,
+    CreateArticleComponent,
+    UpdateArticleComponent
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -46,7 +55,9 @@ import { UpdateArticleComponent } from './update-article/update-article.componen
     MultiSelectModule,
     MessageModule,
     MessagesModule,
-    InputNumberModule
+    InputNumberModule,
+    SidebarModule,
+    BadgeModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
