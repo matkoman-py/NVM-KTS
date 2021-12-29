@@ -9,4 +9,6 @@ import com.rest.RestaurantApp.domain.enums.ArticleType;
 
 public interface ArticleRepository extends JpaRepository<Article, Integer> {
 	List<Article> findByType(ArticleType type);
+	List<Article> findByNameContainingIgnoreCase(String name);
+	List<Article> findByTypeAndNameContainingIgnoreCase(ArticleType type, String name);
 }

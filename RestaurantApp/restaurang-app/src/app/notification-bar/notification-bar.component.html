@@ -1,0 +1,48 @@
+<p-toast position="bottom-right" key="br"></p-toast>
+<p-sidebar
+  [(visible)]="newOrdersSidebar"
+  position="right"
+  [baseZIndex]="10000"
+  styleClass="p-sidebar-md"
+>
+  <h3>New orders</h3>
+  <ul>
+    <li *ngFor="let message of newOrderMessages; let i = index">
+      {{ i + 1 }} - {{ message }}
+    </li>
+  </ul>
+</p-sidebar>
+<p-sidebar
+  [(visible)]="articleChangedSidebar"
+  position="right"
+  [baseZIndex]="10000"
+  styleClass="p-sidebar-md"
+>
+  <h3>Article changes</h3>
+  <ul>
+    <li *ngFor="let message of articleStatusChangedMessages; let i = index">
+      {{ i + 1 }} - {{ message }}
+    </li>
+  </ul>
+</p-sidebar>
+
+<button
+  pButton
+  type="button"
+  label="Messages orders"
+  icon="pi pi-users"
+  class="p-button-warning"
+  badge="0"
+  badgeClass="p-badge-info"
+  (click)="newOrdersSidebar = true"
+></button>
+<button
+  pButton
+  type="button"
+  label="Messages articles"
+  icon="pi pi-users"
+  class="p-button-warning"
+  badge="0"
+  badgeClass="p-badge-info"
+  (click)="articleChangedSidebar = true"
+></button>

@@ -23,7 +23,9 @@ export class ArticlesService {
     articleType: ArticleType,
     articleNameParam: string
   ): Observable<Article[]> {
-    let params = new HttpParams().set('type', articleType.value);
+    let params = new HttpParams()
+      .set('type', articleType.value)
+      .set('name', articleNameParam);
     return this.http.get<Article[]>(`api/article/search`, { params: params });
   }
 

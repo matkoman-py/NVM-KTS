@@ -40,8 +40,9 @@ public class ArticleController {
     }
 	
 	@GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<ArticleDTO>> search(@RequestParam(value = "type", required = false) String type) {
-		return ResponseEntity.ok(articleService.search(type));	
+	public ResponseEntity<List<ArticleDTO>> search(@RequestParam(value = "type", required = false, defaultValue = "") String type,
+			@RequestParam(value = "name", required = false, defaultValue = "") String name) {
+		return ResponseEntity.ok(articleService.search(type,name));	
 	}
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)

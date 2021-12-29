@@ -3,6 +3,7 @@ package com.rest.RestaurantApp.integration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,9 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+
 import com.rest.RestaurantApp.domain.enums.ArticleType;
 import com.rest.RestaurantApp.dto.ArticleCreationDTO;
 import com.rest.RestaurantApp.dto.ArticleDTO;
@@ -34,6 +39,8 @@ public class ArticleControllerTest {
 	@Autowired
 	private ArticleService articleService;
 	
+	
+	
 	@Test
 	public void testGetAll() throws Exception {
 		ResponseEntity<ArticleDTO[]> responseEntity = restTemplate.getForEntity(
@@ -43,6 +50,63 @@ public class ArticleControllerTest {
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 		assertEquals(10, categories.length);
 		
+	}
+	
+	@Test
+	public void testSearch_nameParam() throws Exception {
+		
+		ResponseEntity<ArticleDTO[]> responseEntity = restTemplate.getForEntity(
+				"/api/article/search/?type=&name=es", ArticleDTO[].class);
+        
+		ArticleDTO[] categories = responseEntity.getBody();
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		assertEquals(3, categories.length);
+		
+	}
+	
+	@Test
+	void testSearch_noParams() {
+		
+		ResponseEntity<ArticleDTO[]> responseEntity = restTemplate.getForEntity(
+				"/api/article/search/?type=&name=", ArticleDTO[].class);
+        
+		ArticleDTO[] categories = responseEntity.getBody();
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		assertEquals(10, categories.length);
+	}
+	
+	
+	@Test
+	void testSearch_typeParam() {
+		
+		ResponseEntity<ArticleDTO[]> responseEntity = restTemplate.getForEntity(
+				"/api/article/search/?type=DESSERT&name=", ArticleDTO[].class);
+        
+		ArticleDTO[] categories = responseEntity.getBody();
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		assertEquals(3, categories.length);
+	}
+	
+	@Test
+	void testSearch_typeAndNameParam_ExpectOne() {
+		
+		ResponseEntity<ArticleDTO[]> responseEntity = restTemplate.getForEntity(
+				"/api/article/search/?type=DESSERT&name=ES", ArticleDTO[].class);
+        
+		ArticleDTO[] categories = responseEntity.getBody();
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		assertEquals(1, categories.length);
+	}
+	
+	@Test
+	void testSearch_typeAndNameParam_ExpectNone() {
+		
+		ResponseEntity<ArticleDTO[]> responseEntity = restTemplate.getForEntity(
+				"/api/article/search/?type=DESSERT&name=ESsdasd", ArticleDTO[].class);
+        
+		ArticleDTO[] categories = responseEntity.getBody();
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		assertEquals(0, categories.length);
 	}
 	
 	@Test
@@ -150,7 +214,6 @@ public class ArticleControllerTest {
 
 		
 		assertEquals(HttpStatus.OK, responseEntityDelete.getStatusCode());
-		assertEquals("Article with id "+newArticle.getId()+" successfully deleted", responseEntityDelete.getBody());
 		int sizeAfter = articleService.getAll().size();
 		assertEquals(sizeBefore, sizeAfter+1);
 	}
