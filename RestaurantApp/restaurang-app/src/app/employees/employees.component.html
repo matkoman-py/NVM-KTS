@@ -17,12 +17,8 @@
       </div>
       <div class="p-field p-grid">
         <label styleClass="p-col-fixed" style="width:100px">Type:</label>
-        <p-dropdown
-          [options]="employeeTypes"
-          [(ngModel)]="typeInput"
-          optionLabel="name"
-          placeholder='Select a type'
-        ></p-dropdown>
+        <p-dropdown [options]="employeeTypes" [(ngModel)]="typeInput" optionLabel="name" placeholder='Select a type'>
+        </p-dropdown>
       </div>
       <div class="p-field p-grid">
         <label styleClass="p-col-fixed" style="width:100px">Salary:</label>
@@ -34,20 +30,35 @@
       </div>
       <div class="p-field p-grid">
         <span class="p-buttonset">
-          <button pButton pRipple label="Create" [disabled]="isDataValid()" class="p-button-success" (click)="createEmployee()"></button>
+          <button pButton pRipple label="Create" [disabled]="isDataValid()" class="p-button-success"
+            (click)="createEmployee()"></button>
           <button pButton pRipple label="Update" [disabled]="isSelected()" (click)="updateEmployee()"></button>
-          <button pButton pRipple label="Delete" [disabled]="isSelected()" class="p-button-danger" (click)="deleteEmployee()"></button>
+          <button pButton pRipple label="Delete" [disabled]="isSelected()" class="p-button-danger"
+            (click)="deleteEmployee()"></button>
         </span>
       </div>
     </div>
   </div>
   <div class="col card special2">
-    <p-table 
-      selectionMode="single" 
-      [value]="employees" 
-      [(selection)]="selectedEmployee"     
-      [paginator]="true"
-      [rows]="5">
+    <div class="p-formgroup-inline search">
+      <div class="p-field">
+        <input type="text" pInputText [(ngModel)]="nameSearchParam" placeholder="Name" />
+      </div>
+      <div class="p-field">
+        <input type="text" pInputText [(ngModel)]="surnameSearchParam" placeholder="Surname" />
+      </div>
+      <div class="p-field">
+        <input type="text" pInputText [(ngModel)]="emailSearchParam" placeholder="Email" />
+      </div>
+      <div class="p-field">
+        <input type="text" pInputText [(ngModel)]="pincodeSearchParam" placeholder="Pincode" />
+      </div>
+      <div class="p-field">
+        <button pButton type="button" label="Submit" (click)="search()"></button>
+      </div>
+    </div>
+
+    <p-table selectionMode="single" [value]="employees" [(selection)]="selectedEmployee" [paginator]="true" [rows]="5">
       <ng-template pTemplate="header">
         <tr>
           <th>Name</th>

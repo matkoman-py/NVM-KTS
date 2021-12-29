@@ -10,6 +10,8 @@ public interface IEmployeeService {
 
 	List<EmployeeDTO> getAll();
 	
+	List<EmployeeDTO> search(String name, String surname, String email, String pincode);
+	
 	EmployeeDTO getOne(int id);
 	
 	EmployeeDTO delete(int id);

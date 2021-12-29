@@ -27,4 +27,18 @@ export class EmployeesService {
   createEmployee(employeeData: Employee):Observable<Employee>{
     return this.http.post<Employee>('/api/employee',  employeeData );
   }
+
+  search(
+    nameSearchParam: string,
+    surnameSearchParam: string,
+    emailSearchParam: string,
+    pincodeSearchParam: string
+  ): Observable<Employee[]> {
+    let params = new HttpParams()
+      .set('name', nameSearchParam)
+      .set('surname', surnameSearchParam)
+      .set('email', emailSearchParam)
+      .set('pincode', pincodeSearchParam);
+    return this.http.get<Employee[]>(`api/employee/search`, { params: params });
+  }
 }

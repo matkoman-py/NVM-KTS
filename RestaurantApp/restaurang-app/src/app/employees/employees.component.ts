@@ -1,7 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { EmployeesService } from './services/employees.service';
-import { Employee, EmployeeType } from '../modules/shared/models/employee';
-import { MessageService, PrimeNGConfig } from 'primeng/api';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
+import {
+  EmployeesService
+} from './services/employees.service';
+import {
+  Employee,
+  EmployeeType
+} from '../modules/shared/models/employee';
+import {
+  MessageService,
+  PrimeNGConfig
+} from 'primeng/api';
 
 @Component({
   selector: 'app-employees',
@@ -12,15 +23,30 @@ import { MessageService, PrimeNGConfig } from 'primeng/api';
 export class EmployeesComponent implements OnInit {
   employees: Employee[] = [];
   selectedEmployee: Employee = {};
-  employeeTypes: EmployeeType[] = [
-    { name: 'WAITER', value: 'WAITER' },
-    { name: 'BARMAN', value: 'BARMAN' },
-    { name: 'COOK', value: 'COOK' },
+  employeeTypes: EmployeeType[] = [{
+      name: 'WAITER',
+      value: 'WAITER'
+    },
+    {
+      name: 'BARMAN',
+      value: 'BARMAN'
+    },
+    {
+      name: 'COOK',
+      value: 'COOK'
+    },
   ];
+  nameSearchParam = '';
+  surnameSearchParam = '';
+  emailSearchParam = '';
+  pincodeSearchParam = '';
 
   employeeData: Employee = {};
   nameInput: string | undefined = '';
-  typeInput: EmployeeType = { name: '', value: '' };
+  typeInput: EmployeeType = {
+    name: '',
+    value: ''
+  };
   surnameInput: string | undefined = '';
   emailInput: string | undefined = '';
   salaryInput: number | undefined = undefined;
@@ -33,10 +59,15 @@ export class EmployeesComponent implements OnInit {
     private primengConfig: PrimeNGConfig,
     private messageService: MessageService
   ) {}
-  
-  isSelected() : boolean{
-    if (Object.keys(this.selectedEmployee).length === 0) return true;
-    return false;
+
+  search() {
+    this.employeesService
+      .search(this.nameSearchParam, 
+            this.surnameSearchParam, 
+            this.emailSearchParam, 
+            this.pincodeSearchParam).subscribe((data) => {
+      this.employees = data;
+    });
   }
 
   getEmployees() {
@@ -45,7 +76,7 @@ export class EmployeesComponent implements OnInit {
     });
   }
 
-  deleteEmployee(){
+  deleteEmployee() {
     this.employeesService.deleteEmployee(this.selectedEmployee.id).subscribe((deletedEmployee) => {
       this.messageService.add({
         key: 'tc',
@@ -58,8 +89,8 @@ export class EmployeesComponent implements OnInit {
     });
   }
 
-  createEmployee(){
-    if(!this.createEmployeeData()) return;
+  createEmployee() {
+    if (!this.createEmployeeData()) return;
 
     this.employeesService.createEmployee(this.employeeData).subscribe((createdEmployee) => {
       this.messageService.add({
@@ -74,14 +105,17 @@ export class EmployeesComponent implements OnInit {
   }
 
   updateEmployee() {
-    this.nameInput = this.nameInput == '' ? this.selectedEmployee.name: this.nameInput;
-    this.surnameInput = this.surnameInput == '' ? this.selectedEmployee.surname: this.surnameInput;
-    this.emailInput = this.emailInput == '' ? this.selectedEmployee.email: this.emailInput;
-    this.typeInput = this.typeInput.name == '' ? { name:this.selectedEmployee.employeeType, value: this.selectedEmployee.employeeType}: this.typeInput;
-    this.salaryInput = this.salaryInput == undefined ? this.selectedEmployee.salary: this.salaryInput;
-    this.pincodeInput = this.pincodeInput == undefined ? this.selectedEmployee.pincode: this.pincodeInput;
+    this.nameInput = this.nameInput == '' ? this.selectedEmployee.name : this.nameInput;
+    this.surnameInput = this.surnameInput == '' ? this.selectedEmployee.surname : this.surnameInput;
+    this.emailInput = this.emailInput == '' ? this.selectedEmployee.email : this.emailInput;
+    this.typeInput = this.typeInput.name == '' ? {
+      name: this.selectedEmployee.employeeType,
+      value: this.selectedEmployee.employeeType
+    } : this.typeInput;
+    this.salaryInput = this.salaryInput == undefined ? this.selectedEmployee.salary : this.salaryInput;
+    this.pincodeInput = this.pincodeInput == undefined ? this.selectedEmployee.pincode : this.pincodeInput;
 
-    if(!this.updateEmployeeData()) return;
+    if (!this.updateEmployeeData()) return;
 
     this.employeesService.updateEmployee(this.employeeData).subscribe((updatedEmployee) => {
       this.messageService.add({
@@ -95,31 +129,39 @@ export class EmployeesComponent implements OnInit {
 
     this.clearInputFields();
   }
-  
-  clearInputFields(){
+
+  isSelected(): boolean {
+    if (Object.keys(this.selectedEmployee).length === 0) return true;
+    return false;
+  }
+
+  clearInputFields() {
     this.nameInput = '';
     this.surnameInput = '';
     this.emailInput = '';
-    this.typeInput = { name: '', value: '' };
+    this.typeInput = {
+      name: '',
+      value: ''
+    };
     this.salaryInput = undefined;
     this.pincodeInput = undefined;
 
     this.selectedEmployee = {};
   }
 
-  isDataValid() : boolean{
-    if(this.nameInput == '') return true;
-    if(this.surnameInput == '') return true;
-    if(this.emailInput == '') return true;
-    if(this.pincodeInput == undefined) return true;
-    if(this.salaryInput == undefined) return true;
-    if(this.typeInput.name == '') return true;
+  isDataValid(): boolean {
+    if (this.nameInput == '') return true;
+    if (this.surnameInput == '') return true;
+    if (this.emailInput == '') return true;
+    if (this.pincodeInput == undefined) return true;
+    if (this.salaryInput == undefined) return true;
+    if (this.typeInput.name == '') return true;
     return false;
   }
 
-  createEmployeeData() : boolean{
+  createEmployeeData(): boolean {
     this.createEmployeeDTO();
-    if(this.employees.filter(employee => employee.email == this.employeeData.email).length != 0){
+    if (this.employees.filter(employee => employee.email == this.employeeData.email).length != 0) {
       this.messageService.add({
         key: 'tc',
         severity: 'warn',
@@ -132,10 +174,10 @@ export class EmployeesComponent implements OnInit {
     return true;
   }
 
-  updateEmployeeData() : boolean{
+  updateEmployeeData(): boolean {
     this.createEmployeeDTO();
-    if((this.employees.filter(employee => employee.email == this.employeeData.email).length == 1) 
-     && this.selectedEmployee.email != this.employeeData.email) {
+    if ((this.employees.filter(employee => employee.email == this.employeeData.email).length == 1) &&
+      this.selectedEmployee.email != this.employeeData.email) {
       this.messageService.add({
         key: 'tc',
         severity: 'warn',
@@ -148,7 +190,7 @@ export class EmployeesComponent implements OnInit {
     return true;
   }
 
-  createEmployeeDTO(){
+  createEmployeeDTO() {
     this.employeeData.id = this.selectedEmployee.id;
     this.employeeData.name = this.nameInput;
     this.employeeData.surname = this.surnameInput;
@@ -178,9 +220,9 @@ export class EmployeesComponent implements OnInit {
   }
 
   isLastPage(): boolean {
-    return this.employees
-      ? this.first === this.employees.length - this.rows
-      : true;
+    return this.employees ?
+      this.first === this.employees.length - this.rows :
+      true;
   }
 
   isFirstPage(): boolean {
