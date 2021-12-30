@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -35,7 +36,7 @@ public class UserAuthServiceTest {
                 UserType.PRIVILEGED_USER, "marko1", "123", PrivilegedUserType.MANAGER);
         privilegedUser.setRoles(new ArrayList<>());
 
-        given(priviligedUserRepository.findByUsername("marko1")).willReturn(privilegedUser);
+        given(priviligedUserRepository.findByUsername("marko1")).willReturn(Optional.of(privilegedUser));
     }
 
     @Test

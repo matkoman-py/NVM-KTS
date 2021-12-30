@@ -92,7 +92,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/order/**").permitAll()
                 .antMatchers("/api/ingredient").permitAll()
                 .antMatchers("/api/privilegedUser/**").permitAll().and().httpBasic().and()
-
 //                .anyRequest().authenticated().and().formLogin().loginProcessingUrl("/api/auth/loging").and()
 
                 .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, userAuthService), BasicAuthenticationFilter.class);

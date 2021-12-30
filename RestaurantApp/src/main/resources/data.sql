@@ -16,7 +16,6 @@ INSERT INTO article (name, description, type, menu_id) VALUES
   ('Coca cola', 'sokic', 'DRINK', 420),
   ('Princes krofna', 'Ubica', 'DESSERT', 420);
 
-
   INSERT INTO suggested_article (name, description, suggested_making_price, suggested_selling_price, type) VALUES
   ('Nova torta', 'Jako fina', 100, 350, 'APPETIZER'),
   ('Nova krofna', 'Ubica', 120, 410, 'APPETIZER');
@@ -99,10 +98,21 @@ INSERT INTO prices (from_date, making_price, selling_price, status, to_date, art
   ('2002-11-23', 60, 150, 'ACTIVE', NULL, 9),
   ('2002-11-23', 100, 200, 'ACTIVE', NULL, 10);
 
+INSERT INTO employee_login_info (type, employee_type, pincode) values
+  ('WAITER', 'ROLE_WAITER', '1111'),
+  ('BARMAN', 'ROLE_BARMAN', '2222'),
+  ('COOK', 'ROLE_COOK', '3333');
+
 INSERT INTO roles (name) values
   ('ROLE_MANAGER'),
-  ('ROLE_OWNER');
+  ('ROLE_OWNER'),
+  ('ROLE_WAITER'),
+  ('ROLE_BARMAN'),
+  ('ROLE_COOK');
 
 INSERT INTO user_role (username, role_id) values
   ('markuza99', 1),
-  ('markuza999', 2);
+  ('markuza999', 2),
+  ('WAITER', 3),
+  ('BARMAN', 4),
+  ('COOK', 5);
