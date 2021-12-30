@@ -7,6 +7,11 @@ import { AppRoutingModule } from './app-routing/app-routing.module';
 import { MenubarModule } from 'primeng/menubar';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
+import { ReactiveFormsModule } from '@angular/forms';
+import { LoginComponent } from './login/components/login.component';
+import { PasswordModule } from 'primeng/password';
+import { TabViewModule } from 'primeng/tabview'
+import { LoginService } from './login/services/login.service';
 import { ArticlesComponent } from './articles/articles.component';
 import { EmployeesComponent } from './employees/employees.component';
 import { TableModule } from 'primeng/table';
@@ -36,7 +41,8 @@ import { UpdateArticleComponent } from './update-article/update-article.componen
     NotificationBarComponent,
     CreateArticleComponent,
     UpdateArticleComponent,
-    EmployeesComponent
+    EmployeesComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -45,6 +51,11 @@ import { UpdateArticleComponent } from './update-article/update-article.componen
     MenubarModule,
     InputTextModule,
     ButtonModule,
+    
+    ReactiveFormsModule,
+    PasswordModule,
+    TabViewModule,
+
     TableModule,
     FormsModule,
     HttpClientModule,
@@ -61,7 +72,7 @@ import { UpdateArticleComponent } from './update-article/update-article.componen
     SidebarModule,
     BadgeModule,
   ],
-  providers: [],
+  providers: [LoginService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
