@@ -73,7 +73,12 @@ INSERT INTO ordered_article (description, status, order_id, article_id, employee
 INSERT INTO ingredient (name, is_allergen) VALUES
   ('Vanila', FALSE),
   ('Cokolada', TRUE),
-  ('Badem', TRUE);
+  ('Badem', TRUE),
+  ('Puter', TRUE),
+  ('Testo', TRUE),
+  ('Prsuta', TRUE),
+  ('Luk', TRUE),
+  ('Slanina', TRUE);
 
 INSERT INTO suggested_article_ingredient (suggested_article_id, ingredient_id) VALUES
   (1, 1),

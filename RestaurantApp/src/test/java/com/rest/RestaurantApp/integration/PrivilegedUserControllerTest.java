@@ -2,6 +2,8 @@ package com.rest.RestaurantApp.integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Date;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,10 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.rest.RestaurantApp.domain.enums.EmployeeType;
+import com.rest.RestaurantApp.domain.enums.PrivilegedUserType;
+import com.rest.RestaurantApp.domain.enums.UserType;
+import com.rest.RestaurantApp.dto.EmployeeDTO;
 import com.rest.RestaurantApp.dto.PrivilegedUserDTO;
 import com.rest.RestaurantApp.services.PrivilegedUserService;
 
@@ -39,7 +45,7 @@ public class PrivilegedUserControllerTest {
 
 		PrivilegedUserDTO privilegedUser = responseEntity.getBody();
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-		assertEquals(privilegedUser.getName(), "Petar");
+		assertEquals("Petar", privilegedUser.getName());
 	}
 	
 	@Test
@@ -58,14 +64,68 @@ public class PrivilegedUserControllerTest {
 		PrivilegedUserDTO[] privilegedUsers = responseEntity.getBody();
 		
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-		assertEquals(privilegedUsers.length, 1);
+		assertEquals(2, privilegedUsers.length);
 	}
 	
 	@Test
-	public void testDelete() { 
+	public void testDelete_ValidId() { 
+		PrivilegedUserDTO pUserDTO = new PrivilegedUserDTO(2,10000,"acaXXaa@mail.com","Aca","Maca",new Date(),UserType.PRIVILEGED_USER, "usernameXX", "passwordX", PrivilegedUserType.MANAGER);
+		privilegedUserService.create(pUserDTO);
+		
 		ResponseEntity<String> responseEntity = restTemplate.exchange(
-				"/api/privilegedUser/1", HttpMethod.DELETE, new HttpEntity<Object>(null), String.class);
+				"/api/privilegedUser/" + pUserDTO.getId(), HttpMethod.DELETE, new HttpEntity<Object>(null), String.class);
 
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+	}
+	
+	@Test
+	public void testDelete_InvalidId() { 
+
+		ResponseEntity<String> responseEntity = restTemplate.exchange(
+				"/api/privilegedUser/113", HttpMethod.DELETE, new HttpEntity<Object>(null), String.class);
+
+		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+	}
+	
+	@Test
+	public void testUpdate_InvalidId() {
+		PrivilegedUserDTO pUserDTO = new PrivilegedUserDTO(2,10000,"acaaaa@mail.com","Aca","Maca",new Date(),UserType.PRIVILEGED_USER, "usernameX", "passwordX", PrivilegedUserType.MANAGER);
+
+		ResponseEntity<String> responseEntity = restTemplate.exchange(
+				"/api/privilegedUser/15", HttpMethod.PUT, new HttpEntity<PrivilegedUserDTO>(pUserDTO), String.class);
+		
+		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+	}
+	
+	@Test
+	public void testUpdate_ValidId() {
+		PrivilegedUserDTO pUserDTO = new PrivilegedUserDTO(2,10000,"acaaaa@mail.com","Aca","Maca",new Date(),UserType.PRIVILEGED_USER, "usernameX", "passwordX", PrivilegedUserType.MANAGER);
+
+		ResponseEntity<PrivilegedUserDTO> responseEntity = restTemplate.exchange(
+				"/api/privilegedUser/2", HttpMethod.PUT, new HttpEntity<PrivilegedUserDTO>(pUserDTO), PrivilegedUserDTO.class);
+		
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		assertEquals("Aca", privilegedUserService.getOne(responseEntity.getBody().getId()).getName());
+		assertEquals("Maca", privilegedUserService.getOne(responseEntity.getBody().getId()).getSurname());
+		assertEquals("acaaaa@mail.com", privilegedUserService.getOne(responseEntity.getBody().getId()).getEmail());
+		assertEquals("usernameX", privilegedUserService.getOne(responseEntity.getBody().getId()).getUsername());
+		assertEquals("passwordX", privilegedUserService.getOne(responseEntity.getBody().getId()).getPassword());
+	}
+	
+	@Test
+	public void testCreate() {
+		PrivilegedUserDTO pUserDTO = new PrivilegedUserDTO(2,10000,"a1caaaa@mail.com","Aca","Maca",new Date(),UserType.PRIVILEGED_USER, "username1X", "passwordX", PrivilegedUserType.MANAGER);
+
+		ResponseEntity<PrivilegedUserDTO> responseEntity = restTemplate.exchange(
+				"/api/privilegedUser", HttpMethod.POST, new HttpEntity<PrivilegedUserDTO>(pUserDTO), PrivilegedUserDTO.class);
+		
+		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+		assertEquals("Aca", privilegedUserService.getOne(responseEntity.getBody().getId()).getName());
+		assertEquals("Maca", privilegedUserService.getOne(responseEntity.getBody().getId()).getSurname());
+		assertEquals("a1caaaa@mail.com", privilegedUserService.getOne(responseEntity.getBody().getId()).getEmail());
+		assertEquals("username1X", privilegedUserService.getOne(responseEntity.getBody().getId()).getUsername());
+		assertEquals("passwordX", privilegedUserService.getOne(responseEntity.getBody().getId()).getPassword());
+	
+		privilegedUserService.delete(responseEntity.getBody().getId());
 	}
 }

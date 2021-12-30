@@ -84,21 +84,29 @@ public class PrivilegedUserServiceTest {
 	}
 	
 	@Test
+	void testCreate() {
+		PrivilegedUserDTO priviligedUser = new PrivilegedUserDTO(null, 0, "petarns99@gmail.com", "Petar", "Markovic", new GregorianCalendar(1999, 10, 29).getTime(),UserType.PRIVILEGED_USER,"user","pass",PrivilegedUserType.MANAGER);
+		
+		PrivilegedUserDTO createdPriviligedUser = privilegedUserService.create(priviligedUser);
+		assertEquals("Petar", privilegedUserService.getOne(createdPriviligedUser.getId()).getName());
+	}
+	
+	@Test
 	void testGetAll() {
 		List<PrivilegedUserDTO> returnedPrivilegedUsers = privilegedUserService.getAll();
-		assertEquals(returnedPrivilegedUsers.size(), 3);
+		assertEquals(3, returnedPrivilegedUsers.size());
 	}
 	
 	@Test
 	void testGetOne_ValidId() {
 		PrivilegedUserDTO result = privilegedUserService.getOne(1);
-		assertEquals(result.getName(), "Petar");
+		assertEquals("Petar", result.getName());
 	}
 	
 	@Test
 	void testGetOne_InvalidId() {
 		assertThrows(NotFoundException.class, ()->{
-			PrivilegedUserDTO result = privilegedUserService.getOne(4);
+			privilegedUserService.getOne(4);
             });
 	}
 	
@@ -107,14 +115,14 @@ public class PrivilegedUserServiceTest {
 		
 		PrivilegedUserDTO result = privilegedUserService.delete(1);
 		
-		assertEquals(result.getName(), "Petar");
+		assertEquals("Petar", result.getName());
 	}
 	
 	@Test
 	void testDelete_InvalidId() {
 		
 		assertThrows(NotFoundException.class, ()->{
-			PrivilegedUserDTO result = privilegedUserService.delete(4);
+			privilegedUserService.delete(4);
             });
 	}
 	
@@ -127,18 +135,16 @@ public class PrivilegedUserServiceTest {
 		
 		
 		PrivilegedUserDTO result = privilegedUserService.update(1, newPrivilegedUser);
-		assertEquals(result.getName(), "Aca");
-		assertEquals(result.getSurname(), "Ceps");
+		assertEquals("Aca", result.getName());
+		assertEquals("Ceps", result.getSurname());
 	}
 	
 	@Test
 	void testUpdate_InvalidId() {
 		
 		PrivilegedUserDTO newPrivilegedUser = new PrivilegedUserDTO();
-		newPrivilegedUser.setName("Aca");
-		newPrivilegedUser.setSurname("Ceps");
 		
 		assertThrows(NotFoundException.class, ()->{
-			PrivilegedUserDTO result = privilegedUserService.update(15, newPrivilegedUser);
+			privilegedUserService.update(15, newPrivilegedUser);
 	        });
 	}}

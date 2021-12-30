@@ -1,0 +1,87 @@
+<p-toast position="top-center" key="tc"></p-toast>
+<div class="card">
+  <h2>Articles</h2>
+  <div class="p-formgroup-inline">
+    <div class="p-field">
+      <input
+        type="text"
+        pInputText
+        [(ngModel)]="nameSearchParam"
+        placeholder="Name"
+      />
+    </div>
+    <div class="p-field">
+      <p-dropdown
+        [options]="articleTypes"
+        [(ngModel)]="selectedArticleType"
+        optionLabel="name"
+        placeholder="Select a type"
+      ></p-dropdown>
+    </div>
+    <button pButton type="button" label="Submit" (click)="search()"></button>
+  </div>
+
+  <p-table
+    selectionMode="single"
+    [(selection)]="selectedArticle"
+    [value]="articles"
+    [paginator]="true"
+    [rows]="10"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Name</th>
+        <th>Making price</th>
+        <th>Selling price</th>
+        <th>Description</th>
+        <th>Type</th>
+        <!-- <th>Ingredients</th> -->
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-article>
+      <tr [pSelectableRow]="article">
+        <td>{{ article.name }}</td>
+        <td>{{ article.makingPrice }}</td>
+        <td>{{ article.sellingPrice }}</td>
+        <td>{{ article.description }}</td>
+        <td>{{ article.type }}</td>
+        <!-- STA RADITI SA INGREDIENTS -->
+        <!-- <td>{{ article.ingredients }}</td> -->
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="paginatorleft"> </ng-template>
+    <ng-template pTemplate="paginatorright"> </ng-template>
+  </p-table>
+
+  <div class="p-formgroup-inline" style="margin-top: 20px">
+    <div class="p-field">
+      <button
+        pButton
+        type="button"
+        label="Create article"
+        class="p-button-success"
+        (click)="create()"
+      ></button>
+    </div>
+    <div class="p-field">
+      <button
+        pButton
+        type="button"
+        label="Update article"
+        class="p-button-info"
+        (click)="update()"
+      ></button>
+    </div>
+    <div class="p-field">
+      <button
+        pButton
+        type="button"
+        label="Delete article"
+        class="p-button-danger"
+        (click)="delete()"
+      ></button>
+    </div>
+  </div>
+</div>

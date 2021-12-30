@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rest.RestaurantApp.dto.ArticleCreationDTO;
 import com.rest.RestaurantApp.dto.ArticleDTO;
+import com.rest.RestaurantApp.dto.DeleteMessageDTO;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.services.ArticleService;
 
@@ -37,6 +39,12 @@ public class ArticleController {
         return new ResponseEntity(notFoundException.getMessage(), HttpStatus.NOT_FOUND);
     }
 	
+	@GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<ArticleDTO>> search(@RequestParam(value = "type", required = false, defaultValue = "") String type,
+			@RequestParam(value = "name", required = false, defaultValue = "") String name) {
+		return ResponseEntity.ok(articleService.search(type,name));	
+	}
+	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<ArticleDTO>> getAll() {
 		return ResponseEntity.ok(articleService.getAll());
@@ -49,9 +57,9 @@ public class ArticleController {
 	}
 	
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity delete(@PathVariable("id") int id) {
-		ArticleDTO article = articleService.delete(id);
-		return new ResponseEntity<>("Article with id " + id + " successfully deleted", HttpStatus.OK);	
+	public ResponseEntity<DeleteMessageDTO> delete(@PathVariable("id") int id) {
+		articleService.delete(id);
+		return new ResponseEntity<DeleteMessageDTO>(new DeleteMessageDTO("Article with id " + id + " successfully deleted"), HttpStatus.OK);	
 	}
 	
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

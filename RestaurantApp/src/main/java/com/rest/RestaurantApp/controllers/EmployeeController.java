@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.rest.RestaurantApp.dto.ArticleDTO;
 import com.rest.RestaurantApp.dto.EmployeeDTO;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.services.EmployeeService;
@@ -31,35 +34,44 @@ public class EmployeeController {
 		this.employeeService = employeeService;
 	}
 	
+	@GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<EmployeeDTO>> search(@RequestParam(value = "name", required = false, defaultValue = "") String name,
+													@RequestParam(value = "surname", required = false, defaultValue = "") String surname,
+													@RequestParam(value = "email", required = false, defaultValue = "") String email,
+													@RequestParam(value = "pincode", required = false, defaultValue = "") String pincode) {
+		return ResponseEntity.ok(employeeService.search(name, surname, email, pincode));	
+	}
+	
+	//
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<EmployeeDTO>> getAll() {
 		return ResponseEntity.ok(employeeService.getAll());
 	}
-	
+	//
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<EmployeeDTO> getOne(@PathVariable("id") int id) {
 		EmployeeDTO employee = employeeService.getOne(id);
 		return new ResponseEntity<EmployeeDTO>(employee, HttpStatus.OK);	
 	}
-	
+	//
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity delete(@PathVariable("id") int id) {
+	public ResponseEntity<EmployeeDTO> delete(@PathVariable("id") int id) {
 		EmployeeDTO employee = employeeService.delete(id);
-		return new ResponseEntity<>("Employee with id " + id + " successfully deleted", HttpStatus.OK);	
+		return new ResponseEntity<EmployeeDTO>(employee, HttpStatus.OK);	
 	}
-	
+	//
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<EmployeeDTO> create(@RequestBody EmployeeDTO employee) {
 		EmployeeDTO createdEmployee = employeeService.create(employee);
 		return new ResponseEntity<EmployeeDTO>(createdEmployee, HttpStatus.CREATED);
 	}
-	
+	//
 	@PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<EmployeeDTO> update(@PathVariable("id") int id, @RequestBody EmployeeDTO employee) {
 		EmployeeDTO updatedEmployee = employeeService.update(id, employee);
 		return new ResponseEntity<EmployeeDTO>(updatedEmployee, HttpStatus.OK);
 	}
-
+	//
 	@GetMapping("/test_waiter/{pin}")
 	public ResponseEntity<Boolean> checkIfWaiterPin(@PathVariable("pin") int pin) {
 		boolean pinValid = employeeService.checkPin(pin, EmployeeType.WAITER);

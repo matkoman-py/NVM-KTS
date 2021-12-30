@@ -75,7 +75,6 @@ public class SuggestedArticleService implements ISuggestedArticleService{
 			ingredient.getArticles().add(savedArticle);
 			ingredients.add(ingredient);
 		}
-		//savedArticle.setIngredients(approvedArticle.getIngredients());
 		savedArticle.setIngredients(ingredients);
 		
 		articleRepository.save(savedArticle);

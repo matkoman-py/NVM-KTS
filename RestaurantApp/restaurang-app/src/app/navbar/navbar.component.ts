@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 @Component({
   selector: 'app-navbar',
@@ -17,6 +16,16 @@ export class NavbarComponent implements OnInit {
       label: 'Login',
       icon: 'pi pi-fw pi-user',
       routerLink: '/login',
+    },
+    {
+      label: 'Articles',
+      icon: 'pi pi-fw pi-user',
+      routerLink: '/articles',
+    },
+    {
+      label: 'Employees',
+      icon: 'pi pi-fw pi-user',
+      routerLink: '/employees',
     },
   ];
   constructor() {}

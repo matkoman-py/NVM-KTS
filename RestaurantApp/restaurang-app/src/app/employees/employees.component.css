@@ -1,0 +1,15 @@
+.special1{
+    margin-top: 4%;
+    float: left;
+    width: 20%;
+}
+
+.special2{
+    float: right;
+    width: 78%;
+}
+
+.search{
+    position: relative;
+    margin-left: 10%;
+}

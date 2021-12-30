@@ -4,7 +4,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,7 +17,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
+
+import com.rest.RestaurantApp.domain.Ingredient;
+import com.rest.RestaurantApp.domain.SuggestedArticle;
+import com.rest.RestaurantApp.domain.enums.ArticleType;
+import com.rest.RestaurantApp.dto.IngredientDTO;
 import com.rest.RestaurantApp.dto.SuggestedArticleDTO;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.services.SuggestedArticleService;
@@ -32,7 +40,7 @@ public class SuggestedArticleServiceTest {
 		
 		SuggestedArticleDTO result = suggestedArticleService.getOne(1);
 		
-		assertEquals(result.getName(), "Nova torta");
+		assertEquals("Nova torta", result.getName());
 	}
 	
 	@Test
@@ -48,17 +56,21 @@ public class SuggestedArticleServiceTest {
 		
 		List<SuggestedArticleDTO> result = suggestedArticleService.getAll();
 		
-		assertEquals(result.size(), 1);
+		assertEquals(2, result.size());
 	}
 	
 	@Test
 	void testDelete_ValidId() {
+		Set<IngredientDTO> ingredients = new HashSet<IngredientDTO>();
+		SuggestedArticleDTO suggestedArticle = new SuggestedArticleDTO(1,ingredients,"new cake","sehr gut",100,150,ArticleType.DESSERT);
+		
+		SuggestedArticleDTO createdSuggestedArticle = suggestedArticleService.create(suggestedArticle);
 		
 		List<SuggestedArticleDTO> result1 = suggestedArticleService.getAll();
-		SuggestedArticleDTO employee = suggestedArticleService.delete(1);
+		suggestedArticleService.delete(createdSuggestedArticle.getId());
 		List<SuggestedArticleDTO> result2 = suggestedArticleService.getAll();
 		
-		assertNotEquals(result1.size(),result2.size());
+		assertEquals(result1.size(),result2.size() + 1);
 	}
 	
 	@Test
@@ -66,6 +78,74 @@ public class SuggestedArticleServiceTest {
 		
 		assertThrows(NotFoundException.class,()->{
 			suggestedArticleService.delete(5);
+		});
+	}
+	
+	@Test
+	void testCreate() {
+		Set<IngredientDTO> ingredients = new HashSet<IngredientDTO>();
+		SuggestedArticleDTO suggestedArticle = new SuggestedArticleDTO(1,ingredients,"new cake","sehr gut",100,150,ArticleType.DESSERT);
+		
+		SuggestedArticleDTO createdSuggestedArticle = suggestedArticleService.create(suggestedArticle);
+		
+		SuggestedArticleDTO fromDatabase = suggestedArticleService.getOne(createdSuggestedArticle.getId());
+		assertEquals("new cake", fromDatabase.getName());
+		assertEquals(100, fromDatabase.getSuggestedMakingPrice());
+		assertEquals(150, fromDatabase.getSuggestedSellingPrice());
+		assertEquals("sehr gut", fromDatabase.getDescription());
+		assertEquals(ArticleType.DESSERT, fromDatabase.getType());
+		
+		suggestedArticleService.delete(createdSuggestedArticle.getId());
+	}
+	
+	@Test
+	void testUpdate_ValidId() {
+		Set<IngredientDTO> ingredients = new HashSet<IngredientDTO>();
+		SuggestedArticleDTO suggestedArticle = new SuggestedArticleDTO(1,ingredients,"new cake","sehr gut",100,150,ArticleType.DESSERT);
+		
+		SuggestedArticleDTO createdSuggestedArticle = suggestedArticleService.create(suggestedArticle);
+
+		SuggestedArticleDTO updateSuggestedArticle = new SuggestedArticleDTO(1,ingredients,"new cake2","sehr gut2",200,250,ArticleType.APPETIZER);
+		suggestedArticleService.update(createdSuggestedArticle.getId(), updateSuggestedArticle);
+		
+		SuggestedArticleDTO updatedSuggestedArticle = suggestedArticleService.getOne(createdSuggestedArticle.getId());
+		assertEquals("new cake2", updatedSuggestedArticle.getName());
+		assertEquals(200, updatedSuggestedArticle.getSuggestedMakingPrice());
+		assertEquals(250, updatedSuggestedArticle.getSuggestedSellingPrice());
+		assertEquals("sehr gut2", updatedSuggestedArticle.getDescription());
+		assertEquals(ArticleType.APPETIZER, updatedSuggestedArticle.getType());
+		
+		suggestedArticleService.delete(createdSuggestedArticle.getId());
+	}
+	
+	@Test
+	void testUpdate_InvalidId() {
+		Set<IngredientDTO> ingredients = new HashSet<IngredientDTO>();
+		SuggestedArticleDTO suggestedArticle = new SuggestedArticleDTO(1,ingredients,"new cake","sehr gut",100,150,ArticleType.DESSERT);
+		
+		assertThrows(NotFoundException.class, () -> {
+			suggestedArticleService.update(11, suggestedArticle);
+		});
+	}
+	
+	@Test
+	void testApprove_ValidId() {
+
+		Set<IngredientDTO> ingredients = new HashSet<IngredientDTO>();
+		SuggestedArticleDTO suggestedArticle = new SuggestedArticleDTO(1,ingredients,"new cake","sehr gut",100,150,ArticleType.DESSERT);
+		
+		SuggestedArticleDTO createdSuggestedArticle = suggestedArticleService.create(suggestedArticle);
+		
+		int beforeApprove = suggestedArticleService.getAll().size();
+		suggestedArticleService.approve(createdSuggestedArticle.getId());
+		int afterApprove = suggestedArticleService.getAll().size();	
+		assertEquals(beforeApprove, afterApprove + 1);
+	}
+	
+	@Test
+	void testApprove_InvalidId() {
+		assertThrows(NotFoundException.class, () -> {
+			suggestedArticleService.approve(11);
 		});
 	}
 }
