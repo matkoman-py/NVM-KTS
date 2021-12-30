@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.rest.RestaurantApp.dto.ArticleDTO;
 import com.rest.RestaurantApp.dto.EmployeeDTO;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.services.EmployeeService;
@@ -30,6 +33,15 @@ public class EmployeeController {
 	public EmployeeController(EmployeeService employeeService) {
 		this.employeeService = employeeService;
 	}
+	
+	@GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<EmployeeDTO>> search(@RequestParam(value = "name", required = false, defaultValue = "") String name,
+													@RequestParam(value = "surname", required = false, defaultValue = "") String surname,
+													@RequestParam(value = "email", required = false, defaultValue = "") String email,
+													@RequestParam(value = "pincode", required = false, defaultValue = "") String pincode) {
+		return ResponseEntity.ok(employeeService.search(name, surname, email, pincode));	
+	}
+	
 	//
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<EmployeeDTO>> getAll() {
@@ -43,9 +55,9 @@ public class EmployeeController {
 	}
 	//
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity delete(@PathVariable("id") int id) {
+	public ResponseEntity<EmployeeDTO> delete(@PathVariable("id") int id) {
 		EmployeeDTO employee = employeeService.delete(id);
-		return new ResponseEntity<>("Employee with id " + id + " successfully deleted", HttpStatus.OK);	
+		return new ResponseEntity<EmployeeDTO>(employee, HttpStatus.OK);	
 	}
 	//
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

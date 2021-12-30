@@ -1,0 +1,49 @@
+<p-toast position="top-center" key="tc"></p-toast>
+<h2>Create Article</h2>
+<div class="p-fluid p-grid">
+    <div class="p-field p-col-12 p-md-4">
+        <span class="p-float-label">
+            <input id="float-input" type="text" [(ngModel)]="article.name"  pInputText> 
+            <label for="float-input">Name</label>
+        </span>
+        <small *ngIf="(article.name || '').toString().trim().length === 0" id="name-help" class="p-error">Name is required.</small>
+    </div>
+    <div class="p-field p-col-12 p-md-4">
+        <span class="p-float-label">
+            <input id="float-input" type="text" pInputText [(ngModel)]="article.description"> 
+            <label for="float-input">Description</label>
+        </span>
+        <small *ngIf="(article.description || '').toString().trim().length === 0" id="description-help" class="p-error">Description is required.</small>
+
+    </div>
+    <div class="p-field p-col-12 p-md-4">
+        <p-dropdown [options]="articleTypes" placeholder="Select type of article" optionLabel="name" [showClear]="true" [(ngModel)]="selectedType" (onChange)="setType(selectedType)"></p-dropdown>
+        <small *ngIf="(article.type || '').toString().trim().length === 0" id="type-help" class="p-error">Type is required.</small>
+    </div>
+    <div class="p-field p-col-12 p-md-6">
+        <span class="p-float-label p-input-icon-left">
+            <p-inputNumber mode="currency" inputId="currency-germany" currency="EUR" locale="de-DE" [(ngModel)]="article.makingPrice"></p-inputNumber>
+            <label for="inputtext-left">Making price</label>
+        </span>
+        <small *ngIf="article.makingPrice!  <= 0.0"  id="type-makingPrice" class="p-error">Making price is required.</small>
+
+    </div>
+    <div class="p-field p-col-12 p-md-6">
+        <span class="p-float-label p-input-icon-left">
+            <p-inputNumber mode="currency" inputId="currency-germany" currency="EUR" locale="de-DE" [(ngModel)]="article.sellingPrice"></p-inputNumber>
+            <label for="inputtext-left">Selling price</label>
+        </span>
+        <small *ngIf="article.sellingPrice!  <= 0.0"  id="type-sellingPrice" class="p-error">Selling price is required.</small>
+
+    </div>
+    <div class="p-field p-col-12 p-md-12">
+        <p-multiSelect [options]="ingredients" [(ngModel)]="selectedIngredients" defaultLabel="Select an ingredient" optionLabel="name" selectedItemsLabel="{0} items selected"></p-multiSelect>
+        <small *ngIf="selectedIngredients.length == 0"  id="type-ingredients" class="p-error">At least 1 ingredient is required.</small>
+
+    </div>
+    <div class="p-field p-col-12 p-md-4">
+        <button pButton type="button" label="Update article" (click)="putArticle()" [disabled] ="!validateAll()"></button>
+    </div>
+
+
+</div>

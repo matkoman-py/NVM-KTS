@@ -43,7 +43,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             identity = tokenUtils.getIdentityFromToken(authToken);
             if(identity != null) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(identity);
-
+                System.out.println("ne puca");
                 if(tokenUtils.validateToken(authToken, userDetails)) {
                     TokenBasedAuthentication authentication = new TokenBasedAuthentication(userDetails);
                     authentication.setToken(authToken);

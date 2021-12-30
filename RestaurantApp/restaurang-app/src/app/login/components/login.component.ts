@@ -3,17 +3,28 @@ import { LoginService } from '../services/login.service'
 import { Login } from '../../modules/shared/models/login';
 import { Router } from '@angular/router';
 import jwt_decode from 'jwt-decode';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
+  providers: [MessageService],
 })
 export class LoginComponent implements OnInit {
 
   username : string;
   password: string;
-  pincode: String;
+  pincode: string;
+
+  validLogin: boolean = true;
+  validPin: boolean = true;
+
+  constructor(
+    private loginService : LoginService, 
+    private messageService: MessageService,
+    private router: Router,
+    ) { }
 
   onPriviledgeLogin = () => {
     const auth: Login = {
@@ -26,22 +37,31 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('token', response.body.accessToken);
         console.log(jwt_decode(response.body.accessToken));
         //if((<any>jwt_decode(response.body.accessToken)).roles.filter((o: { name: string; }) => {o.name === 'ROLE_MANAGER'})) alert('jaj');
-        this.findUserRole();
+        this.findUserRole(jwt_decode(response.body.accessToken));
       },
       (error) => {
-        alert(error.status);
+        this.validLogin = false;
       });
   };
 
   onEmployeeLogin = () => {
-
+    this.loginService.employeeLogin(this.pincode).subscribe(
+      (response: any) => {
+        this.router.navigate(['home']);
+      },
+      (error) => {
+        this.validPin = false;
+      }
+    )
   };
 
-  findUserRole = () => {
+  findUserRole = (user: any) => {
+    alert(user.roles[0].name);
+  };
 
+  checkEmptyFields() {
+    return this.username === '' || this.username === undefined || this.password === '' || this.password === undefined;
   }
-
-  constructor(private loginService : LoginService, private router: Router) { }
 
   ngOnInit(): void { }
 

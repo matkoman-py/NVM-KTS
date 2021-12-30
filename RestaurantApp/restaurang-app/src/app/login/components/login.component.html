@@ -4,16 +4,21 @@
         <p-tabView>
             <p-tabPanel header="Priviledged User">
                 <span class="p-float-label p-input-icon-right username">
-                    <input id="float-input" type="text" pInputText [(ngModel)]="username"> 
-                    <label for="float-input">Username</label>
+                    <input id="float-username" type="text" class="p-invalid" [(ngModel)]="username" pInputText> 
+                    <label for="float-username">Username</label>
                 </span>
-
+                
                 <span class="p-float-label">
-                    <p-password [(ngModel)]="password" [toggleMask]="true" [feedback]="false"></p-password>
-                    <label for="float-input">Password</label>
+                    <p-password id="float-password" [toggleMask]="true" [feedback]="false" [(ngModel)]="password"></p-password>
+                    <label for="float-password">Password</label>
                 </span>
 
-                <button (click)="onPriviledgeLogin()" pButton pRipple type="button" label="Log In" class="p-button-rounded login-button"></button>
+                <div [style.visibility]="!validLogin ? 'visible' : 'hidden'" style="margin-left: 1rem; margin-top: -1rem;">
+                    <small id="username-help" class="p-error">Username or password is incorrect!</small>
+                </div>
+
+
+                <button (click)="onPriviledgeLogin()" [disabled]="checkEmptyFields()" pButton pRipple type="button" label="Log In" class="p-button-rounded login-button"></button>
             </p-tabPanel>
 
             <p-tabPanel header="Employee">
@@ -21,6 +26,11 @@
                     <p-password [(ngModel)]="pincode" [toggleMask]="true" [feedback]="false"></p-password>
                     <label for="float-input">Pincode</label>
                 </span>
+
+                <div [style.visibility]="!validPin ? 'visible' : 'hidden'" style="margin-left: 1rem; margin-top: -1rem;">
+                    <small id="username-help" class="p-error">Pincode is incorrect!</small>
+                </div>
+
                 <button (click)="onEmployeeLogin()" pButton pRipple type="button" label="Log In" class="p-button-rounded login-button"></button>
             </p-tabPanel>
         </p-tabView>
