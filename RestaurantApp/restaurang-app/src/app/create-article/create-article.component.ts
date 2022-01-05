@@ -3,7 +3,7 @@ import {PrimeNGConfig, MessageService, Message} from 'primeng/api';
 import { Article, ArticleType } from '../modules/shared/models/article';
 import { Ingredient } from '../modules/shared/models/ingredient';
 import { CreateArticleService } from './services/create-article.service';
-import {ToastModule} from 'primeng/toast';
+
 
 import {Router} from "@angular/router"
 
