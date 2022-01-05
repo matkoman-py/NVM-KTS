@@ -34,7 +34,7 @@ public class TokenUtils {
         return Jwts.builder()
                 .setIssuer(APP_NAME)
                 .setSubject(id)
-                .claim("roles", authorities)
+                .claim("authority", authorities)
                 .setAudience(AUDIENCE_WEB)
                 .setIssuedAt(new Date())
                 .signWith(SIGNATURE_ALGORITHM, SECRET).compact();

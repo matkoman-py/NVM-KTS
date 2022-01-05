@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -64,6 +65,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .withUser("owner_test")
                 .password(encoder.encode("test"))
                 .roles("OWNER");
+
+        auth.inMemoryAuthentication()
+                .passwordEncoder(encoder)
+                .withUser("employee")
+                .password(encoder.encode("cook123"))
+                .roles("COOK")
+                .authorities("COOK");
+
+        auth.inMemoryAuthentication()
+                .passwordEncoder(encoder)
+                .withUser("employee")
+                .password(encoder.encode("barman123"))
+                .roles("BARMAN")
+                .authorities("BARMAN");
+
+        auth.inMemoryAuthentication()
+                .passwordEncoder(encoder)
+                .withUser("employee")
+                .password(encoder.encode("waiter123"))
+                .roles("WAITER")
+                .authorities("WAITER");
 
         auth.userDetailsService(userAuthService).passwordEncoder(passwordEncoder());
     }

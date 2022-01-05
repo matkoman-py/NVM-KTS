@@ -13,7 +13,7 @@
                     <label for="float-password">Password</label>
                 </span>
 
-                <div [style.visibility]="!validLogin ? 'visible' : 'hidden'" style="margin-left: 1rem; margin-top: -1rem;">
+                <div class="inline-error" [style.visibility]="!validLogin ? 'visible' : 'hidden'">
                     <small id="username-help" class="p-error">Username or password is incorrect!</small>
                 </div>
 
@@ -27,7 +27,7 @@
                     <label for="float-input">Pincode</label>
                 </span>
 
-                <div [style.visibility]="!validPin ? 'visible' : 'hidden'" style="margin-left: 1rem; margin-top: -1rem;">
+                <div class="inline-error" [style.visibility]="!validPin ? 'visible' : 'hidden'">
                     <small id="username-help" class="p-error">Pincode is incorrect!</small>
                 </div>
 

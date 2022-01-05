@@ -35,9 +35,10 @@ export class LoginComponent implements OnInit {
       (response: any) => {
         this.router.navigate(['home']);
         localStorage.setItem('token', response.body.accessToken);
+        this.loginService.findUserRole(response.body.accessToken);
         console.log(jwt_decode(response.body.accessToken));
         //if((<any>jwt_decode(response.body.accessToken)).roles.filter((o: { name: string; }) => {o.name === 'ROLE_MANAGER'})) alert('jaj');
-        this.findUserRole(jwt_decode(response.body.accessToken));
+        alert(this.findUserRole(jwt_decode(response.body.accessToken)));
       },
       (error) => {
         this.validLogin = false;
@@ -45,9 +46,17 @@ export class LoginComponent implements OnInit {
   };
 
   onEmployeeLogin = () => {
-    this.loginService.employeeLogin(this.pincode).subscribe(
+    const auth: Login = {
+      username: "employee",
+      password: this.pincode
+    }
+    this.loginService.priviledgedUserLogin(auth).subscribe(
       (response: any) => {
+        localStorage.setItem('token', response.body.accessToken);
+        console.log(jwt_decode(response.body.accessToken));
+        this.loginService.findUserRole(response.body.accessToken);
         this.router.navigate(['home']);
+        alert(this.findUserRole(jwt_decode(response.body.accessToken)));
       },
       (error) => {
         this.validPin = false;
@@ -56,8 +65,8 @@ export class LoginComponent implements OnInit {
   };
 
   findUserRole = (user: any) => {
-    alert(user.roles[0].name);
-  };
+    return user.authority[0].name === undefined ? user.authority[0].authority : user.authority[0].name;
+  }
 
   checkEmptyFields() {
     return this.username === '' || this.username === undefined || this.password === '' || this.password === undefined;
