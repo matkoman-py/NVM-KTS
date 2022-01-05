@@ -26,7 +26,7 @@ export class ArticlesService {
     let params = new HttpParams()
       .set('type', articleType.value)
       .set('name', articleNameParam);
-    return this.http.get<Article[]>(`api/article/search`, { params: params });
+    return this.http.get<Article[]>(`/api/article/search`, { params: params });
   }
 
   delete(_id?: number): Observable<DeleteMessageDTO> {
