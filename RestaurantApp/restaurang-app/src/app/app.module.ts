@@ -32,6 +32,8 @@ import { NotificationBarComponent } from './notification-bar/notification-bar.co
 import { SidebarModule } from 'primeng/sidebar';
 import { BadgeModule } from 'primeng/badge';
 import { UpdateArticleComponent } from './update-article/update-article.component';
+import { OrdersComponent } from './orders/orders.component';
+import { ViewOrderComponent } from './view-order/view-order.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,9 @@ import { UpdateArticleComponent } from './update-article/update-article.componen
     CreateArticleComponent,
     UpdateArticleComponent,
     EmployeesComponent,
-    LoginComponent
+    LoginComponent,
+    OrdersComponent,
+    ViewOrderComponent,
   ],
   imports: [
     BrowserModule,
@@ -51,11 +55,9 @@ import { UpdateArticleComponent } from './update-article/update-article.componen
     MenubarModule,
     InputTextModule,
     ButtonModule,
-    
     ReactiveFormsModule,
     PasswordModule,
     TabViewModule,
-
     TableModule,
     FormsModule,
     HttpClientModule,

@@ -1,0 +1,22 @@
+<p-toast position="top-center" key="tc"></p-toast>
+<h2>Orders</h2>
+<div class="card">
+  <p-table selectionMode="single" [value]="orders" [(selection)]="selectedOrder" [paginator]="true" [rows]="5">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Order number</th>
+        <th>Description</th>
+        <th>No of articles</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-role>
+      <tr [pSelectableRow]="role">
+        <td>{{ role.id }}</td>
+        <td>{{ role.description }}</td>
+        <td>{{ role.articles.length }}</td>
+      </tr>
+      
+    </ng-template>    
+  </p-table>
+  <button pButton type="button" label="See order" class="p-button-info" (click)="seeOrder()"></button>
+</div>
