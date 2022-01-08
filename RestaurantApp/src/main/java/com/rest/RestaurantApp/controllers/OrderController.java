@@ -1,9 +1,6 @@
 package com.rest.RestaurantApp.controllers;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,8 +14,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.rest.RestaurantApp.domain.Order;
 import com.rest.RestaurantApp.dto.OrderDTO;
 import com.rest.RestaurantApp.dto.OrderedArticleDTO;
 import com.rest.RestaurantApp.exceptions.ChangeFinishedStateException;
@@ -28,9 +23,6 @@ import com.rest.RestaurantApp.exceptions.NullArticlesException;
 import com.rest.RestaurantApp.exceptions.OrderAlreadyTakenException;
 import com.rest.RestaurantApp.exceptions.OrderTakenByWrongEmployeeTypeException;
 import com.rest.RestaurantApp.services.OrderService;
-
-
-
 
 @RestController
 @RequestMapping("/api/order")
@@ -56,7 +48,12 @@ public class OrderController {
 			return new ResponseEntity<OrderDTO>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<OrderDTO>(order, HttpStatus.OK);
-		
+	}
+	
+	@GetMapping(value = "articles/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<OrderedArticleDTO>> getArticlesForOrder(@PathVariable("id") int id) {
+		List<OrderedArticleDTO> orderedArticles = orderService.getArticlesForOrder(id);
+		return new ResponseEntity<List<OrderedArticleDTO>>(orderedArticles, HttpStatus.OK);	
 	}
 	
 	@ExceptionHandler(value = NullArticlesException.class)
@@ -88,14 +85,6 @@ public class OrderController {
 	public ResponseEntity handleChangeFinishedStateException(ChangeFinishedStateException changeFinishedStateException) {
         return new ResponseEntity(changeFinishedStateException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
-	
-	
-	@GetMapping(value = "articles/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<OrderedArticleDTO>> getArticlesForOrder(@PathVariable("id") int id) {
-		List<OrderedArticleDTO> orderedArticles = orderService.getArticlesForOrder(id);
-		return new ResponseEntity<List<OrderedArticleDTO>>(orderedArticles, HttpStatus.OK);
-		
-	}
 	
 	@GetMapping(value = "/test", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> test() {

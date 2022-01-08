@@ -1,6 +1,8 @@
 export interface OrderedArticle{
-    id: number,
-    articleId: number,
+    id?: number,
+    articleId?: number,
     status: string;
-    description: string;
+    description?: string;
+    articleName?: String;
+    articleDescription?: String;
 }

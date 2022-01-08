@@ -19,4 +19,13 @@ export class ViewOrderService {
   getArticlesForOrder(id: number): Observable<OrderedArticle[]> {
     return this.http.get<OrderedArticle[]>('/api/order/articles/' + id);
   }
+
+  getArticle(id?: number): Observable<Article> {
+    return this.http.get<Article>('/api/article/' + id);
+  }
+
+  changeStatus(orderedArticleId?: number, pin?: number): Observable<Article>{
+    return this.http.put<Article>('/api/order/article/' + orderedArticleId + '/' + pin, null);
+  }
 }
+//article/{id}/{pin}

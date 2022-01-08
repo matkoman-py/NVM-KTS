@@ -42,26 +42,24 @@ INSERT INTO orders (description, order_date, table_number, employee_id) VALUES
   ('No ketchup', '2021-7-3 12:43:33', 1, 3),
   ('No ketchup', '2021-9-3 12:43:33', 1, 3),
   ('No ketchup', '2021-11-3 12:43:33', 1, 3),
-
   ('No ketchup', '2021-11-3 12:43:33', 1, 3),
   ('No ketchup', '2021-11-3 12:43:33', 1, 3),
   ('No ketchup', '2021-11-3 12:43:33', 1, 3),
   ('No ketchup', '2021-11-3 12:43:33', 1, 3),
   ('No ketchup', '2021-11-3 12:43:33', 1, 3),
-
   ('Extra mayo', '2021-12-3 15:21:00', 3, 3);
 
 INSERT INTO ordered_article (description, status, order_id, article_id, employee_id) VALUES
-  ('bez buta', 'FINISHED', 1, 2, 6),
-  ('bez cevapa', 'FINISHED', 1, 3, 7),
-  ('bez sira', 'FINISHED', 1, 4, 6),
-  ('duza sa mlekom', 'FINISHED', 2, 8, 4),
-  ('zero', 'FINISHED', 2, 9, 5),
+  ('bez buta', 'NOT_TAKEN', 1, 2, 6),
+  ('bez cevapa', 'NOT_TAKEN', 1, 3, 7),
+  ('bez sira', 'NOT_TAKEN', 1, 4, 6),
+  ('duza sa mlekom', 'NOT_TAKEN', 2, 8, 4),
+  ('zero', 'NOT_TAKEN', 2, 9, 5),
   ('bez buta', 'FINISHED', 2, 2, 7),
   ('bez kobasica', 'TAKEN', 3, 3, 6),
   ('bez sira', 'FINISHED', 4, 4, 7),
-  ('kraca bez mleka', 'FINISHED', 5, 8, 4),
-  (NULL, 'FINISHED', 6, 9, 4),
+  ('kraca bez mleka', 'PREPARING', 5, 8, 4),
+  (NULL, 'TAKEN', 6, 9, 4),
   ('duza bez', 'FINISHED', 6, 8, 5),
   (NULL, 'FINISHED', 7, 9, 5);
   

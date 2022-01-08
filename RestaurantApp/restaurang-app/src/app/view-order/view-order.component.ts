@@ -13,10 +13,19 @@ import { OrderedArticle } from '../modules/shared/models/orderedArticle';
 })
 export class ViewOrderComponent implements OnInit {
   order: Order = {};
+  employeePin?: number;
+  updateArticleStatusId?: number;
   articles: OrderedArticle[] = []
   orderId: number;
   first = 0;
   rows = 5;
+  display: boolean = false;
+
+  statusDict = new Map<string, string>([
+    ["NOT_TAKEN", "Take article"],
+    ["TAKEN", "Start preparing"],
+    ["PREPARING", "Finish preparing"]
+    ]);
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -35,6 +44,39 @@ export class ViewOrderComponent implements OnInit {
     });
   }
 
+  handleClose(){
+    this.display = false;
+    this.employeePin = undefined;
+    this.updateArticleStatusId = undefined;
+  }
+
+  openConfirmDialog(articleId?: number){
+    this.display = true;
+    this.updateArticleStatusId = articleId;
+  }
+
+  updateStatus(){
+    this.viewOrderService.changeStatus(this.updateArticleStatusId, this.employeePin).subscribe((data) => {
+        this.getArticlesForOrder(this.orderId);
+        this.messageService.add({
+            key: 'tc',
+            severity: 'success',
+            summary: 'Success!',
+            detail: "Status of article successfully updaed",
+            });
+        this.handleClose();
+    },err => {
+        this.messageService.add({
+            key: 'tc',
+            severity: 'warn',
+            summary: 'Fail',
+            detail: err.error,
+            });
+        console.log(err.error);
+        this.handleClose();
+      });
+  }
+
   getOrder(id: number) {
     this.viewOrderService.getOrder(id).subscribe((data) => {
       this.order = data;
@@ -44,6 +86,14 @@ export class ViewOrderComponent implements OnInit {
   getArticlesForOrder(id: number) {
     this.viewOrderService.getArticlesForOrder(id).subscribe((data) => {
       this.articles = data;
+
+      for(let article of this.articles){
+        this.viewOrderService.getArticle(article.articleId).subscribe((result) => {
+            article.articleName = result.name;
+            article.articleDescription = result.description;
+        });
+    }
+
     });
   }
 

@@ -185,8 +185,13 @@ public class OrderService implements IOrderService {
 	public OrderedArticleDTO changeStatusOfArticle(int employeePin, int articleId) {
 		// TODO Auto-generated method stub
 		OrderedArticle orderedArticle = orderedArticleRepository.findById(articleId).get();
-		Employee employee = employeeRepository.findByPincode(employeePin);
+		Optional<Employee> employeeOP = employeeRepository.findByPincode(employeePin);
+		
+		if(employeeOP.isEmpty()) {
+			throw new NotFoundException("Employee with pin " + employeePin + " was not found");
+		}
 
+		Employee employee = employeeOP.get();
 		switch(orderedArticle.getStatus()) {
 		case NOT_TAKEN:
 			if((employee.getEmployeeType().equals(EmployeeType.WAITER)) || (employee.getEmployeeType().equals(EmployeeType.BARMAN) && !orderedArticle.getArticle().getType().equals(ArticleType.DRINK)) || (employee.getEmployeeType().equals(EmployeeType.COOK) && orderedArticle.getArticle().getType().equals(ArticleType.DRINK))) {
@@ -220,7 +225,6 @@ public class OrderService implements IOrderService {
 		default:
 			throw new ChangeFinishedStateException("Can't change status of order that is finished");
 		}
-		
 		return new OrderedArticleDTO(orderedArticleRepository.save(orderedArticle));
 	}
 

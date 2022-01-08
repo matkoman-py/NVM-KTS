@@ -34,6 +34,8 @@ import { BadgeModule } from 'primeng/badge';
 import { UpdateArticleComponent } from './update-article/update-article.component';
 import { OrdersComponent } from './orders/orders.component';
 import { ViewOrderComponent } from './view-order/view-order.component';
+import { CardModule } from "primeng/card";
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   declarations: [
@@ -49,6 +51,7 @@ import { ViewOrderComponent } from './view-order/view-order.component';
     ViewOrderComponent,
   ],
   imports: [
+    CardModule,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
@@ -57,6 +60,7 @@ import { ViewOrderComponent } from './view-order/view-order.component';
     ButtonModule,
     ReactiveFormsModule,
     PasswordModule,
+    DialogModule,
     TabViewModule,
     TableModule,
     FormsModule,
