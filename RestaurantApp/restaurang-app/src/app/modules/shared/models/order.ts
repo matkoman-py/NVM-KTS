@@ -6,9 +6,11 @@
 //         "orderedArticles": [],
 //         "tableNumber": 1,
 //         "employeeId": 3
+//         "orderStatus": "NOT_STARTED"
 
 export interface Order{
     id?: number;
     description?: string;
     articles?: number[];
+    orderStatus?: string;
 }

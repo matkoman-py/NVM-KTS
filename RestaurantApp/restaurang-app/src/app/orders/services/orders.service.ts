@@ -13,4 +13,8 @@ export class OrdersService {
   getOrders(): Observable<Order[]> {
     return this.http.get<Order[]>('/api/order');
   }
+
+  updateOrderStatus(id?: number, orderStatus?: String): Observable<Order[]>{
+    return this.http.get<Order[]>('/api/order/updateOrderStatus/' + id + '/' + orderStatus);
+  }
 }

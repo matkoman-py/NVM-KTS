@@ -4,6 +4,7 @@ import { MessageService, PrimeNGConfig } from 'primeng/api';
 import {ActivatedRoute, Router} from "@angular/router"
 import { Order } from '../modules/shared/models/order';
 import { OrderedArticle } from '../modules/shared/models/orderedArticle';
+import { OrdersService } from '../orders/services/orders.service';
 
 @Component({
   selector: 'app-view-order',
@@ -30,6 +31,7 @@ export class ViewOrderComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private viewOrderService: ViewOrderService,
+    private orderService: OrdersService,
     private messageService: MessageService,
     private primengConfig: PrimeNGConfig,
     private router: Router
@@ -83,6 +85,37 @@ export class ViewOrderComponent implements OnInit {
     });
   }
 
+  updateOrderStatus(){
+    let not_taken = 0;
+    let finished = 0;
+    for(let article of this.articles) {
+      switch(article.status){
+        case 'NOT_TAKEN' :
+          {not_taken++; break};
+        case 'FINISHED' :
+          {finished++; break};
+      }
+    }
+    // alert(not_taken);
+    // alert(finished);
+    // alert(this.order.orderStatus);
+    if(finished == this.articles.length){
+     if (this.order.orderStatus != 'FINISHED') {
+      this.orderService.updateOrderStatus(this.orderId, 'FINISHED').subscribe((data) =>{});
+     }
+    }
+    else if(not_taken == this.articles.length) { 
+      if (this.order.orderStatus != 'NOT_STARTED') {
+        this.orderService.updateOrderStatus(this.orderId, 'NOT_STARTED').subscribe((data) =>{});
+      }
+    }
+    else{
+      if(this.order.orderStatus != 'PREPARING') {
+        this.orderService.updateOrderStatus(this.orderId, 'PREPARING').subscribe((data) =>{});
+      } 
+    }
+  }
+
   getArticlesForOrder(id: number) {
     this.viewOrderService.getArticlesForOrder(id).subscribe((data) => {
       this.articles = data;
@@ -93,7 +126,7 @@ export class ViewOrderComponent implements OnInit {
             article.articleDescription = result.description;
         });
     }
-
+    this.updateOrderStatus();
     });
   }
 

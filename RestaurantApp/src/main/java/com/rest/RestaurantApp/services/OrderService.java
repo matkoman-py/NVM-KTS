@@ -1,18 +1,13 @@
 package com.rest.RestaurantApp.services;
 
-import java.util.ArrayList;
-import java.util.Collection;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.rest.RestaurantApp.domain.Article;
 import com.rest.RestaurantApp.domain.Employee;
 import com.rest.RestaurantApp.domain.Order;
@@ -20,6 +15,7 @@ import com.rest.RestaurantApp.domain.OrderedArticle;
 import com.rest.RestaurantApp.domain.enums.ArticleStatus;
 import com.rest.RestaurantApp.domain.enums.ArticleType;
 import com.rest.RestaurantApp.domain.enums.EmployeeType;
+import com.rest.RestaurantApp.domain.enums.OrderStatus;
 import com.rest.RestaurantApp.dto.OrderDTO;
 import com.rest.RestaurantApp.dto.OrderedArticleDTO;
 import com.rest.RestaurantApp.exceptions.ChangeFinishedStateException;
@@ -65,9 +61,6 @@ public class OrderService implements IOrderService {
 		return orders;
 
 	}
-	
-	
-	
 	
 	@Override
 	public OrderDTO getOne(int id) {
@@ -301,5 +294,15 @@ public class OrderService implements IOrderService {
 		template.convertAndSend("/orders/article-status-changed", "Updated article" + new OrderedArticleDTO(orderedArticle));
 	}
 
-
+	public OrderDTO updateOrderStatus(int id, OrderStatus orderStatus) {
+		Optional<Order> orderOpt = orderRepository.findById(id);
+		
+		if(orderOpt.isEmpty()) {
+			throw new NotFoundException("Order with id " + id + " was not found");
+		}
+		Order order = orderOpt.get();
+		order.setOrderStatus(orderStatus);
+		Order updatedOrder = orderRepository.save(order);
+		return new OrderDTO(updatedOrder);
+	}
 }

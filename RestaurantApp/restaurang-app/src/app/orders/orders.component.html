@@ -4,18 +4,19 @@
   <p-table selectionMode="single" [value]="orders" [(selection)]="selectedOrder" [paginator]="true" [rows]="5">
     <ng-template pTemplate="header">
       <tr>
-        <th>Order number</th>
+        <th pSortableColumn="id">Order number <p-sortIcon field="id"></p-sortIcon></th>
         <th>Description</th>
-        <th>No of articles</th>
+        <th pSortableColumn="articles.length">No of articles <p-sortIcon field="articles.length"></p-sortIcon></th>
+        <th>Status</th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-role>
-      <tr [pSelectableRow]="role">
-        <td>{{ role.id }}</td>
-        <td>{{ role.description }}</td>
-        <td>{{ role.articles.length }}</td>
+    <ng-template pTemplate="body" let-order>
+      <tr [pSelectableRow]="order">
+        <td>{{ order.id }}</td>
+        <td>{{ order.description }}</td>
+        <td>{{ order.articles.length }}</td>
+        <td>{{ statusDict.get(order.orderStatus) }}</td>
       </tr>
-      
     </ng-template>    
   </p-table>
   <button pButton type="button" label="See order" class="p-button-info" (click)="seeOrder()"></button>

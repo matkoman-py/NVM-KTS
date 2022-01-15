@@ -1,11 +1,10 @@
 package com.rest.RestaurantApp.dto;
 
-import java.time.LocalDateTime;import java.util.Collections;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import com.rest.RestaurantApp.domain.Order;
+import com.rest.RestaurantApp.domain.enums.OrderStatus;
 
 
 public class OrderDTO {
@@ -18,8 +17,9 @@ public class OrderDTO {
 	private List<Integer> orderedArticles;
 	private int tableNumber;
 	private int employeeId;
+	private OrderStatus orderStatus;
 	
-	public OrderDTO(Integer id, boolean deleted, String description, LocalDateTime orderDate, int tableNumber, int employeeId) {
+	public OrderDTO(Integer id, boolean deleted, String description, LocalDateTime orderDate, int tableNumber, int employeeId, OrderStatus orderStatus) {
 		super();
 		this.id = id;
 		this.deleted = deleted;
@@ -27,11 +27,11 @@ public class OrderDTO {
 		this.orderDate = orderDate;
 		this.tableNumber = tableNumber;
 		this.employeeId = employeeId;
+		this.orderStatus = orderStatus;
 	}
-	
 
 	public OrderDTO(boolean deleted, String description, LocalDateTime orderDate, List<Integer> articles,
-			int tableNumber, int employeeId) {
+			int tableNumber, int employeeId, OrderStatus orderStatus) {
 		super();
 		this.deleted = deleted;
 		this.description = description;
@@ -39,7 +39,9 @@ public class OrderDTO {
 		this.articles = articles;
 		this.tableNumber = tableNumber;
 		this.employeeId = employeeId;
+		this.orderStatus = orderStatus;
 	}
+	
 	public OrderDTO() {
 		super();
 	}
@@ -54,12 +56,11 @@ public class OrderDTO {
 		this.employeeId = order.getEmployee().getId();
 		this.articles = order.getOrderedArticles().stream().map(article -> article.getArticle().getId()).collect(Collectors.toList());
 		this.orderedArticles = order.getOrderedArticles().stream().map(article -> article.getId()).collect(Collectors.toList());
+		this.orderStatus = order.getOrderStatus();
 	}
-	
-	
 
 	public OrderDTO(Integer id, boolean deleted, String description, LocalDateTime orderDate,
-			List<Integer> orderedArticles, int tableNumber, int employeeId) {
+			List<Integer> orderedArticles, int tableNumber, int employeeId, OrderStatus orderStatus) {
 		super();
 		this.id = id;
 		this.deleted = deleted;
@@ -68,7 +69,17 @@ public class OrderDTO {
 		this.articles = orderedArticles;
 		this.tableNumber = tableNumber;
 		this.employeeId = employeeId;
+		this.orderStatus = orderStatus;
 	}
+
+	public OrderStatus getOrderStatus() {
+		return orderStatus;
+	}
+
+	public void setOrderStatus(OrderStatus orderStatus) {
+		this.orderStatus = orderStatus;
+	}
+
 
 	public Integer getId() {
 		return id;

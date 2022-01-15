@@ -19,6 +19,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Where;
 
+import com.rest.RestaurantApp.domain.enums.OrderStatus;
+
 @Entity
 @Table(name = "orders")
 @Where(clause = "deleted = false")
@@ -32,6 +34,9 @@ public class Order extends BaseEntity{
 	
 	@Column(nullable = false)
 	private LocalDateTime orderDate;
+	
+	@Column(nullable = false)
+	private OrderStatus orderStatus;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "employee_id", nullable = false)
@@ -47,6 +52,7 @@ public class Order extends BaseEntity{
 		this.orderDate = orderDate;
 		this.employee = employee;
 		this.orderedArticles = new ArrayList<>();
+		this.orderStatus = OrderStatus.NOT_STARTED;
 	}
 
 	public Order() {
@@ -120,9 +126,12 @@ public class Order extends BaseEntity{
         }
         return Objects.equals(this.getId(), order.getId());
     }
-	
-	
-	
-	
-	
+
+	public OrderStatus getOrderStatus() {
+		return orderStatus;
+	}
+
+	public void setOrderStatus(OrderStatus orderStatus) {
+		this.orderStatus = orderStatus;
+	}
 }

@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.rest.RestaurantApp.domain.enums.OrderStatus;
 import com.rest.RestaurantApp.dto.OrderDTO;
 import com.rest.RestaurantApp.dto.OrderedArticleDTO;
 import com.rest.RestaurantApp.exceptions.ChangeFinishedStateException;
@@ -39,7 +41,6 @@ public class OrderController {
 	public ResponseEntity<List<OrderDTO>> getAll() {
 		return ResponseEntity.ok(orderService.getAll());
 	}
-	
 	
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<OrderDTO> getOne(@PathVariable("id") int id) {
@@ -134,6 +135,10 @@ public class OrderController {
 		OrderedArticleDTO orderedArticle = orderService.updateArticleForOrder(orderId, article);
 		return new ResponseEntity<OrderedArticleDTO>(orderedArticle, HttpStatus.OK);
 	}
-	
-
+	//NEMA TESTOVA ZA OVU
+	@GetMapping(value = "updateOrderStatus/{id}/{orderStatus}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<OrderDTO> updateOrderStatus(@PathVariable("id") int id, @PathVariable("orderStatus") String orderStatus){
+		OrderDTO order = orderService.updateOrderStatus(id, OrderStatus.valueOf(orderStatus));
+		return new ResponseEntity<OrderDTO>(order, HttpStatus.OK);
+	}
 }

@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import com.rest.RestaurantApp.domain.enums.EmployeeType;
 import com.rest.RestaurantApp.dto.EmployeeAuthDTO;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
@@ -15,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.rest.RestaurantApp.domain.Employee;
 import com.rest.RestaurantApp.domain.SalaryInfo;
 import com.rest.RestaurantApp.dto.EmployeeDTO;
-import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.repositories.EmployeeRepository;
 import com.rest.RestaurantApp.repositories.OrderRepository;
 import com.rest.RestaurantApp.repositories.OrderedArticleRepository;
@@ -106,7 +104,7 @@ public class EmployeeService implements IEmployeeService{
 
 	@Override//
 	public boolean checkPin(int pin, EmployeeType type) {
-		Optional<Employee> e = Optional.ofNullable(employeeRepository.findByPincode(pin));
+		Optional<Employee> e = employeeRepository.findByPincode(pin);
 		
 		if(e.isEmpty()) {
 			throw new NotFoundException("Employee with pin " + pin + " was not found");
@@ -117,7 +115,7 @@ public class EmployeeService implements IEmployeeService{
 
 	@Override//
 	public EmployeeAuthDTO getOneByPin(int pin) {
-		Optional<Employee> employee = Optional.ofNullable(employeeRepository.findByPincode(pin));
+		Optional<Employee> employee = employeeRepository.findByPincode(pin);
 		if(employee.isEmpty()) {
 			throw new NotFoundException("Employee with pin " + pin + " was not found");
 		}

@@ -16,6 +16,11 @@ export class OrdersComponent implements OnInit {
   selectedOrder: Order = {};
   first = 0;
   rows = 5;
+  statusDict = new Map<string, string>([
+    ["NOT_STARTED", "Not started"],
+    ["PREPARING", "Preparing"],
+    ["FINISHED", "Finished"]
+    ]);
 
   constructor(
     private ordersService: OrdersService,
