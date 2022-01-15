@@ -14,3 +14,8 @@ export interface Order{
     articles?: number[];
     orderStatus?: string;
 }
+
+export interface OrderStatus {
+    name: string;
+    value: string;
+  }

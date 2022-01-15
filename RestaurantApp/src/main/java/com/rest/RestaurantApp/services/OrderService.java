@@ -174,6 +174,25 @@ public class OrderService implements IOrderService {
 		return orderedArticles;
 	}
 
+	public List<OrderedArticleDTO> searchArticles(int id, ArticleStatus articleStatus){
+		Optional<Order> oldOrderData = orderRepository.findById(id);
+		if (oldOrderData.isEmpty()) {
+			throw new NotFoundException("Order with id " + id + " was not found");
+		}
+		Order order = oldOrderData.get();
+		List<OrderedArticleDTO> orderedArticles = order.getOrderedArticles().stream()
+				.map(article -> new OrderedArticleDTO(article)).collect(Collectors.toList())
+				.stream().filter(article -> {
+					return article.getStatus().equals(articleStatus);
+				}).collect(Collectors.toList());
+		return orderedArticles;
+	}
+	
+	public List<OrderDTO> search(OrderStatus orderStatus){
+		List<OrderDTO> orders = orderRepository.findByOrderStatus(orderStatus);
+		return orders;
+	}
+	
 	@Override
 	public OrderedArticleDTO changeStatusOfArticle(int employeePin, int articleId) {
 		// TODO Auto-generated method stub

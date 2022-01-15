@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { OrdersService } from './services/orders.service';
 import { MessageService, PrimeNGConfig } from 'primeng/api';
 import {Router} from "@angular/router"
-import { Order } from '../modules/shared/models/order';
+import { Order, OrderStatus } from '../modules/shared/models/order';
 
 
 @Component({
@@ -16,11 +16,20 @@ export class OrdersComponent implements OnInit {
   selectedOrder: Order = {};
   first = 0;
   rows = 5;
+
   statusDict = new Map<string, string>([
     ["NOT_STARTED", "Not started"],
     ["PREPARING", "Preparing"],
     ["FINISHED", "Finished"]
-    ]);
+  ]);
+
+  orderStatuses: OrderStatus[] = [
+    { name: 'Not started', value: 'NOT_STARTED' },
+    { name: 'Preparing', value: 'PREPARING' },
+    { name: 'Finished', value: 'FINISHED' },
+  ];
+
+  selectedOrderStatus: OrderStatus = { name: '', value: '' };
 
   constructor(
     private ordersService: OrdersService,
@@ -32,6 +41,14 @@ export class OrdersComponent implements OnInit {
   ngOnInit(): void {
     this.primengConfig.ripple = true;
     this.getOrders();
+  }
+
+  search() {
+    this.ordersService
+      .search(this.selectedOrderStatus)
+      .subscribe((data) => {
+        this.orders = data;
+      });
   }
 
   getOrders() {
@@ -46,7 +63,7 @@ export class OrdersComponent implements OnInit {
         key: 'tc',
         severity: 'error',
         summary: 'Error',
-        detail: 'No article selected',
+        detail: 'No order selected',
       });
       return;
     }

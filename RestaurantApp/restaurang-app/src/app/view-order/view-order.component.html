@@ -1,4 +1,17 @@
 <p-toast position="top-center" key="tc"></p-toast>
+<br>
+<div class="p-formgroup-inline search">
+  <div class="p-field">
+    <p-dropdown
+      [options]="articleStatuses"
+      [(ngModel)]="selectedArticleStatus"
+      optionLabel="name"
+      placeholder="Article Status"
+    ></p-dropdown>
+  </div>
+  <button pButton type="button" label="Submit" (click)="search()"></button>
+</div>
+<h3 *ngIf="articles.length == 0" style="text-align: center;"> No articles found</h3>
 <p-card header="{{article.articleName}}" *ngFor="let article of articles"
   [style]="{'width': '50%', 'margin-bottom': '2em', 'margin-left':'25%'}">
 

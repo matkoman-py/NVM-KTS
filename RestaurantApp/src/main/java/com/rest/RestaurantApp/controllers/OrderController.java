@@ -13,9 +13,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rest.RestaurantApp.domain.enums.ArticleStatus;
 import com.rest.RestaurantApp.domain.enums.OrderStatus;
+import com.rest.RestaurantApp.dto.ArticleDTO;
 import com.rest.RestaurantApp.dto.OrderDTO;
 import com.rest.RestaurantApp.dto.OrderedArticleDTO;
 import com.rest.RestaurantApp.exceptions.ChangeFinishedStateException;
@@ -140,5 +143,16 @@ public class OrderController {
 	public ResponseEntity<OrderDTO> updateOrderStatus(@PathVariable("id") int id, @PathVariable("orderStatus") String orderStatus){
 		OrderDTO order = orderService.updateOrderStatus(id, OrderStatus.valueOf(orderStatus));
 		return new ResponseEntity<OrderDTO>(order, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<OrderDTO>> search(@RequestParam(value = "orderStatus", required = false, defaultValue = "") String orderStatus) {
+		return ResponseEntity.ok(orderService.search(OrderStatus.valueOf(orderStatus)));	
+	}
+	
+	@GetMapping(value = "articles/search/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<OrderedArticleDTO>> searchArticles(@PathVariable("id") int id, 
+			@RequestParam(value = "articleStatus", required = false, defaultValue = "") String articleStatus) {
+		return ResponseEntity.ok(orderService.searchArticles(id, ArticleStatus.valueOf(articleStatus)));	
 	}
 }

@@ -1,9 +1,9 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Article } from '../../modules/shared/models/article';
 import { Order } from '../../modules/shared/models/order';
-import { OrderedArticle } from '../../modules/shared/models/orderedArticle';
+import { ArticleStatus, OrderedArticle } from '../../modules/shared/models/orderedArticle';
 
 @Injectable({
   providedIn: 'any',
@@ -27,5 +27,13 @@ export class ViewOrderService {
   changeStatus(orderedArticleId?: number, pin?: number): Observable<Article>{
     return this.http.put<Article>('/api/order/article/' + orderedArticleId + '/' + pin, null);
   }
+
+  search(
+    articleStatus: ArticleStatus,
+    orderedArticleId?: number
+  ): Observable<OrderedArticle[]> {
+    let params = new HttpParams()
+      .set('articleStatus', articleStatus.value);
+    return this.http.get<OrderedArticle[]>(`/api/order/articles/search/` + orderedArticleId, { params: params });
+  }
 }
-//article/{id}/{pin}

@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ViewOrderService } from './services/view-order.service';
 import { MessageService, PrimeNGConfig } from 'primeng/api';
 import {ActivatedRoute, Router} from "@angular/router"
-import { Order } from '../modules/shared/models/order';
-import { OrderedArticle } from '../modules/shared/models/orderedArticle';
+import { Order, OrderStatus } from '../modules/shared/models/order';
+import { ArticleStatus, OrderedArticle } from '../modules/shared/models/orderedArticle';
 import { OrdersService } from '../orders/services/orders.service';
 
 @Component({
@@ -26,7 +26,16 @@ export class ViewOrderComponent implements OnInit {
     ["NOT_TAKEN", "Take article"],
     ["TAKEN", "Start preparing"],
     ["PREPARING", "Finish preparing"]
-    ]);
+  ]);
+
+  articleStatuses: ArticleStatus[] = [
+    { name: 'Not taken', value: 'NOT_TAKEN' },
+    { name: 'Taken', value: 'TAKEN' },
+    { name: 'Preparing', value: 'PREPARING' },
+    { name: 'Finished', value: 'FINISHED' },
+  ];    
+  
+  selectedArticleStatus: ArticleStatus = { name: '', value: '' };
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -57,6 +66,25 @@ export class ViewOrderComponent implements OnInit {
     this.updateArticleStatusId = articleId;
   }
 
+  search(){
+    this.viewOrderService
+      .search(this.selectedArticleStatus, this.orderId)
+      .subscribe((data) => {
+        this.articles = data;
+
+      this.getArticleNamesAndDescriptions();
+      });
+  }
+
+  getArticleNamesAndDescriptions() {
+    for(let article of this.articles){
+        this.viewOrderService.getArticle(article.articleId).subscribe((result) => {
+            article.articleName = result.name;
+            article.articleDescription = result.description;
+        });
+    }
+  }
+  
   updateStatus(){
     this.viewOrderService.changeStatus(this.updateArticleStatusId, this.employeePin).subscribe((data) => {
         this.getArticlesForOrder(this.orderId);
@@ -96,9 +124,7 @@ export class ViewOrderComponent implements OnInit {
           {finished++; break};
       }
     }
-    // alert(not_taken);
-    // alert(finished);
-    // alert(this.order.orderStatus);
+
     if(finished == this.articles.length){
      if (this.order.orderStatus != 'FINISHED') {
       this.orderService.updateOrderStatus(this.orderId, 'FINISHED').subscribe((data) =>{});
@@ -119,13 +145,8 @@ export class ViewOrderComponent implements OnInit {
   getArticlesForOrder(id: number) {
     this.viewOrderService.getArticlesForOrder(id).subscribe((data) => {
       this.articles = data;
-
-      for(let article of this.articles){
-        this.viewOrderService.getArticle(article.articleId).subscribe((result) => {
-            article.articleName = result.name;
-            article.articleDescription = result.description;
-        });
-    }
+    
+    this.getArticleNamesAndDescriptions();
     this.updateOrderStatus();
     });
   }
