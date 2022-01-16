@@ -126,7 +126,7 @@ public class EmployeeServiceTest {
 		assertEquals(1389,updatedEmployee.getPincode());
 		assertEquals(EmployeeType.WAITER,updatedEmployee.getEmployeeType());
 		
-		employeeService.delete(employeeRepository.findByPincode(1389).getId());
+		employeeService.delete(employeeRepository.findByPincode(1389).get().getId());
 	}
 	
 	@Test

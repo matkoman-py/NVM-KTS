@@ -158,9 +158,9 @@ class OrderServiceTest {
 		given(employeeRepository.findById(1)).willReturn(Optional.of(waiter));
 		given(employeeRepository.findById(2)).willReturn(Optional.of(waiter1));
 		given(employeeRepository.findById(3)).willReturn(Optional.of(cook));
-		given(employeeRepository.findByPincode(5436)).willReturn(cook);
-		given(employeeRepository.findByPincode(7654)).willReturn(barman);
-		given(employeeRepository.findByPincode(2468)).willReturn(cook1);
+		given(employeeRepository.findByPincode(5436)).willReturn(Optional.of(cook));
+		given(employeeRepository.findByPincode(7654)).willReturn(Optional.of(barman));
+		given(employeeRepository.findByPincode(2468)).willReturn(Optional.of(cook1));
 		given(orderedArticleRepository.findById(1)).willReturn(Optional.of(orderedArticle));
 		given(orderedArticleRepository.findById(2)).willReturn(Optional.of(orderedArticle1));
 		given(orderedArticleRepository.findById(3)).willReturn(Optional.of(orderedArticle2));

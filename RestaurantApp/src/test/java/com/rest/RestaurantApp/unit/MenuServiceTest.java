@@ -65,8 +65,9 @@ public class MenuServiceTest {
 		
 		List<PriceInfo> price4 = new ArrayList<>();
 		Article article4 = new Article("dobos torta", "slatke", ArticleType.DESSERT);
-		article1.setId(4);
-		price1.add(new PriceInfo(new Date(),500,600,article4));
+		article4.setId(4);
+		price4.add(new PriceInfo(new Date(),500,600,article4));
+		article4.setPrices(price4);
 		given(articleRepository.findById(4)).willReturn(java.util.Optional.of(article4));
 		given(articleRepository.findById(5)).willReturn(Optional.empty());
 	}

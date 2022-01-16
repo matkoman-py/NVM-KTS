@@ -76,7 +76,7 @@ public class EmployeeServiceTest {
 		given(employeeRepository.findById(1)).willReturn(java.util.Optional.of(employee));
 		given(employeeRepository.save(employee)).willReturn(employee);
 		
-		given(employeeRepository.findByPincode(1234)).willReturn(employee);
+		given(employeeRepository.findByPincode(1234)).willReturn(Optional.of(employee));
 
 	}
 	
