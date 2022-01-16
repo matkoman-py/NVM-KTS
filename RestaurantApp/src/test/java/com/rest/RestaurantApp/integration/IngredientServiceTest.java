@@ -31,7 +31,7 @@ public class IngredientServiceTest {
     public void testGetAll() {
         List<IngredientDTO> ingredients = ingredientService.getAll();
 
-        assertEquals(3, ingredients.size());
+        assertEquals(8, ingredients.size());
     }
 
     @Test
@@ -86,7 +86,7 @@ public class IngredientServiceTest {
 
         ingredientService.delete(created.getId());
 
-        assertEquals((int) created.getId(), 4);
+        assertEquals((int) created.getId(), 9);
         assertEquals(created.getName(), "Sastojak 1");
         assertEquals(oldSize + 1, newSize);
 

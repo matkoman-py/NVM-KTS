@@ -1,6 +1,7 @@
 package com.rest.RestaurantApp.integration;
 
 import com.rest.RestaurantApp.domain.enums.ArticleStatus;
+import com.rest.RestaurantApp.domain.enums.OrderStatus;
 import com.rest.RestaurantApp.dto.ArticleDTO;
 import com.rest.RestaurantApp.dto.IngredientDTO;
 import com.rest.RestaurantApp.dto.OrderDTO;
@@ -70,7 +71,7 @@ class OrderServiceTest {
 	
 	@Test
     public void testDelete_ValidId() {
-        OrderDTO createdOrder = orderService.create(new OrderDTO(false, "Nothing", LocalDateTime.of(2021, 1,1,13,13,13), Arrays.asList(1,2,2), 3, 3));
+        OrderDTO createdOrder = orderService.create(new OrderDTO(false, "Nothing", LocalDateTime.of(2021, 1,1,13,13,13), Arrays.asList(1,2,2), 3, 3, OrderStatus.NOT_STARTED));
         int oldSize = orderService.getAll().size();
         OrderDTO order = orderService.delete(createdOrder.getId());
 
@@ -93,7 +94,7 @@ class OrderServiceTest {
 	@Test
     public void testCreate_ValidOrder() {
         int oldSize = orderService.getAll().size();
-        OrderDTO orderDTO = new OrderDTO(false, "", LocalDateTime.of(2021, 1,1,1,1,1), Arrays.asList(1,3), 3, 3);
+        OrderDTO orderDTO = new OrderDTO(false, "", LocalDateTime.of(2021, 1,1,1,1,1), Arrays.asList(1,3), 3, 3, OrderStatus.NOT_STARTED);
 
         OrderDTO created = orderService.create(orderDTO);
         List<OrderDTO> orders = orderService.getAll();
@@ -113,20 +114,20 @@ class OrderServiceTest {
 	
 	@Test
 	void testCreate_InvalidOrder_NoArticles() {
-		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), null, 3, 3);
+		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), null, 3, 3, OrderStatus.NOT_STARTED);
 		assertThrows(NullArticlesException.class, () -> {OrderDTO createdOrder = orderService.create(orderToCreate);});
 	}
 	
 	@Test
 	void testCreate_InvalidOrder_OrderTakenByCookOrBarman() {
-		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), Arrays.asList(1), 5, 5);
+		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), Arrays.asList(1), 5, 5, OrderStatus.NOT_STARTED);
 		assertThrows(OrderTakenByWrongEmployeeTypeException.class, () -> {OrderDTO createdOrder = orderService.create(orderToCreate);});
 	}
 	
 	@Test
 	void testUpdate_ValidOrder() {
 		int oldSize = orderService.getAll().size();
-        OrderDTO orderDTO = new OrderDTO(false, "", LocalDateTime.of(2021, 1,1,1,1,1), Arrays.asList(1,3), 3, 3);
+        OrderDTO orderDTO = new OrderDTO(false, "", LocalDateTime.of(2021, 1,1,1,1,1), Arrays.asList(1,3), 3, 3, OrderStatus.NOT_STARTED);
 
         OrderDTO updated = orderService.update(2, orderDTO);
         List<OrderDTO> orders = orderService.getAll();
@@ -141,14 +142,14 @@ class OrderServiceTest {
 	
 	@Test
 	void testUpdate_InvalidOrder_NoArticles() {
-		OrderDTO orderToUpdate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), new ArrayList<Integer>(), 3, 3);
+		OrderDTO orderToUpdate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), new ArrayList<Integer>(), 3, 3, OrderStatus.NOT_STARTED);
 		assertThrows(NullArticlesException.class, () -> {OrderDTO updatedOrder = orderService.update(7, orderToUpdate);});
 
 	}
 	
 	@Test
 	void testUpdate_InvalidOrder_OrderNotFound() {
-		OrderDTO orderToUpdate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), new ArrayList<Integer>(), 3, 3);
+		OrderDTO orderToUpdate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), new ArrayList<Integer>(), 3, 3, OrderStatus.NOT_STARTED);
 		assertThrows(NotFoundException.class, () -> {OrderDTO updatedOrder = orderService.update(55, orderToUpdate);});
 
 	}
@@ -189,7 +190,7 @@ class OrderServiceTest {
 	
 	@Test
 	void testChangeArticleStatus_InvalidArticle_ArticleStatusIsFinished() {
-		assertThrows(ChangeFinishedStateException.class, () -> {OrderedArticleDTO order = orderService.changeStatusOfArticle(4269, 1);});
+		assertThrows(ChangeFinishedStateException.class, () -> {OrderedArticleDTO order = orderService.changeStatusOfArticle(4269, 3);});
 
 	}
 	

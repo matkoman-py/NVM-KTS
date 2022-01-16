@@ -22,6 +22,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.rest.RestaurantApp.domain.enums.ArticleStatus;
+import com.rest.RestaurantApp.domain.enums.OrderStatus;
 import com.rest.RestaurantApp.dto.OrderDTO;
 import com.rest.RestaurantApp.dto.OrderedArticleDTO;
 import com.rest.RestaurantApp.exceptions.IncompatibleEmployeeTypeException;
@@ -80,7 +81,7 @@ class OrderControllerTest {
 	@Test
 	public void testCreateOrder_ValidOrder() throws Exception {
 		int size = orderService.getAll().size(); 
-		OrderDTO order = new OrderDTO(false, "No honey", LocalDateTime.of(2021, 1, 3, 12, 43, 33), Arrays.asList(1,2), 3, 3);
+		OrderDTO order = new OrderDTO(false, "No honey", LocalDateTime.of(2021, 1, 3, 12, 43, 33), Arrays.asList(1,2), 3, 3, OrderStatus.NOT_STARTED);
 		
 		ResponseEntity<OrderDTO> responseEntity = restTemplate.postForEntity("/api/order", order, OrderDTO.class);
 		
@@ -106,7 +107,7 @@ class OrderControllerTest {
 	@Test
 	public void testCreateOrder_InvalidOrder_NoArticles() throws Exception {
 		int size = orderService.getAll().size(); 
-		OrderDTO order = new OrderDTO(false, "No honey", LocalDateTime.of(2021, 1, 3, 12, 43, 33), new ArrayList<Integer>(), 3, 3);
+		OrderDTO order = new OrderDTO(false, "No honey", LocalDateTime.of(2021, 1, 3, 12, 43, 33), new ArrayList<Integer>(), 3, 3, OrderStatus.NOT_STARTED);
 		
 		ResponseEntity<String> responseEntity = restTemplate.postForEntity("/api/order", order, String.class);
 		
@@ -120,7 +121,7 @@ class OrderControllerTest {
 	@Test
 	public void testCreateOrder_InvalidOrder_OrderTakenByCookOrBarman() throws Exception {
 		int size = orderService.getAll().size(); 
-		OrderDTO order = new OrderDTO(false, "No honey", LocalDateTime.of(2021, 2, 3, 12, 43, 33), Arrays.asList(1, 2), 4, 4);
+		OrderDTO order = new OrderDTO(false, "No honey", LocalDateTime.of(2021, 2, 3, 12, 43, 33), Arrays.asList(1, 2), 4, 4, OrderStatus.NOT_STARTED);
 		
 		ResponseEntity<String> responseEntity = restTemplate.postForEntity("/api/order", order, String.class);
 		
@@ -134,7 +135,7 @@ class OrderControllerTest {
 	@Test
 	void testUpdate_ValidOrder() {
 		int size = orderService.getAll().size(); 
-		OrderDTO order = new OrderDTO(false, "No honey", LocalDateTime.of(2021, 1, 3, 12, 43, 33), Arrays.asList(1,2), 3, 3);
+		OrderDTO order = new OrderDTO(false, "No honey", LocalDateTime.of(2021, 1, 3, 12, 43, 33), Arrays.asList(1,2), 3, 3, OrderStatus.NOT_STARTED);
 		
 		ResponseEntity<OrderDTO> responseEntity = restTemplate.exchange(
 				"/api/order/2", HttpMethod.PUT, new HttpEntity<OrderDTO>(order), OrderDTO.class);
@@ -156,7 +157,7 @@ class OrderControllerTest {
 	@Test
 	void testUpdate_InvalidOrder_NoArticles() {
 		int size = orderService.getAll().size(); 
-		OrderDTO order = new OrderDTO(false, "No honey", LocalDateTime.of(2021, 1, 3, 12, 43, 33), new ArrayList<Integer>(), 3, 3);
+		OrderDTO order = new OrderDTO(false, "No honey", LocalDateTime.of(2021, 1, 3, 12, 43, 33), new ArrayList<Integer>(), 3, 3, OrderStatus.NOT_STARTED);
 		
 		ResponseEntity<String> responseEntity = restTemplate.exchange(
 				"/api/order/2", HttpMethod.PUT, new HttpEntity<OrderDTO>(order), String.class);
@@ -171,7 +172,7 @@ class OrderControllerTest {
 	
 	@Test
 	public void testDelete_ValidId() throws Exception {
-		OrderDTO order = orderService.create(new OrderDTO(false, "No honey", LocalDateTime.of(2021, 1, 3, 12, 43, 33), Arrays.asList(1,2), 3, 3));
+		OrderDTO order = orderService.create(new OrderDTO(false, "No honey", LocalDateTime.of(2021, 1, 3, 12, 43, 33), Arrays.asList(1,2), 3, 3, OrderStatus.NOT_STARTED));
 		int size = orderService.getAll().size();
 		ResponseEntity<Void> responseEntity = restTemplate.exchange(
 				"/api/order/" + order.getId(), HttpMethod.DELETE, new HttpEntity<Object>(null),

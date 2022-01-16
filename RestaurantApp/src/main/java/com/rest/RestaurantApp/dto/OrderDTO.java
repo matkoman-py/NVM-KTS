@@ -72,9 +72,6 @@ public class OrderDTO {
 		this.orderStatus = orderStatus;
 	}
 
-	public OrderDTO(boolean b, String appetizers_first, LocalDateTime of, Object o, int i, int i1) {
-	}
-
 	public OrderStatus getOrderStatus() {
 		return orderStatus;
 	}

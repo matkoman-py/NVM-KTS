@@ -38,7 +38,7 @@ public class IngredientControllerTest {
         IngredientDTO[] ingredients = response.getBody();
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(ingredients.length, 3);
+        assertEquals(ingredients.length, 8);
 
     }
 
@@ -75,7 +75,7 @@ public class IngredientControllerTest {
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(createdIngredient.getName(), "Sastojak 1");
         assertFalse(createdIngredient.isAllergen());
-        assertEquals(createdIngredient.getId(), 4);
+        assertEquals(createdIngredient.getId(), 9);
 
         List<IngredientDTO> ingredients = ingredientService.getAll();
         assertEquals(ingredients.size(), size + 1);

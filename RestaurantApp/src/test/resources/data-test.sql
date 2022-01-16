@@ -34,7 +34,9 @@ VALUES ('2003-5-6', '2003-5-6', 'ACTIVE', 23000, 3),
        ('2003-5-6', '2003-5-6', 'ACTIVE', 23000, 4),
        ('2003-5-6', '2003-5-6', 'ACTIVE', 23000, 5),
        ('2003-5-6', '2003-5-6', 'ACTIVE', 23000, 6),
-       ('2003-5-6', '2003-5-6', 'ACTIVE', 23000, 7);
+       ('2003-5-6', '2003-5-6', 'ACTIVE', 23000, 7),
+       ('2003-5-6', '2003-5-6', 'ACTIVE', 23000, 2),
+       ('2003-5-6', '2003-5-6', 'ACTIVE', 23000, 1);
 
 INSERT INTO orders (description, order_date, order_status, table_number, employee_id)
 VALUES ('No mustard', '2021-1-3 12:43:33', 0, 1, 3),
@@ -52,9 +54,9 @@ VALUES ('No mustard', '2021-1-3 12:43:33', 0, 1, 3),
        ('Extra mayo', '2021-12-3 15:21:00', 0, 3, 3);
 
 INSERT INTO ordered_article (description, status, order_id, article_id, employee_id)
-VALUES ('bez buta', 'NOT_TAKEN', 1, 2, 6),
+VALUES ('bez buta', 'TAKEN', 1, 2, 6),
        ('bez cevapa', 'NOT_TAKEN', 1, 3, 7),
-       ('bez sira', 'NOT_TAKEN', 1, 4, 6),
+       ('bez sira', 'FINISHED', 1, 4, 6),
        ('duza sa mlekom', 'NOT_TAKEN', 2, 8, 4),
        ('zero', 'NOT_TAKEN', 2, 9, 5),
        ('bez buta', 'FINISHED', 2, 2, 7),

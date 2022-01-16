@@ -26,6 +26,7 @@ import com.rest.RestaurantApp.domain.OrderedArticle;
 import com.rest.RestaurantApp.domain.enums.ArticleStatus;
 import com.rest.RestaurantApp.domain.enums.ArticleType;
 import com.rest.RestaurantApp.domain.enums.EmployeeType;
+import com.rest.RestaurantApp.domain.enums.OrderStatus;
 import com.rest.RestaurantApp.domain.enums.UserType;
 import com.rest.RestaurantApp.dto.OrderDTO;
 import com.rest.RestaurantApp.dto.OrderedArticleDTO;
@@ -222,7 +223,7 @@ class OrderServiceTest {
 	
 	@Test
 	void testCreate_ValidOrder() {
-		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), Arrays.asList(1), 5, 1);
+		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), Arrays.asList(1), 5, 1, OrderStatus.NOT_STARTED);
 		OrderDTO createdOrder = orderService.create(orderToCreate);
 		
 		assertEquals(createdOrder.getId(), 4);
@@ -235,19 +236,19 @@ class OrderServiceTest {
 	
 	@Test
 	void testCreate_InvalidOrder_NoArticles() {
-		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), null, 5, 1);
+		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), null, 5, 1, OrderStatus.NOT_STARTED);
 		assertThrows(NullArticlesException.class, () -> {OrderDTO createdOrder = orderService.create(orderToCreate);});
 	}
 	
 	@Test
 	void testCreate_InvalidOrder_OrderTakenByCookOrBarman() {
-		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), null, 5, 3);
+		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), null, 5, 3, OrderStatus.NOT_STARTED);
 		assertThrows(OrderTakenByWrongEmployeeTypeException.class, () -> {OrderDTO createdOrder = orderService.create(orderToCreate);});
 	}
 	
 	@Test
 	void testUpdate_ValidOrder() {
-		OrderDTO orderToUpdate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), Arrays.asList(1), 5, 1);
+		OrderDTO orderToUpdate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), Arrays.asList(1), 5, 1, OrderStatus.NOT_STARTED);
 		OrderDTO updatedOrder = orderService.update(3, orderToUpdate);
 		
 		assertEquals(updatedOrder.getId(), 4);
@@ -260,7 +261,7 @@ class OrderServiceTest {
 	
 	@Test
 	void testUpdate_InvalidOrder_NoArticles() {
-		OrderDTO orderToUpdate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), null, 5, 1);
+		OrderDTO orderToUpdate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), null, 5, 1, OrderStatus.NOT_STARTED);
 		assertThrows(NotFoundException.class, () -> {OrderDTO updatedOrder = orderService.update(6, orderToUpdate);});
 
 	}
