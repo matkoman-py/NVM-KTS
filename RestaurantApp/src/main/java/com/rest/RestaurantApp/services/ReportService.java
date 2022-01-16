@@ -6,15 +6,13 @@ import com.rest.RestaurantApp.dto.ArticleReportDTO;
 import com.rest.RestaurantApp.dto.ProfitDTO;
 import com.rest.RestaurantApp.repositories.ArticleRepository;
 import com.rest.RestaurantApp.repositories.OrderedArticleRepository;
-import org.apache.tomcat.jni.Local;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.stream.Collectors;
@@ -38,7 +36,7 @@ public class ReportService implements IReportService {
         LocalDateTime ldt = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
         ArrayList<OrderedArticle> orderedArticles = new ArrayList<>(orderedArticleRepository.findAllWithOrder());
 
-        orderedArticles = orderedArticles.stream().filter(article -> compareDates(article, ldt)).collect(Collectors.toCollection(ArrayList::new));
+        orderedArticles = orderedArticles.stream().filter(article -> compareArticleDate(article, ldt)).collect(Collectors.toCollection(ArrayList::new));
 
         return calcArticlesEarnings(orderedArticles);
     }
@@ -67,7 +65,24 @@ public class ReportService implements IReportService {
 
         orderedArticles = orderedArticles.stream().filter(article -> compareQuarters(article, year, quarter)).collect(Collectors.toCollection(ArrayList::new));
 
-        return calcArticlesEarnings(orderedArticles);    }
+        return calcArticlesEarnings(orderedArticles);
+    }
+
+    @Override
+    public ArticleReportDTO articleProfitBetweenDates(Date dateFrom, Date dateTo) {
+        ArrayList<OrderedArticle> orderedArticles = new ArrayList<>(orderedArticleRepository.findAllWithOrder());
+
+        orderedArticles = orderedArticles.stream().filter(article -> compareArticleBetweenDates(article, dateFrom, dateTo)).collect(Collectors.toCollection(ArrayList::new));
+
+        return calcArticlesEarnings(orderedArticles);
+    }
+
+    private boolean compareArticleBetweenDates(OrderedArticle article, Date dateFrom, Date dateTo) {
+        LocalDate ldt = article.getOrder().getOrderDate().toLocalDate();
+        LocalDate from = dateFrom.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate to = dateTo.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        return (ldt.isAfter(from) || ldt.isEqual(from)) && (ldt.isBefore(to) || ldt.isEqual(to));
+    }
 
     private boolean compareQuarters(OrderedArticle article, int year, int quarter) {
         LocalDateTime ldt = article.getOrder().getOrderDate();
@@ -104,7 +119,7 @@ public class ReportService implements IReportService {
         return articleReport;
     }
 
-    private boolean compareDates(OrderedArticle article, LocalDateTime ldt) {
+    private boolean compareArticleDate(OrderedArticle article, LocalDateTime ldt) {
         LocalDateTime orderDate = article.getOrder().getOrderDate();
         return (orderDate.getDayOfYear() == ldt.getDayOfYear()) && (orderDate.getYear() == ldt.getYear());
     }

@@ -1,5 +1,6 @@
 package com.rest.RestaurantApp.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.rest.RestaurantApp.domain.enums.ArticleType;
@@ -30,6 +31,16 @@ public class ArticleCreationDTO {
 		this.description = description;
 		this.type = type;
 		this.image = image;
+	}
+
+	public ArticleCreationDTO(List<IngredientDTO> ingredients, String name, double makingPrice, double sellingPrice,
+							  String description, ArticleType type) {
+		this.ingredients = ingredients;
+		this.name = name;
+		this.makingPrice = makingPrice;
+		this.sellingPrice = sellingPrice;
+		this.description = description;
+		this.type = type;
 	}
 
 	public ArticleCreationDTO() {
