@@ -52,7 +52,7 @@ public class MenuServiceTest {
 	
 	@Test
 	void testAddArticle_ValidId() {
-		ArticleCreationDTO article = new ArticleCreationDTO(new ArrayList<>(),"novi",500,600,"hladna",ArticleType.DRINK);
+		ArticleCreationDTO article = new ArticleCreationDTO(new ArrayList<>(), "novi", 500, 600, "hladna", ArticleType.DRINK);
 		ArticleDTO newArticle = articleService.create(article);
 		MenuDTO result = menuService.addArticle(420,newArticle.getId());
 		

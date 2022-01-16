@@ -3,7 +3,7 @@ import {PrimeNGConfig, MessageService, Message} from 'primeng/api';
 import { Article, ArticleType } from '../modules/shared/models/article';
 import { Ingredient } from '../modules/shared/models/ingredient';
 import { CreateArticleService } from './services/create-article.service';
-import {ToastModule} from 'primeng/toast';
+
 
 import {Router} from "@angular/router"
 
@@ -16,7 +16,7 @@ import {Router} from "@angular/router"
 })
 export class CreateArticleComponent implements OnInit {
 
-  article: Article = {name: "", makingPrice: 0, sellingPrice: 0, description: "", type: "", ingredients: []};
+  article: Article = {name: "", makingPrice: 0, sellingPrice: 0, description: "", type: "", ingredients: [], image: ""};
   nesto: string = "";
   selectedType: ArticleType = {name:"", value:""};
 
@@ -69,6 +69,17 @@ export class CreateArticleComponent implements OnInit {
     },
       error => console.log(error)
     );
+  }
+
+  processFile(imageInput: any) {
+    var file = imageInput.files[0];
+    var reader = new FileReader();
+    let self = this;
+    reader.onloadend = function() {
+      console.log('RESULT', reader.result)
+      self.article.image = reader.result!.toString();
+    }
+    reader.readAsDataURL(file);
   }
 
 }

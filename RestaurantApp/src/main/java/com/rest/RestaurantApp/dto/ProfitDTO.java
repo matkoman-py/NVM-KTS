@@ -1,16 +1,18 @@
 package com.rest.RestaurantApp.dto;
 
 public class ProfitDTO {
+    private String articleName;
     private Double earning;
     private int numberOfOrders;
     private Double totalMakingPrice;
     private Double totalSellingPrice;
 
-    public ProfitDTO(Double earning, int numberOfOrders, double totalSellingPrice, double totalMakingPrice) {
+    public ProfitDTO(Double earning, int numberOfOrders, double totalSellingPrice, double totalMakingPrice, String name) {
         this.earning = earning;
         this.numberOfOrders = numberOfOrders;
         this.totalMakingPrice = totalMakingPrice;
         this.totalSellingPrice = totalSellingPrice;
+        this.articleName = name;
     }
 
     public ProfitDTO() {
@@ -18,6 +20,7 @@ public class ProfitDTO {
         this.numberOfOrders = 0;
         this.totalSellingPrice = 0.0;
         this.totalMakingPrice = 0.0;
+        this.articleName = "";
     }
 
     public Double getTotalMakingPrice() {
@@ -50,5 +53,13 @@ public class ProfitDTO {
 
     public void setNumberOfOrders(int numberOfOrders) {
         this.numberOfOrders = numberOfOrders;
+    }
+
+    public String getArticleName() {
+        return articleName;
+    }
+
+    public void setArticleName(String articleName) {
+        this.articleName = articleName;
     }
 }

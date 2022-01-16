@@ -52,7 +52,7 @@ public class MenuControllerTest {
 	
 	@Test
 	public void testAddArticle_ValidId() { 
-		ArticleCreationDTO article = new ArticleCreationDTO(new ArrayList<>(),"novi",500,600,"hladna",ArticleType.DRINK);
+		ArticleCreationDTO article = new ArticleCreationDTO(new ArrayList<>(), "novi", 500, 600, "hladna", ArticleType.DRINK);
 		ArticleDTO newArticle = articleService.create(article);
 		
 		ResponseEntity<MenuDTO> responseEntity = restTemplate.exchange(

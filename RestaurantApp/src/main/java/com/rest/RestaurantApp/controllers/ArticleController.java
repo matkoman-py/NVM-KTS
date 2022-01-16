@@ -76,4 +76,9 @@ public class ArticleController {
 		ArticleDTO updateArticle = articleService.update(id, article);
 		return new ResponseEntity<ArticleDTO>(updateArticle, HttpStatus.OK);
 	}
+	
+	@PostMapping(value="/testiraj")
+	public ResponseEntity<String> nesto(@RequestBody String be) {
+		return new ResponseEntity<String>(be, HttpStatus.OK);
+	}
 }

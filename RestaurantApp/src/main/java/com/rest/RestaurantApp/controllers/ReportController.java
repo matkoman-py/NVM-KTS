@@ -57,4 +57,13 @@ public class ReportController {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(articleReport, HttpStatus.OK);
     }
+
+    @GetMapping("/articleProfitBetweenDates/{dateFrom}/{dateTo}")
+    public ResponseEntity<ArticleReportDTO> articleProfitBetweenDates(Date dateFrom, Date dateTo) {
+        ArticleReportDTO articleReport = reportService.articleProfitBetweenDates(dateFrom, dateTo);
+
+        if(articleReport.getArticleProfits().isEmpty())
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(articleReport, HttpStatus.OK);
+    }
 }

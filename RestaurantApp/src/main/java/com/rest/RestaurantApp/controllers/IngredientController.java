@@ -55,7 +55,7 @@ public class IngredientController {
         return new ResponseEntity<>(updateIngredient, HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{id}", produces="text/plain")
     public ResponseEntity<String> delete(@PathVariable("id") int id) {
         IngredientDTO ingredientDTO = ingredientService.delete(id);
         return new ResponseEntity<>("Ingredient with id " + id + " successfully deleted", HttpStatus.OK);
