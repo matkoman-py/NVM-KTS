@@ -1,38 +1,80 @@
 <div class="login-form">
-    <div class="border">
-        <h1 class="title">Welcome!</h1>
-        <p-tabView>
-            <p-tabPanel header="Priviledged User">
-                <span class="p-float-label p-input-icon-right username">
-                    <input id="float-username" type="text" class="p-invalid" [(ngModel)]="username" pInputText> 
-                    <label for="float-username">Username</label>
-                </span>
-                
-                <span class="p-float-label">
-                    <p-password id="float-password" [toggleMask]="true" [feedback]="false" [(ngModel)]="password"></p-password>
-                    <label for="float-password">Password</label>
-                </span>
+  <div class="border">
+    <h1 class="title">Welcome!</h1>
+    <p-tabView>
+      <p-tabPanel header="Priviledged User">
+        <span class="p-float-label p-input-icon-right username">
+          <input
+            id="float-username"
+            type="text"
+            class="p-invalid"
+            [(ngModel)]="username"
+            pInputText
+          />
+          <label for="float-username">Username</label>
+        </span>
 
-                <div class="inline-error" [style.visibility]="!validLogin ? 'visible' : 'hidden'">
-                    <small id="username-help" class="p-error">Username or password is incorrect!</small>
-                </div>
+        <span class="p-float-label">
+          <p-password
+            id="float-password"
+            [toggleMask]="true"
+            [feedback]="false"
+            [(ngModel)]="password"
+          ></p-password>
+          <label for="float-password">Password</label>
+        </span>
 
+        <div
+          class="inline-error"
+          [style.visibility]="!validLogin ? 'visible' : 'hidden'"
+        >
+          <small id="username-help-privileged" class="p-error"
+            >Username or password is incorrect!</small
+          >
+        </div>
 
-                <button (click)="onPriviledgeLogin()" [disabled]="checkEmptyFields()" pButton pRipple type="button" label="Log In" class="p-button-rounded login-button"></button>
-            </p-tabPanel>
+        <button
+          id="login-button-privileged"
+          (click)="onPriviledgeLogin()"
+          [disabled]="checkEmptyFields()"
+          pButton
+          pRipple
+          type="button"
+          label="Log In"
+          class="p-button-rounded login-button"
+        ></button>
+      </p-tabPanel>
 
-            <p-tabPanel header="Employee">
-                <span class="p-float-label">
-                    <p-password [(ngModel)]="pincode" [toggleMask]="true" [feedback]="false"></p-password>
-                    <label for="float-input">Pincode</label>
-                </span>
+      <p-tabPanel header="Employee">
+        <span class="p-float-label">
+          <p-password
+            id="pincode-input"
+            [(ngModel)]="pincode"
+            [toggleMask]="true"
+            [feedback]="false"
+          ></p-password>
+          <label for="float-input">Pincode</label>
+        </span>
 
-                <div class="inline-error" [style.visibility]="!validPin ? 'visible' : 'hidden'">
-                    <small id="username-help" class="p-error">Pincode is incorrect!</small>
-                </div>
+        <div
+          class="inline-error"
+          [style.visibility]="!validPin ? 'visible' : 'hidden'"
+        >
+          <small id="username-help-employee" class="p-error"
+            >Pincode is incorrect!</small
+          >
+        </div>
 
-                <button (click)="onEmployeeLogin()" pButton pRipple type="button" label="Log In" class="p-button-rounded login-button"></button>
-            </p-tabPanel>
-        </p-tabView>
-    </div>
+        <button
+          id="login-button-employee"
+          (click)="onEmployeeLogin()"
+          pButton
+          pRipple
+          type="button"
+          label="Log In"
+          class="p-button-rounded login-button"
+        ></button>
+      </p-tabPanel>
+    </p-tabView>
+  </div>
 </div>
