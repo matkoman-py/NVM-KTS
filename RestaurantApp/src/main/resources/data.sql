@@ -4,17 +4,17 @@ INSERT INTO users (type, birthday, email, name, surname, privileged_type, userna
 
 INSERT INTO menu (id) VALUES
   ('420');
-INSERT INTO article (name, description, type, menu_id) VALUES
-  ('Dobos torta', 'Jako fina', 'DESSERT', 420),
-  ('Jagnjetina', 'Vruca', 'MAIN_COURSE', 420),
-  ('Mesano meso', '1kg mesa sa rostilja', 'MAIN_COURSE', 420),
-  ('Meze', 'Taze meze', 'APPETIZER', 420),
-  ('Pohovana piletina', 'Jako fina', 'MAIN_COURSE', 420), 
-  ('Krempita', 'Jako fina', 'DESSERT', 420),
-  ('Cezar salata', 'Jako fina', 'MAIN_COURSE', 420),
-  ('Espreso', 'Kafa', 'DRINK', 420),
-  ('Coca cola', 'sokic', 'DRINK', 420),
-  ('Princes krofna', 'Ubica', 'DESSERT', 420);
+INSERT INTO article (name, description, type, menu_id, image) VALUES
+  ('Dobos torta', 'Jako fina', 'DESSERT', 420, ''),
+  ('Jagnjetina', 'Vruca', 'MAIN_COURSE', 420, ''),
+  ('Mesano meso', '1kg mesa sa rostilja', 'MAIN_COURSE', 420, ''),
+  ('Meze', 'Taze meze', 'APPETIZER', 420, ''),
+  ('Pohovana piletina', 'Jako fina', 'MAIN_COURSE', 420, ''), 
+  ('Krempita', 'Jako fina', 'DESSERT', 420, ''),
+  ('Cezar salata', 'Jako fina', 'MAIN_COURSE', 420, ''),
+  ('Espreso', 'Kafa', 'DRINK', 420, ''),
+  ('Coca cola', 'sokic', 'DRINK', 420, ''),
+  ('Princes krofna', 'Ubica', 'DESSERT', 420, '');
 
   INSERT INTO suggested_article (name, description, suggested_making_price, suggested_selling_price, type) VALUES
   ('Nova torta', 'Jako fina', 100, 350, 'APPETIZER'),

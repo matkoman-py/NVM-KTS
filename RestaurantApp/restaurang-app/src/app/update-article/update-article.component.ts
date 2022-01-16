@@ -7,6 +7,9 @@ import { Ingredient } from '../modules/shared/models/ingredient';
 import {Router} from "@angular/router"
 import { _resolveDirectionality } from '@angular/cdk/bidi/directionality';
 
+class ImageSnippet {
+  constructor(public src: string, public file: File) {}
+}
 
 @Component({
   selector: 'app-update-article',
@@ -18,9 +21,11 @@ import { _resolveDirectionality } from '@angular/cdk/bidi/directionality';
 export class UpdateArticleComponent implements OnInit {
 
   constructor(private activatedRoute: ActivatedRoute, private updateArticleService: UpdateArticleService, private messageService: MessageService, private router: Router) { }
-  article: Article = {name: "", makingPrice: 0, sellingPrice: 0, description: "", type: "", ingredients: []};
+  article: Article = {name: "", makingPrice: 0, sellingPrice: 0, description: "", type: "", ingredients: [], image: ""};
   selectedType: ArticleType = {name:"", value:""};
   id: number = 0;
+  selectedFile: ImageSnippet;
+  slika: string = "";
 
   articleTypes: ArticleType[] = [
     { name: 'DESSERT', value: 'DESSERT' },
@@ -37,6 +42,7 @@ export class UpdateArticleComponent implements OnInit {
       this.id = parseInt(paramsId['id']);
       this.updateArticleService.getArticle(parseInt(paramsId['id'])).subscribe(res => {
         this.article = res;
+        console.log(res);
         switch(res.type) {
           case "DESSERT":
             this.selectedType = this.articleTypes[0];
@@ -79,6 +85,17 @@ export class UpdateArticleComponent implements OnInit {
       return false;
     }
     return true;
+  }
+
+  processFile(imageInput: any) {
+    var file = imageInput.files[0];
+    var reader = new FileReader();
+    let self = this;
+    reader.onloadend = function() {
+      console.log('RESULT', reader.result)
+      self.article.image = reader.result!.toString();
+    }
+    reader.readAsDataURL(file);
   }
 
 }

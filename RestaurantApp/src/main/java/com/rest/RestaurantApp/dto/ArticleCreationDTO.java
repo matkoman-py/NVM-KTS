@@ -16,10 +16,12 @@ public class ArticleCreationDTO {
 	
 	private String description;
 	
+	private String image;
+	
 	private ArticleType type;
 
 	public ArticleCreationDTO(List<IngredientDTO> ingredients, String name, double makingPrice, double sellingPrice,
-			String description, ArticleType type) {
+			String description, ArticleType type, String image) {
 		super();
 		this.ingredients = ingredients;
 		this.name = name;
@@ -27,6 +29,7 @@ public class ArticleCreationDTO {
 		this.sellingPrice = sellingPrice;
 		this.description = description;
 		this.type = type;
+		this.image = image;
 	}
 
 	public ArticleCreationDTO() {
@@ -80,5 +83,14 @@ public class ArticleCreationDTO {
 	public void setType(ArticleType type) {
 		this.type = type;
 	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+	
 	
 }

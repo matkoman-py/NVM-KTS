@@ -1,0 +1,45 @@
+<p-toast position="top-center" key="tc"></p-toast>
+<div class="p-grid">
+    <div class="p-sm-12 p-mds-12 p-lg-3 p-mt-2">
+        <div class="p-fluid">
+            <div class="p-field">
+                <label styleClass="p-col-fixed" >Name:</label>
+                <input type="text" pInputText [(ngModel)]="ingredient.name">
+            </div>
+            <div class="p-field">
+                <label>Is an allergen:</label>
+                <br>
+                <p-checkbox [binary]="true" [(ngModel)]="ingredient.allergen"></p-checkbox>
+            </div>
+        </div>
+        <button pButton type="button" class="p-sm-12 p-md-12 p-lg-3 p-m-1 p-button-success" label="Create" (click)="create()" [disabled]="(ingredient.name || '').toString().trim().length === 0"></button>
+        <button pButton type="button" class="p-sm-12 p-md-12 p-lg-3 p-m-1" label="Update" [disabled]="selectedIngredient.id == 0" (click)="update()"></button>
+        <button pButton type="button" class="p-sm-12 p-md-12 p-lg-3 p-m-1 p-button-danger" label="Delete" [disabled]="selectedIngredient.id == 0" (click)="delete()"></button>
+    </div>
+    <div class="p-sm-12 p-lg-9 p-mt-2">
+        <div class="p-mb-2 p-mt-4 p-d-flex p-jc-center">
+            <input type="text" class = "p-mx-2" pInputText placeholder="Search by name">
+            <p-dropdown [options]="ingredientType" placeholder="Select type of ingredients" optionLabel="name" [showClear]="true" [(ngModel)]="selectedType" ></p-dropdown>
+            <button pButton type="button" class="p-col-3 p-mr-1 p-ml-1" label="Search"></button>
+        </div>
+        <p-table selectionMode="single" [value]="ingredients" [(selection)]="selectedIngredient" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" >
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Is allergen</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-ingredient>
+              <tr [pSelectableRowDblClick]="ingredient" (dblclick)="foo(ingredient)">
+                <td>{{ ingredient.id }}</td>
+                <td>{{ ingredient.name }}</td>
+                <td *ngIf="ingredient.allergen">Yes</td>
+                <td *ngIf="!ingredient.allergen">No</td>
+              </tr>
+              <ng-template pTemplate="paginatorleft"> </ng-template>
+              <ng-template pTemplate="paginatorright"> </ng-template>
+            </ng-template>
+          </p-table>
+    </div>
+</div>

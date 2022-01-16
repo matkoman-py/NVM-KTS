@@ -97,6 +97,7 @@ public class ReportService implements IReportService {
             profit.setNumberOfOrders(profit.getNumberOfOrders() + 1);
             profit.setTotalMakingPrice(profit.getTotalMakingPrice() + articleDTO.getMakingPrice());
             profit.setTotalSellingPrice(profit.getTotalSellingPrice() + articleDTO.getSellingPrice());
+            profit.setArticleName(articleDTO.getName());
 
             articleReport.getArticleProfits().put(articleDTO.getId(), profit);
         }

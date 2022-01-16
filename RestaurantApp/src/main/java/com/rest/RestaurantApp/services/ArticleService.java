@@ -65,6 +65,7 @@ public class ArticleService implements IArticleService {
 		}
 		return new ArticleDTO(article.get());
 	}
+	//
 	
 	
 	@Override
@@ -81,7 +82,7 @@ public class ArticleService implements IArticleService {
 	
 	@Override
 	public ArticleDTO create(ArticleCreationDTO article) {
-		Article newArticle = new Article(article.getName(), article.getDescription(),article.getType());
+		Article newArticle = new Article(article.getName(), article.getDescription(),article.getType(), article.getImage());
 		Article savedArticle = articleRepository.save(newArticle);
 		PriceInfo priceInfo = new PriceInfo(new Date(), article.getMakingPrice(), article.getSellingPrice(), savedArticle);
 		priceInfoRepository.save(priceInfo);
@@ -109,6 +110,7 @@ public class ArticleService implements IArticleService {
 		Set<Ingredient> ingredients = article.getIngredients().stream()
 				.map(ingredientDTO -> ingredientRepository.findById(ingredientDTO.getId()).orElse(null)).collect(Collectors.toSet());
 		oldArticle.setIngredients(ingredients);
+		oldArticle.setImage(article.getImage());
 		Article updatedArticle = articleRepository.save(oldArticle);
 		return new ArticleDTO(updatedArticle);
 	}
