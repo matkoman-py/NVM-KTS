@@ -32,6 +32,10 @@ import { NotificationBarComponent } from './notification-bar/notification-bar.co
 import { SidebarModule } from 'primeng/sidebar';
 import { BadgeModule } from 'primeng/badge';
 import { UpdateArticleComponent } from './update-article/update-article.component';
+import { OrdersComponent } from './orders/orders.component';
+import { ViewOrderComponent } from './view-order/view-order.component';
+import { CardModule } from "primeng/card";
+import { DialogModule } from 'primeng/dialog';
 import { IngredientsComponent } from './ingredients/ingredients.component';
 import {FileUploadModule} from 'primeng/fileupload';
 
@@ -45,9 +49,12 @@ import {FileUploadModule} from 'primeng/fileupload';
     UpdateArticleComponent,
     EmployeesComponent,
     LoginComponent,
+    OrdersComponent,
+    ViewOrderComponent,
     IngredientsComponent
   ],
   imports: [
+    CardModule,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
@@ -57,8 +64,8 @@ import {FileUploadModule} from 'primeng/fileupload';
     FileUploadModule,
     ReactiveFormsModule,
     PasswordModule,
+    DialogModule,
     TabViewModule,
-
     TableModule,
     FormsModule,
     HttpClientModule,

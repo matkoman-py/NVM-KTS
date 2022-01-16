@@ -58,6 +58,11 @@ export class NavbarComponent implements OnInit {
           routerLink: '/articles',
         },
         {
+          label: 'Orders',
+          icon: 'pi pi-fw pi-user',
+          routerLink: '/active-orders',
+        },
+        {
           label: 'Employees',
           icon: 'pi pi-fw pi-user',
           routerLink: '/employees',
@@ -76,6 +81,4 @@ export class NavbarComponent implements OnInit {
   ngOnInit(): void {
     this.setNavbarItems();
   }
-
-  
 }

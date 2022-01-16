@@ -1,9 +1,6 @@
 package com.rest.RestaurantApp.controllers;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,9 +13,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.rest.RestaurantApp.domain.Order;
+import com.rest.RestaurantApp.domain.enums.ArticleStatus;
+import com.rest.RestaurantApp.domain.enums.OrderStatus;
+import com.rest.RestaurantApp.dto.ArticleDTO;
 import com.rest.RestaurantApp.dto.OrderDTO;
 import com.rest.RestaurantApp.dto.OrderedArticleDTO;
 import com.rest.RestaurantApp.exceptions.ChangeFinishedStateException;
@@ -28,9 +28,6 @@ import com.rest.RestaurantApp.exceptions.NullArticlesException;
 import com.rest.RestaurantApp.exceptions.OrderAlreadyTakenException;
 import com.rest.RestaurantApp.exceptions.OrderTakenByWrongEmployeeTypeException;
 import com.rest.RestaurantApp.services.OrderService;
-
-
-
 
 @RestController
 @RequestMapping("/api/order")
@@ -48,7 +45,6 @@ public class OrderController {
 		return ResponseEntity.ok(orderService.getAll());
 	}
 	
-	
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<OrderDTO> getOne(@PathVariable("id") int id) {
 		OrderDTO order = orderService.getOne(id);
@@ -56,7 +52,12 @@ public class OrderController {
 			return new ResponseEntity<OrderDTO>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<OrderDTO>(order, HttpStatus.OK);
-		
+	}
+	
+	@GetMapping(value = "articles/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<OrderedArticleDTO>> getArticlesForOrder(@PathVariable("id") int id) {
+		List<OrderedArticleDTO> orderedArticles = orderService.getArticlesForOrder(id);
+		return new ResponseEntity<List<OrderedArticleDTO>>(orderedArticles, HttpStatus.OK);	
 	}
 	
 	@ExceptionHandler(value = NullArticlesException.class)
@@ -88,14 +89,6 @@ public class OrderController {
 	public ResponseEntity handleChangeFinishedStateException(ChangeFinishedStateException changeFinishedStateException) {
         return new ResponseEntity(changeFinishedStateException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
-	
-	
-	@GetMapping(value = "articles/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<OrderedArticleDTO>> getArticlesForOrder(@PathVariable("id") int id) {
-		List<OrderedArticleDTO> orderedArticles = orderService.getArticlesForOrder(id);
-		return new ResponseEntity<List<OrderedArticleDTO>>(orderedArticles, HttpStatus.OK);
-		
-	}
 	
 	@GetMapping(value = "/test", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> test() {
@@ -145,6 +138,21 @@ public class OrderController {
 		OrderedArticleDTO orderedArticle = orderService.updateArticleForOrder(orderId, article);
 		return new ResponseEntity<OrderedArticleDTO>(orderedArticle, HttpStatus.OK);
 	}
+	//NEMA TESTOVA ZA OVU
+	@GetMapping(value = "updateOrderStatus/{id}/{orderStatus}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<OrderDTO> updateOrderStatus(@PathVariable("id") int id, @PathVariable("orderStatus") String orderStatus){
+		OrderDTO order = orderService.updateOrderStatus(id, OrderStatus.valueOf(orderStatus));
+		return new ResponseEntity<OrderDTO>(order, HttpStatus.OK);
+	}
 	
-
+	@GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<OrderDTO>> search(@RequestParam(value = "orderStatus", required = false, defaultValue = "") String orderStatus) {
+		return ResponseEntity.ok(orderService.search(OrderStatus.valueOf(orderStatus)));	
+	}
+	
+	@GetMapping(value = "articles/search/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<OrderedArticleDTO>> searchArticles(@PathVariable("id") int id, 
+			@RequestParam(value = "articleStatus", required = false, defaultValue = "") String articleStatus) {
+		return ResponseEntity.ok(orderService.searchArticles(id, ArticleStatus.valueOf(articleStatus)));	
+	}
 }
