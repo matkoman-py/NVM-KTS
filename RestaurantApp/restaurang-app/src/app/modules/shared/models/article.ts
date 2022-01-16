@@ -8,6 +8,7 @@ export interface Article {
   description?: String;
   type?: String;
   ingredients?: Ingredient[];
+  image?: String;
 }
 
 export interface ArticlesDTO {

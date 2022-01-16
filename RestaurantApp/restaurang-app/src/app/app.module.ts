@@ -33,6 +33,7 @@ import { SidebarModule } from 'primeng/sidebar';
 import { BadgeModule } from 'primeng/badge';
 import { UpdateArticleComponent } from './update-article/update-article.component';
 import { IngredientsComponent } from './ingredients/ingredients.component';
+import {FileUploadModule} from 'primeng/fileupload';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,7 @@ import { IngredientsComponent } from './ingredients/ingredients.component';
     MenubarModule,
     InputTextModule,
     ButtonModule,
-    
+    FileUploadModule,
     ReactiveFormsModule,
     PasswordModule,
     TabViewModule,

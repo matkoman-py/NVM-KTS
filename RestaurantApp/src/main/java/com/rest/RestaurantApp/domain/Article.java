@@ -14,6 +14,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -44,6 +45,9 @@ public class Article extends BaseEntity{
 		@Column(nullable = false)
 		private String description;
 		
+		@Column(columnDefinition="text", nullable = true)
+		private String image;
+		
 		@OneToMany(mappedBy = "article")
 		private List<PriceInfo> prices;
 		
@@ -58,6 +62,17 @@ public class Article extends BaseEntity{
 		@OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
 		private Set<OrderedArticle> orderedArticles;
 
+		public Article(String name, String description, ArticleType type, String image) {
+			super();
+			this.ingredients = new HashSet<>();
+			this.name = name;
+			this.description = description;
+			this.prices = new ArrayList<PriceInfo>();
+			this.type = type;
+			this.image = image;
+			this.orderedArticles = new HashSet<>();
+		}
+		
 		public Article(String name, String description, ArticleType type) {
 			super();
 			this.ingredients = new HashSet<>();
@@ -65,8 +80,23 @@ public class Article extends BaseEntity{
 			this.description = description;
 			this.prices = new ArrayList<PriceInfo>();
 			this.type = type;
+			this.image = "";
 			this.orderedArticles = new HashSet<>();
 		}
+		
+		
+
+		public String getImage() {
+			return image;
+		}
+
+
+
+		public void setImage(String image) {
+			this.image = image;
+		}
+
+
 
 		public Article() {
 			super();
