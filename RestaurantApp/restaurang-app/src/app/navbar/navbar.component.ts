@@ -45,7 +45,6 @@ export class NavbarComponent implements OnInit {
           label: 'Home',
           icon: 'pi pi-fw pi-home',
           routerLink: '/home',
-    
         },
         {
           label: 'Login',
@@ -61,6 +60,11 @@ export class NavbarComponent implements OnInit {
           label: 'Orders',
           icon: 'pi pi-fw pi-user',
           routerLink: '/active-orders',
+        },
+        {
+          label: 'Reports',
+          icon: 'pi pi-fw pi-user',
+          routerLink: '/reports',
         },
         {
           label: 'Employees',

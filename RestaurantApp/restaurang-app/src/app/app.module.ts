@@ -37,7 +37,9 @@ import { ViewOrderComponent } from './view-order/view-order.component';
 import { CardModule } from "primeng/card";
 import { DialogModule } from 'primeng/dialog';
 import { IngredientsComponent } from './ingredients/ingredients.component';
-import {FileUploadModule} from 'primeng/fileupload';
+import { FileUploadModule } from 'primeng/fileupload';
+import { ReportsComponent } from './reports/reports.component';
+import { ChartModule } from 'primeng/chart';
 
 @NgModule({
   declarations: [
@@ -51,9 +53,11 @@ import {FileUploadModule} from 'primeng/fileupload';
     LoginComponent,
     OrdersComponent,
     ViewOrderComponent,
-    IngredientsComponent
+    IngredientsComponent,
+    ReportsComponent
   ],
   imports: [
+    ChartModule,
     CardModule,
     BrowserModule,
     BrowserAnimationsModule,
