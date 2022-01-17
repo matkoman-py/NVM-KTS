@@ -40,6 +40,7 @@ import { IngredientsComponent } from './ingredients/ingredients.component';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ReportsComponent } from './reports/reports.component';
 import { ChartModule } from 'primeng/chart';
+import {CalendarModule} from 'primeng/calendar';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,8 @@ import { ChartModule } from 'primeng/chart';
     ReportsComponent
   ],
   imports: [
+    CalendarModule,
+    RadioButtonModule,
     ChartModule,
     CardModule,
     BrowserModule,
@@ -77,7 +80,6 @@ import { ChartModule } from 'primeng/chart';
     ToastModule,
     RippleModule,
     CheckboxModule,
-    RadioButtonModule,
     AutoCompleteModule,
     MultiSelectModule,
     MessageModule,
