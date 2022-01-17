@@ -81,21 +81,21 @@ class OrderServiceTest {
 		Employee cook1 = new Employee("marko.maric@gmail.com", "Marko", "Maric", new GregorianCalendar(1976, 10, 10).getTime(), UserType.EMPLOYEE, 2468, EmployeeType.COOK);
 		cook1.setId(5);
 		
-		Order order = new Order("Extra chair", 31, LocalDateTime.of(2021, 3, 4, 13, 10, 12), waiter);
+		Order order = new Order("Extra chair", 31, LocalDateTime.of(2021, 3, 4, 13, 10, 12), waiter, 40);
 		order.setId(1);
 		
-		Order order1 = new Order("", 22, LocalDateTime.of(2021, 4, 5, 17, 9, 12), waiter1);
+		Order order1 = new Order("", 22, LocalDateTime.of(2021, 4, 5, 17, 9, 12), waiter1, 50);
 		order1.setId(2);
 		
-		Order order2 = new Order("Join tables", 1, LocalDateTime.of(2021, 12, 13, 17, 0, 2), waiter);
+		Order order2 = new Order("Join tables", 1, LocalDateTime.of(2021, 12, 13, 17, 0, 2), waiter, 60);
 		order2.setId(3);
 		
-		Order newOrder = new Order("Appetizers first", 5 , LocalDateTime.of(2021, 2, 3, 17, 0, 2), waiter);
+		Order newOrder = new Order("Appetizers first", 5 , LocalDateTime.of(2021, 2, 3, 17, 0, 2), waiter, 70);
 		
-		Order saveNewOrder = new Order("Appetizers first", 5 , LocalDateTime.of(2021, 2, 3, 17, 0, 2), waiter);
+		Order saveNewOrder = new Order("Appetizers first", 5 , LocalDateTime.of(2021, 2, 3, 17, 0, 2), waiter, 80);
 		saveNewOrder.setId(4);
 		
-		Order orderWithArticles = new Order("", 10, LocalDateTime.of(2021, 3, 6, 13, 10, 12), waiter1);
+		Order orderWithArticles = new Order("", 10, LocalDateTime.of(2021, 3, 6, 13, 10, 12), waiter1, 90);
 		orderWithArticles.setId(5);
 		
 		
@@ -223,7 +223,7 @@ class OrderServiceTest {
 	
 	@Test
 	void testCreate_ValidOrder() {
-		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), Arrays.asList(1), 5, 1, OrderStatus.NOT_STARTED);
+		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), Arrays.asList(1), 5, 1, OrderStatus.NOT_STARTED, 5000);
 		OrderDTO createdOrder = orderService.create(orderToCreate);
 		
 		assertEquals(createdOrder.getId(), 4);
@@ -236,19 +236,19 @@ class OrderServiceTest {
 	
 	@Test
 	void testCreate_InvalidOrder_NoArticles() {
-		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), null, 5, 1, OrderStatus.NOT_STARTED);
+		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), null, 5, 1, OrderStatus.NOT_STARTED, 6000);
 		assertThrows(NullArticlesException.class, () -> {OrderDTO createdOrder = orderService.create(orderToCreate);});
 	}
 	
 	@Test
 	void testCreate_InvalidOrder_OrderTakenByCookOrBarman() {
-		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), null, 5, 3, OrderStatus.NOT_STARTED);
+		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), null, 5, 3, OrderStatus.NOT_STARTED, 7000);
 		assertThrows(OrderTakenByWrongEmployeeTypeException.class, () -> {OrderDTO createdOrder = orderService.create(orderToCreate);});
 	}
 	
 	@Test
 	void testUpdate_ValidOrder() {
-		OrderDTO orderToUpdate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), Arrays.asList(1), 5, 1, OrderStatus.NOT_STARTED);
+		OrderDTO orderToUpdate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), Arrays.asList(1), 5, 1, OrderStatus.NOT_STARTED, 8000);
 		OrderDTO updatedOrder = orderService.update(3, orderToUpdate);
 		
 		assertEquals(updatedOrder.getId(), 4);
@@ -261,7 +261,7 @@ class OrderServiceTest {
 	
 	@Test
 	void testUpdate_InvalidOrder_NoArticles() {
-		OrderDTO orderToUpdate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), null, 5, 1, OrderStatus.NOT_STARTED);
+		OrderDTO orderToUpdate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), null, 5, 1, OrderStatus.NOT_STARTED, 9000);
 		assertThrows(NotFoundException.class, () -> {OrderDTO updatedOrder = orderService.update(6, orderToUpdate);});
 
 	}

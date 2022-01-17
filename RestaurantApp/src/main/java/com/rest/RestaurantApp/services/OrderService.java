@@ -115,7 +115,16 @@ public class OrderService implements IOrderService {
 		List<OrderedArticle> orderedArticles = articles.stream()
 				.map(orderedArticle -> new OrderedArticle(ArticleStatus.NOT_TAKEN, orderedArticle))
 				.collect(Collectors.toList());
-		Order createdOrder = new Order(order.getDescription(), order.getTableNumber(), order.getOrderDate(), employee);
+		
+		//dodaj cenu
+		double priceOfOrder = articles.stream().map(x -> {
+			if(x.getActivePrice() != null) {
+				return x.getActivePrice().getSellingPrice();
+			}
+			return 0.0;
+			}).reduce(0.0, (x, y) -> x + y);
+		
+		Order createdOrder = new Order(order.getDescription(), order.getTableNumber(), order.getOrderDate(), employee, priceOfOrder);
 		
 		for (OrderedArticle o : orderedArticles) {
 			createdOrder.addOrderedArticle(o);
@@ -146,6 +155,8 @@ public class OrderService implements IOrderService {
 			oldOrder.removeOrderedArticle(orderedArticle);
 		}
 		oldOrder.getOrderedArticles().clear();
+		// STAVI CENU NA NULA? 
+		oldOrder.setPrice(0);
 		oldOrder.setDescription(order.getDescription());
 		oldOrder.setEmployee(employeeRepository.findById(order.getEmployeeId()).get());
 		oldOrder.setOrderDate(order.getOrderDate());
@@ -156,6 +167,11 @@ public class OrderService implements IOrderService {
 		List<OrderedArticle> orderedArticles = articles.stream().map(orderedArticle -> new OrderedArticle(ArticleStatus.NOT_TAKEN,orderedArticle)).collect(Collectors.toList());
 		for (OrderedArticle orderedArticle : orderedArticles) {
 			oldOrder.addOrderedArticle(orderedArticle);
+			//dodaj cenu svakog
+			if(orderedArticle.getArticle().getActivePrice() != null) {
+				oldOrder.setPrice(oldOrder.getPrice() + orderedArticle.getArticle().getActivePrice().getSellingPrice());
+			}
+			
 		}
 		Order updatedOrder = orderRepository.save(oldOrder);
 		

@@ -38,20 +38,20 @@ VALUES ('2003-5-6', '2003-5-6', 'ACTIVE', 23000, 3),
        ('2003-5-6', '2003-5-6', 'ACTIVE', 23000, 2),
        ('2003-5-6', '2003-5-6', 'ACTIVE', 23000, 1);
 
-INSERT INTO orders (description, order_date, order_status, table_number, employee_id)
-VALUES ('No mustard', '2021-1-3 12:43:33', 0, 1, 3),
-       ('No ketchup', '2021-1-13 12:43:33', 0, 1, 3),
-       ('No ketchup', '2021-5-3 12:43:33', 0, 1, 3),
-       ('No ketchup', '2021-6-3 12:43:33', 0, 1, 3),
-       ('No ketchup', '2021-7-3 12:43:33', 0, 1, 3),
-       ('No ketchup', '2021-9-3 12:43:33', 0, 1, 3),
-       ('No ketchup', '2021-11-3 12:43:33', 0, 1, 3),
-       ('No ketchup', '2021-11-3 12:43:33', 0, 1, 3),
-       ('No ketchup', '2021-11-3 12:43:33', 0, 1, 3),
-       ('No ketchup', '2021-11-3 12:43:33', 0, 1, 3),
-       ('No ketchup', '2021-11-3 12:43:33', 0, 1, 3),
-       ('No ketchup', '2021-11-3 12:43:33', 0, 1, 3),
-       ('Extra mayo', '2021-12-3 15:21:00', 0, 3, 3);
+INSERT INTO orders (description, order_date, order_status, table_number, employee_id, price) VALUES
+  ('No mustard', '2021-1-3 12:43:33', 0, 1, 3, 1989),
+  ('No ketchup', '2021-1-13 12:43:33',0, 1, 3, 1389),
+  ('No ketchup', '2021-5-3 12:43:33',0, 1, 3, 1421),
+  ('No ketchup', '2021-6-3 12:43:33',0, 1, 3, 5040),
+  ('No ketchup', '2021-7-3 12:43:33',0, 1, 3, 3040),
+  ('No ketchup', '2021-9-3 12:43:33',0, 1, 3, 2040),
+  ('No ketchup', '2021-11-3 12:43:33',0, 1, 3, 1501),
+  ('No ketchup', '2021-11-3 12:43:33',0, 1, 3, 10011),
+  ('No ketchup', '2021-11-3 12:43:33',0, 1, 3, 10032),
+  ('No ketchup', '2021-11-3 12:43:33',0, 1, 3, 10022),
+  ('No ketchup', '2021-11-3 12:43:33',0, 1, 3, 1003),
+  ('No ketchup', '2021-11-3 12:43:33',0, 1, 3, 1004),
+  ('Extra mayo', '2021-12-3 15:21:00',0, 3, 3, 1005);
 
 INSERT INTO ordered_article (description, status, order_id, article_id, employee_id)
 VALUES ('bez buta', 'TAKEN', 1, 2, 6),

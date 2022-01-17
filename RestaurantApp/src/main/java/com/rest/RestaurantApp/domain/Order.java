@@ -38,6 +38,9 @@ public class Order extends BaseEntity{
 	@Column(nullable = false)
 	private OrderStatus orderStatus;
 	
+	@Column(nullable = false)
+	private double price;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "employee_id", nullable = false)
 	private Employee employee;
@@ -45,7 +48,7 @@ public class Order extends BaseEntity{
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<OrderedArticle> orderedArticles;
 
-	public Order(String description, int tableNumber, LocalDateTime orderDate, Employee employee) {
+	public Order(String description, int tableNumber, LocalDateTime orderDate, Employee employee, double price) {
 		super();
 		this.description = description;
 		this.tableNumber = tableNumber;
@@ -53,6 +56,7 @@ public class Order extends BaseEntity{
 		this.employee = employee;
 		this.orderedArticles = new ArrayList<>();
 		this.orderStatus = OrderStatus.NOT_STARTED;
+		this.price = price;
 	}
 
 	public Order() {
@@ -134,4 +138,13 @@ public class Order extends BaseEntity{
 	public void setOrderStatus(OrderStatus orderStatus) {
 		this.orderStatus = orderStatus;
 	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+	
 }

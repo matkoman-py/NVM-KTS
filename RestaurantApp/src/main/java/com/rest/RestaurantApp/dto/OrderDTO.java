@@ -18,8 +18,9 @@ public class OrderDTO {
 	private int tableNumber;
 	private int employeeId;
 	private OrderStatus orderStatus;
+	private double price;
 	
-	public OrderDTO(Integer id, boolean deleted, String description, LocalDateTime orderDate, int tableNumber, int employeeId, OrderStatus orderStatus) {
+	public OrderDTO(Integer id, boolean deleted, String description, LocalDateTime orderDate, int tableNumber, int employeeId, OrderStatus orderStatus, double price) {
 		super();
 		this.id = id;
 		this.deleted = deleted;
@@ -28,10 +29,11 @@ public class OrderDTO {
 		this.tableNumber = tableNumber;
 		this.employeeId = employeeId;
 		this.orderStatus = orderStatus;
+		this.price = price;
 	}
 
 	public OrderDTO(boolean deleted, String description, LocalDateTime orderDate, List<Integer> articles,
-			int tableNumber, int employeeId, OrderStatus orderStatus) {
+			int tableNumber, int employeeId, OrderStatus orderStatus, double price) {
 		super();
 		this.deleted = deleted;
 		this.description = description;
@@ -40,6 +42,7 @@ public class OrderDTO {
 		this.tableNumber = tableNumber;
 		this.employeeId = employeeId;
 		this.orderStatus = orderStatus;
+		this.price = price;
 	}
 	
 	public OrderDTO() {
@@ -57,10 +60,11 @@ public class OrderDTO {
 		this.articles = order.getOrderedArticles().stream().map(article -> article.getArticle().getId()).collect(Collectors.toList());
 		this.orderedArticles = order.getOrderedArticles().stream().map(article -> article.getId()).collect(Collectors.toList());
 		this.orderStatus = order.getOrderStatus();
+		this.price = order.getPrice();
 	}
 
 	public OrderDTO(Integer id, boolean deleted, String description, LocalDateTime orderDate,
-			List<Integer> orderedArticles, int tableNumber, int employeeId, OrderStatus orderStatus) {
+			List<Integer> orderedArticles, int tableNumber, int employeeId, OrderStatus orderStatus, double price) {
 		super();
 		this.id = id;
 		this.deleted = deleted;
@@ -70,6 +74,7 @@ public class OrderDTO {
 		this.tableNumber = tableNumber;
 		this.employeeId = employeeId;
 		this.orderStatus = orderStatus;
+		this.price = price;
 	}
 
 	public OrderStatus getOrderStatus() {
@@ -145,9 +150,13 @@ public class OrderDTO {
 	public void setOrderedArticles(List<Integer> orderedArticles) {
 		this.orderedArticles = orderedArticles;
 	}
-	
-	
-	
-	
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
 	
 }

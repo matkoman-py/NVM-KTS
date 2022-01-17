@@ -29,7 +29,7 @@ class RestaurantAppApplicationTests {
 	void setMockOutput() {
 		Employee employee = new Employee("dsadas", null, null, null, null, 0, null);
 		employee.setId(1);
-		Order order = new Order("blabla", 69, null, employee);
+		Order order = new Order("blabla", 69, null, employee, 500);
 		Optional<Order> orderData = Optional.of(order);
 		when(orderRepository.findById(1)).thenReturn(orderData);
 	}
