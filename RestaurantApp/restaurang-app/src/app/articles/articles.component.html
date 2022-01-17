@@ -33,22 +33,36 @@
     <ng-template pTemplate="header">
       <tr>
         <th>Name</th>
+        <th>Image</th>
         <th>Making price</th>
         <th>Selling price</th>
         <th>Description</th>
         <th>Type</th>
-        <!-- <th>Ingredients</th> -->
+        <th>Ingredients</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-article>
       <tr [pSelectableRow]="article">
         <td>{{ article.name }}</td>
+        <td>
+          <img
+            [src]="article.image"
+            [alt]="article.name"
+            width="100"
+            class="p-shadow-4"
+          />
+        </td>
         <td>{{ article.makingPrice }}</td>
         <td>{{ article.sellingPrice }}</td>
         <td>{{ article.description }}</td>
         <td>{{ article.type }}</td>
-        <!-- STA RADITI SA INGREDIENTS -->
-        <!-- <td>{{ article.ingredients }}</td> -->
+        <td>
+          <ul>
+            <li *ngFor="let ingredient of article.ingredients">
+              {{ ingredient.name }}
+            </li>
+          </ul>
+        </td>
       </tr>
     </ng-template>
     <ng-template pTemplate="paginatorleft"> </ng-template>
