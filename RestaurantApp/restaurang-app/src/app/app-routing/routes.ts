@@ -8,6 +8,7 @@ import { UpdateArticleComponent } from '../update-article/update-article.compone
 import { OrdersComponent } from '../orders/orders.component';
 import { ViewOrderComponent } from '../view-order/view-order.component';
 import { IngredientsComponent } from '../ingredients/ingredients.component';
+import { ReportsComponent } from '../reports/reports.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -18,5 +19,6 @@ export const routes: Routes = [
   { path: 'update-article/:id', component: UpdateArticleComponent},
   { path: 'active-orders', component: OrdersComponent},
   { path: 'view-order-kitchen/:id', component: ViewOrderComponent},
-  { path: 'ingredients', component: IngredientsComponent}
+  { path: 'ingredients', component: IngredientsComponent},
+  { path: 'reports', component: ReportsComponent}
 ];
