@@ -19,10 +19,15 @@ export class ReportsService {
   }
 
   articleProfitMonth(year: number, month: number) : Observable<ArticleProfit>{
-    return this.http.get<ArticleProfit>('/api/report/articleProfitQuarter/' + year + '/' + month);
+    return this.http.get<ArticleProfit>('/api/report/articleProfitMonth/' + year + '/' + month);
   }
 
   articleProfitDay(year: number, month: number, day: number) : Observable<ArticleProfit>{
     return this.http.get<ArticleProfit>('/api/report/articleProfitDay/' + year + '/' + month + '/' + day);
   }
+
+  articleProfitBetweenDates(dateFrom: Date, dateTo: Date) : Observable<ArticleProfit>{
+    return this.http.get<ArticleProfit>('/api/report/articleProfitBetweenDates/' + dateFrom.toUTCString() + '/' + dateTo.toUTCString());
+  }
 }
+// "29-Sep-2021"

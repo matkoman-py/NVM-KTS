@@ -25,7 +25,7 @@
       </div>
       <div class="p-field">
         <label styleClass="p-col-fixed" style="margin-right: 10px;">Year: </label>
-        <input type="number" pInputText [(ngModel)]="articleYearInput" (change)="getArticleQuarterData()" />
+        <input type="number" pInputText [(ngModel)]="articleQuarterYearInput" (change)="getArticleQuarterData()" />
       </div>
       <div class="p-field">
         <label styleClass="p-col-fixed" style="margin-right: 10px;">Quarter: </label>
@@ -47,7 +47,7 @@
         </div>
         <div class="p-field">
           <label styleClass="p-col-fixed" style="margin-right: 10px;">Year: </label>
-          <input type="number" pInputText [(ngModel)]="articleYearInput" (change)="getArticleQuarterData()" />
+          <input type="number" pInputText [(ngModel)]="articleMonthYearInput" (change)="getArticleMonthData()" />
         </div>
         <div class="p-field">
           <label styleClass="p-col-fixed" style="margin-right: 10px;">Month: </label>
@@ -72,10 +72,31 @@
                 <br>
                 <p-calendar (onSelect)="getArticleDayData()" name="calendar" inputId="basic" [(ngModel)]="date1"></p-calendar>
             </div>
-        <div class="pie1">
+        <div class="pie3">
+          <p-chart type="pie" [data]="data"></p-chart>
+        </div>
+      </p-card>
+  </p-tabPanel>
+  <p-tabPanel header="Article from/to report">
+    <p-card>
+        <div *ngFor="let category of categories" class="p-field-checkbox">
+          <p-radioButton (click)="fixUpData()" [inputId]="category.key" name="category" [value]="category"
+            [(ngModel)]="selectedCategory" [disabled]="category.key === 'R'"></p-radioButton>
+          <label [for]="category.key">{{category.name}}</label>
+        </div>
+            <div class="p-field">
+                <label for="basic">Choose a start date: </label>
+                <br>
+                <p-calendar (onSelect)="getArticleFromToData()" name="calendar" inputId="basic" [(ngModel)]="date2"></p-calendar>
+            </div>
+            <div class="p-field">
+                <label for="basic">Choose an end date: </label>
+                <br>
+                <p-calendar (onSelect)="getArticleFromToData()" name="calendar" inputId="basic" [(ngModel)]="date3"></p-calendar>
+            </div>
+        <div class="pie4">
           <p-chart type="pie" [data]="data"></p-chart>
         </div>
       </p-card>
   </p-tabPanel>
 </p-tabView>
-<p-calendar [(ngModel)]="date1"></p-calendar>

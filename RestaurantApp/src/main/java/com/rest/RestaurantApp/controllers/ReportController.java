@@ -59,7 +59,8 @@ public class ReportController {
     }
 
     @GetMapping("/articleProfitBetweenDates/{dateFrom}/{dateTo}")
-    public ResponseEntity<ArticleReportDTO> articleProfitBetweenDates(Date dateFrom, Date dateTo) {
+    public ResponseEntity<ArticleReportDTO> articleProfitBetweenDates(@PathVariable("dateFrom") Date dateFrom,
+    																  @PathVariable("dateTo") Date dateTo) {
         ArticleReportDTO articleReport = reportService.articleProfitBetweenDates(dateFrom, dateTo);
 
         if(articleReport.getArticleProfits().isEmpty())

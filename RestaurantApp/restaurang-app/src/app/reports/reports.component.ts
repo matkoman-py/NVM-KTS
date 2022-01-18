@@ -13,6 +13,7 @@ import {
   Router
 } from "@angular/router"
 import { ArticleProfit } from '../modules/shared/models/articleProfit';
+import { ProfitDTO } from '../modules/shared/models/articleProfit';
 
 @Component({
   selector: 'app-reports',
@@ -23,9 +24,13 @@ import { ArticleProfit } from '../modules/shared/models/articleProfit';
 export class ReportsComponent implements OnInit {
   articleReportData: ArticleProfit;
   articleYearInput: number = 2021;
+  articleMonthYearInput: number = 2021;
   articleQuarterInput: any;
+  articleQuarterYearInput: number = 2021;
   articleMonthInput: any;
   date1: Date = new Date('01/3/2021');
+  date2: Date = new Date('01/1/2021');
+  date3: Date = new Date('12/30/2021');
 
   data: any;
   categories: any[] = 
@@ -77,6 +82,24 @@ export class ReportsComponent implements OnInit {
     else if(event.index == 1) this.getArticleQuarterData();
     else if(event.index == 2) this.getArticleMonthData();
     else if(event.index == 3) this.getArticleDayData();
+    else if(event.index == 4) this.getArticleFromToData();
+  }
+
+  getArticleFromToData(){
+    this.reportsService.articleProfitBetweenDates(this.date2, this.date3).subscribe((data) => {
+      this.articleReportData = data;
+      this.fixUpData();
+    },err => {
+      this.messageService.add({
+          key: 'tc',
+          severity: 'warn',
+          summary: 'No data available',
+          detail: err.error,
+          });
+      console.log(err.error);
+      this.makeEmptyData();
+      this.articleReportData.articleProfits = new Map();
+    });
   }
 
   getArticleDayData(){
@@ -94,11 +117,13 @@ export class ReportsComponent implements OnInit {
           detail: err.error,
           });
       console.log(err.error);
+      this.makeEmptyData();
+      this.articleReportData.articleProfits = new Map();
     });
   }
 
   getArticleMonthData(){
-    this.reportsService.articleProfitMonth(this.articleYearInput, this.articleMonthInput.value).subscribe((data) => {
+    this.reportsService.articleProfitMonth(this.articleMonthYearInput, this.articleMonthInput.value).subscribe((data) => {
       this.articleReportData = data;
       this.fixUpData();
     },err => {
@@ -109,11 +134,13 @@ export class ReportsComponent implements OnInit {
           detail: err.error,
           });
       console.log(err.error);
+      this.makeEmptyData();
+      this.articleReportData.articleProfits = new Map();
     });
   }
 
   getArticleQuarterData() {
-    this.reportsService.articleProfitQuarter(this.articleYearInput, this.articleQuarterInput.value).subscribe((data) => {
+    this.reportsService.articleProfitQuarter(this.articleQuarterYearInput, this.articleQuarterInput.value).subscribe((data) => {
       this.articleReportData = data;
       this.fixUpData();
     },err => {
@@ -124,6 +151,8 @@ export class ReportsComponent implements OnInit {
           detail: err.error,
           });
       console.log(err.error);
+      this.makeEmptyData();
+      this.articleReportData.articleProfits = new Map();
     });
   }
   
@@ -139,10 +168,26 @@ export class ReportsComponent implements OnInit {
           detail: err.error,
           });
       console.log(err.error);
+      this.makeEmptyData();
+      this.articleReportData.articleProfits = new Map();
     });
   }
 
+  makeEmptyData() {
+    this.data = {
+      labels: ['No data availabe'],
+      datasets: [{
+        data: [1],
+        backgroundColor: ['#808080'],
+      }]
+    };
+  }
+
   fixUpData() {
+    if(this.articleReportData.articleProfits.size == 0) {
+      this.makeEmptyData();
+      return;
+    }
     this.data = {
       labels: this.getNames(),
       datasets: [{
