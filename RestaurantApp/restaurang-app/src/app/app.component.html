@@ -1,14 +1,23 @@
 <div class="container-fluid">
-  <app-notification-bar></app-notification-bar>
   <div class="row">
     <div class="col">
       <app-navbar></app-navbar>
     </div>
   </div>
-
   <div class="row">
     <div class="col">
       <router-outlet></router-outlet>
     </div>
+  </div>
+  <app-notification-bar #notifications></app-notification-bar>
+
+  <!-- isto ifara dal se prikazuje  -->
+  <!-- samo da nije menadzer, ali da je ulogovan -->
+  <div class="message-button-div">
+    <i
+      class="pi pi-comments hover"
+      style="font-size: 3rem"
+      (click)="notifications.openSidebar()"
+    ></i>
   </div>
 </div>

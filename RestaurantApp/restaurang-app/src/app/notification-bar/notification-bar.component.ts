@@ -82,6 +82,17 @@ export class NotificationBarComponent implements OnInit {
     this.articleStatusChangedMessages.push(message.body);
   }
 
+  openSidebar(): void {
+    //ovde ide ifara
+    //if(loggedIn = Waiter){
+    //   this.articleChangedSidebar = true;
+    // }
+    // else{
+    //   this.newOrdersSidebar = true;
+    // }
+    this.articleChangedSidebar = true;
+  }
+
   ngOnInit(): void {
     this.primengConfig.ripple = true;
     this.connect();
