@@ -275,6 +275,9 @@ public class OrderService implements IOrderService {
 		}
 		Order order = orderData.get();
 		OrderedArticle orderedArticle = new OrderedArticle(ArticleStatus.NOT_TAKEN, newArticle, order, article.getDescription());
+		if(orderedArticle.getArticle().getActivePrice() != null) {
+			order.setPrice(order.getPrice() + orderedArticle.getArticle().getActivePrice().getSellingPrice());
+		}
 		OrderedArticle savedArticle = orderedArticleRepository.save(orderedArticle);
 		notifyCooksAndBarmenArticleCreated(savedArticle);
 		return new OrderedArticleDTO(savedArticle);
@@ -295,6 +298,7 @@ public class OrderService implements IOrderService {
 		if(!orderedArticle.getStatus().equals(ArticleStatus.NOT_TAKEN)) {
 			throw new OrderAlreadyTakenException("Can't delete ordered article with id " + orderedArticle.getId() + " because it is already taken");
 		}
+		
 		orderedArticle.setDeleted(true);
 		notifyCooksAndBarmenArticleDeleted(orderedArticle);
 		return new OrderedArticleDTO(orderedArticleRepository.save(orderedArticle));
