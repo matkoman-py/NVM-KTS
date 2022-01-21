@@ -41,6 +41,8 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { ReportsComponent } from './reports/reports.component';
 import { ChartModule } from 'primeng/chart';
 import {CalendarModule} from 'primeng/calendar';
+import { TableLayoutComponent } from './table-layout/table-layout.component';
+import { EditTableLayoutComponent } from './edit-table-layout/edit-table-layout.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +57,9 @@ import {CalendarModule} from 'primeng/calendar';
     OrdersComponent,
     ViewOrderComponent,
     IngredientsComponent,
-    ReportsComponent
+    ReportsComponent,
+    TableLayoutComponent,
+    EditTableLayoutComponent
   ],
   imports: [
     CalendarModule,

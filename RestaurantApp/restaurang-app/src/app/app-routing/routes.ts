@@ -9,6 +9,8 @@ import { OrdersComponent } from '../orders/orders.component';
 import { ViewOrderComponent } from '../view-order/view-order.component';
 import { IngredientsComponent } from '../ingredients/ingredients.component';
 import { ReportsComponent } from '../reports/reports.component';
+import { TableLayoutComponent } from '../table-layout/table-layout.component';
+import { EditTableLayoutComponent } from '../edit-table-layout/edit-table-layout.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -20,5 +22,7 @@ export const routes: Routes = [
   { path: 'active-orders', component: OrdersComponent},
   { path: 'view-order-kitchen/:id', component: ViewOrderComponent},
   { path: 'ingredients', component: IngredientsComponent},
-  { path: 'reports', component: ReportsComponent}
+  { path: 'reports', component: ReportsComponent},
+  { path: 'table-layout', component: TableLayoutComponent },
+  { path: 'edit-table-layout', component: EditTableLayoutComponent },
 ];
