@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface IIngredientService {
     List<IngredientDTO> getAll();
+    
+    List<IngredientDTO> search(String name, String type);
 
     IngredientDTO getOne(int id);
 

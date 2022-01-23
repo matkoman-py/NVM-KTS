@@ -19,6 +19,9 @@ export class IngredientType {
 export class IngredientsComponent implements OnInit {
 
   ingredients: Ingredient[] = [];
+  nameSearch: String = "";
+  typeSearch: String = "";
+
   selectedIngredient: Ingredient = {id:0, name: '', allergen: false};
   ingredient: Ingredient = {};
   ingredientId: number = 0;
@@ -110,6 +113,22 @@ delete() : void {
       console.log(res);
       this.selectedIngredient = {id:0};
       
+    })
+  }
+
+  search() : void {
+    let search = this.nameSearch.trim();
+    let type = "";
+    if(!this.selectedType) {
+      this.selectedType = {name: ""};
+    }
+    if(this.selectedType.name == "Just allergens") {
+      type = "allergen";
+    } else if(this.selectedType.name == "No allergens") {
+      type = "notAllergen"
+    }
+    this.ingredientService.searchIngredients(search, type).subscribe(res => {
+      this.ingredients = res;
     })
   }
 

@@ -33,6 +33,13 @@ public class IngredientServiceTest {
 
         assertEquals(8, ingredients.size());
     }
+    
+    @Test
+    public void testSearch() {
+        List<IngredientDTO> ingredients = ingredientService.search("ba","allergen");
+
+        assertEquals(1, ingredients.size());
+    }
 
     @Test
     public void testGetOne_ValidId() {

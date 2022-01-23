@@ -57,6 +57,11 @@ public class IngredientServiceTest {
         ingredient3.setId(2);
         ingredient3.setDeleted(false);
         ingredients.add(ingredient3);
+        
+        Ingredient ingredient4 = new Ingredient("Ham", true);
+        ingredient4.setId(4);
+        ingredient3.setDeleted(false);
+        ingredients.add(ingredient4);
 
         given(ingredientRepository.findAll()).willReturn(ingredients);
         given(ingredientRepository.findById(0)).willReturn(Optional.of(ingredient1));
@@ -78,8 +83,15 @@ public class IngredientServiceTest {
         List<IngredientDTO> found = ingredientService.getAll();
         System.out.println(ingredientService.getAll().size());
 //        verify(ingredientRepository, times(1)).findAll();
-        assertEquals(3, found.size());
+        assertEquals(4, found.size());
     }
+    
+    @Test
+    public void testSearch() {
+        List<IngredientDTO> found = ingredientService.search("Ham", "allergen");
+        assertEquals(1, found.size());
+    }
+    
 
     @Test
     public void testGetOne_ValidId() {

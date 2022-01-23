@@ -18,9 +18,9 @@
     </div>
     <div class="p-sm-12 p-lg-9 p-mt-2">
         <div class="p-mb-2 p-mt-4 p-d-flex p-jc-center">
-            <input type="text" class = "p-mx-2" pInputText placeholder="Search by name">
+            <input type="text" class = "p-mx-2" pInputText placeholder="Search by name" [(ngModel)]="nameSearch">
             <p-dropdown [options]="ingredientType" placeholder="Select type of ingredients" optionLabel="name" [showClear]="true" [(ngModel)]="selectedType" ></p-dropdown>
-            <button pButton type="button" class="p-col-3 p-mr-1 p-ml-1" label="Search"></button>
+            <button pButton type="button" class="p-col-3 p-mr-1 p-ml-1" label="Search" (click)="search()"></button>
         </div>
         <p-table selectionMode="single" [value]="ingredients" [(selection)]="selectedIngredient" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" >
             <ng-template pTemplate="header">

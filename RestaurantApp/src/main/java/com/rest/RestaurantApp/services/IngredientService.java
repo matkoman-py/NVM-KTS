@@ -84,4 +84,22 @@ public class IngredientService implements IIngredientService {
 
         return new IngredientDTO(updatedIngredient);
     }
+
+	@Override
+	public List<IngredientDTO> search(String name, String type) {
+		if(type.equals("") && name.equals("")) {
+			return ingredientRepository.findAll().stream().map(ingredient -> new IngredientDTO(ingredient)).collect(Collectors.toList());
+		} else if(type.equals("") && !name.equals("")) {
+			return ingredientRepository.findAll().stream().map(ingredient -> new IngredientDTO(ingredient)).filter(i->i.getName().toLowerCase().contains(name.toLowerCase())).collect(Collectors.toList());
+		}
+		
+		boolean isAllergen;
+		if(type.equals("allergen")) {
+			isAllergen = true;
+		} else {
+			isAllergen = false;
+		}
+		
+		return ingredientRepository.findAll().stream().map(ingredient -> new IngredientDTO(ingredient)).filter(i->i.getName().toLowerCase().contains(name.toLowerCase()) && i.isAllergen() == isAllergen).collect(Collectors.toList());
+	}
 }
