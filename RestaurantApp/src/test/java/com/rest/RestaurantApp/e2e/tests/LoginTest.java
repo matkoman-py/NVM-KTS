@@ -83,8 +83,6 @@ public class LoginTest {
 		assertEquals("http://localhost:4200/home", browser.getCurrentUrl());
 	}
 	
-	
-	//OVO KOMENTARISI ZA VREME DEVELOPMENTA
 	@After
 	public void closeSelenium() {
 		// Shutdown the browser
