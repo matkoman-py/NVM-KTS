@@ -11,9 +11,10 @@
   </div>
   <app-notification-bar #notifications></app-notification-bar>
 
-  <!-- isto ifara dal se prikazuje  -->
-  <!-- samo da nije menadzer, ali da je ulogovan -->
-  <div class="message-button-div">
+  <div
+    class="message-button-div"
+    *ngIf="role !== 'ROLE_MANAGER' && role !== ''"
+  >
     <i
       class="pi pi-comments hover"
       style="font-size: 3rem"

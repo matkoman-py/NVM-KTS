@@ -10,7 +10,7 @@ import { ButtonModule } from 'primeng/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login/components/login.component';
 import { PasswordModule } from 'primeng/password';
-import { TabViewModule } from 'primeng/tabview'
+import { TabViewModule } from 'primeng/tabview';
 import { LoginService } from './login/services/login.service';
 import { ArticlesComponent } from './articles/articles.component';
 import { EmployeesComponent } from './employees/employees.component';
@@ -19,28 +19,29 @@ import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ToastModule } from 'primeng/toast';
-import {CheckboxModule} from 'primeng/checkbox';
-import {AutoCompleteModule} from 'primeng/autocomplete';
+import { CheckboxModule } from 'primeng/checkbox';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 import { RippleModule } from 'primeng/ripple';
-import {RadioButtonModule} from 'primeng/radiobutton';
+import { RadioButtonModule } from 'primeng/radiobutton';
 import { CreateArticleComponent } from './create-article/create-article.component';
-import {MultiSelectModule} from 'primeng/multiselect';
-import {MessagesModule} from 'primeng/messages';
-import {MessageModule} from 'primeng/message';
-import {InputNumberModule} from 'primeng/inputnumber';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { NotificationBarComponent } from './notification-bar/notification-bar.component';
 import { SidebarModule } from 'primeng/sidebar';
 import { BadgeModule } from 'primeng/badge';
 import { UpdateArticleComponent } from './update-article/update-article.component';
 import { OrdersComponent } from './orders/orders.component';
 import { ViewOrderComponent } from './view-order/view-order.component';
-import { CardModule } from "primeng/card";
+import { CardModule } from 'primeng/card';
 import { DialogModule } from 'primeng/dialog';
 import { IngredientsComponent } from './ingredients/ingredients.component';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ReportsComponent } from './reports/reports.component';
 import { ChartModule } from 'primeng/chart';
-import {CalendarModule} from 'primeng/calendar';
+import { CalendarModule } from 'primeng/calendar';
+import { LogoutComponent } from './logout/component/logout.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import {CalendarModule} from 'primeng/calendar';
     OrdersComponent,
     ViewOrderComponent,
     IngredientsComponent,
-    ReportsComponent
+    ReportsComponent,
+    LogoutComponent,
   ],
   imports: [
     CalendarModule,

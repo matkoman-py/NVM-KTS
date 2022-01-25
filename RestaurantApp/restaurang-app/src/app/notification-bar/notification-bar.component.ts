@@ -18,6 +18,7 @@ export class NotificationBarComponent implements OnInit {
   newOrderMessages: String[] = [];
   articleStatusChangedMessages: String[] = [];
 
+  role: string | null = '';
   constructor(
     private messageService: MessageService,
     private primengConfig: PrimeNGConfig
@@ -64,7 +65,7 @@ export class NotificationBarComponent implements OnInit {
 
   onNewOrderReceived(message: Message) {
     this.messageService.add({
-      key: 'br',
+      key: 'kitchen_workers',
       severity: 'info',
       summary: 'Notification',
       detail: 'New order: ' + message.body,
@@ -74,7 +75,7 @@ export class NotificationBarComponent implements OnInit {
 
   onArticleStatusChangedReceived(message: Message) {
     this.messageService.add({
-      key: 'br',
+      key: 'waiters',
       severity: 'info',
       summary: 'Notification',
       detail: 'Article status changed: ' + message.body,
@@ -83,14 +84,13 @@ export class NotificationBarComponent implements OnInit {
   }
 
   openSidebar(): void {
-    //ovde ide ifara
-    //if(loggedIn = Waiter){
-    //   this.articleChangedSidebar = true;
-    // }
-    // else{
-    //   this.newOrdersSidebar = true;
-    // }
-    this.articleChangedSidebar = true;
+    if (localStorage.getItem('role') === 'WAITER') {
+      this.articleChangedSidebar = true;
+      this.role = 'WAITER';
+    } else {
+      this.newOrdersSidebar = true;
+      this.role = 'KITCHEN_WORKER';
+    }
   }
 
   ngOnInit(): void {

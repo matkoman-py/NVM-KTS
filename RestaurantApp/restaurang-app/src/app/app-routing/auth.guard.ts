@@ -6,8 +6,6 @@ import {
   RouterStateSnapshot,
   UrlTree,
 } from '@angular/router';
-import { Observable } from 'rxjs';
-import jwt_decode from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
@@ -20,33 +18,20 @@ export class AuthGuard implements CanActivate {
     // on the data property
     const expectedRole = route.data['expectedRoles'];
     // decode the token to get its payload
-    const tokenPayload = this.findUserRole();
+    const tokenPayload = localStorage.getItem('role');
 
-    if (tokenPayload === '') {
+    if (localStorage.getItem('isLoggedIn') !== 'true') {
       this.router.navigate(['login']);
       return false;
     }
     if (!expectedRole.includes(tokenPayload)) {
-      this.router.navigate(['home']);
+      if (tokenPayload === 'WAITER' || tokenPayload === 'ROLE_MANAGER') {
+        this.router.navigate(['home']);
+      } else {
+        this.router.navigate(['active-orders']);
+      }
       return false;
     }
     return true;
   }
-
-  findUserRole = () => {
-    let role = localStorage.getItem('token');
-    console.log(role);
-    let user: any;
-
-    if (role) {
-      user = jwt_decode(role);
-    }
-    console.log(user);
-    if (user !== undefined)
-      return user.authority[0].name === undefined
-        ? user.authority[0].authority
-        : user.authority[0].name;
-
-    return '';
-  };
 }
