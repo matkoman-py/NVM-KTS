@@ -19,11 +19,7 @@ export class LoginComponent implements OnInit {
   validLogin: boolean = true;
   validPin: boolean = true;
 
-  constructor(
-    private loginService: LoginService,
-    private messageService: MessageService,
-    private router: Router
-  ) {}
+  constructor(private loginService: LoginService, private router: Router) {}
 
   onPriviledgeLogin = () => {
     const auth: Login = {
@@ -32,9 +28,14 @@ export class LoginComponent implements OnInit {
     };
     this.loginService.priviledgedUserLogin(auth).subscribe(
       (response: any) => {
+        var role = this.findUserRole(response.body.accessToken);
+        if (role != undefined) {
+          localStorage.setItem('role', role);
+          localStorage.setItem('isLoggedIn', 'true');
+        }
+        this.loginService.emitLogin();
         this.router.navigate(['home']);
-        localStorage.setItem('token', response.body.accessToken);
-        this.loginService.findUserRole(response.body.accessToken);
+
         console.log(jwt_decode(response.body.accessToken));
         //if((<any>jwt_decode(response.body.accessToken)).roles.filter((o: { name: string; }) => {o.name === 'ROLE_MANAGER'})) alert('jaj');
         // alert(this.findUserRole(jwt_decode(response.body.accessToken)));
@@ -52,10 +53,18 @@ export class LoginComponent implements OnInit {
     };
     this.loginService.priviledgedUserLogin(auth).subscribe(
       (response: any) => {
-        localStorage.setItem('token', response.body.accessToken);
         console.log(jwt_decode(response.body.accessToken));
-        this.loginService.findUserRole(response.body.accessToken);
-        this.router.navigate(['home']);
+        var role = this.findUserRole(response.body.accessToken);
+        if (role != undefined) {
+          localStorage.setItem('role', role);
+          localStorage.setItem('isLoggedIn', 'true');
+        }
+        this.loginService.emitLogin();
+        if (role === 'WAITER') {
+          this.router.navigate(['home']);
+        } else {
+          this.router.navigate(['active-orders']);
+        }
         // alert(this.findUserRole(jwt_decode(response.body.accessToken)));
       },
       (error) => {
@@ -64,10 +73,21 @@ export class LoginComponent implements OnInit {
     );
   };
 
-  findUserRole = (user: any) => {
-    return user.authority[0].name === undefined
-      ? user.authority[0].authority
-      : user.authority[0].name;
+  findUserRole = (token: any) => {
+    console.log('hahahah');
+    let user: any;
+
+    if (token) {
+      user = jwt_decode(token);
+    }
+
+    if (user !== undefined) {
+      return user.authority[0].name === undefined
+        ? user.authority[0].authority
+        : user.authority[0].name;
+    }
+
+    return undefined;
   };
 
   checkEmptyFields() {

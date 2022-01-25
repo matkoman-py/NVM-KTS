@@ -10,8 +10,17 @@ import { ViewOrderComponent } from '../view-order/view-order.component';
 import { IngredientsComponent } from '../ingredients/ingredients.component';
 import { ReportsComponent } from '../reports/reports.component';
 import { AuthGuard } from './auth.guard';
+import { LogoutComponent } from '../logout/component/logout.component';
 
 export const routes: Routes = [
+  {
+    path: 'logout',
+    component: LogoutComponent,
+    canActivate: [AuthGuard],
+    data: {
+      expectedRoles: ['ROLE_MANAGER', 'COOK', 'BARMAN', 'WAITER'],
+    },
+  },
   { path: 'login', component: LoginComponent },
   {
     path: 'home',

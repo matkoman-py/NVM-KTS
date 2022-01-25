@@ -1,4 +1,14 @@
-<p-toast position="bottom-right" key="br"></p-toast>
+<p-toast
+  *ngIf="role === 'WAITER'"
+  position="bottom-right"
+  key="waiters"
+></p-toast>
+<p-toast
+  *ngIf="role !== 'WAITER'"
+  position="bottom-right"
+  key="kitchen_workers"
+></p-toast>
+
 <p-sidebar
   [(visible)]="newOrdersSidebar"
   position="right"
