@@ -19,6 +19,9 @@ export class IngredientType {
 export class IngredientsComponent implements OnInit {
 
   ingredients: Ingredient[] = [];
+  nameSearch: String = "";
+  typeSearch: String = "";
+
   selectedIngredient: Ingredient = {id:0, name: '', allergen: false};
   ingredient: Ingredient = {};
   ingredientId: number = 0;
@@ -68,25 +71,16 @@ export class IngredientsComponent implements OnInit {
   }
 
   create() : void {
-    if (this.ingredients.filter(ing => ing.name == this.ingredient.name).length != 0) {
+    this.ingredientService.createIngredient(this.ingredient).subscribe(res=> {
       this.messageService.add({
         key: 'tc',
-        severity: 'warn',
-        summary: 'Fail',
-        detail: 'Ingredient with name ' + this.ingredient.name + ' already exists',
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Ingredient successfully created',
       });
-      return;
-  }
-  this.ingredientService.createIngredient(this.ingredient).subscribe(res=> {
-    this.messageService.add({
-      key: 'tc',
-      severity: 'success',
-      summary: 'Success',
-      detail: 'Ingredient successfully created',
-    });
-    this.getAllIngredients();
-    this.selectedIngredient = {id:0};
-  })
+      this.getAllIngredients();
+      this.selectedIngredient = {id:0};
+    })
 }
 
 delete() : void {
@@ -113,16 +107,33 @@ delete() : void {
     })
   }
 
-  update() : void {
-    if (this.ingredients.filter(ing => ing.name == this.ingredient.name && ing.id != this.selectedIngredient.id).length != 0) {
-      this.messageService.add({
-        key: 'tc',
-        severity: 'warn',
-        summary: 'Fail',
-        detail: 'Ingredient with name ' + this.ingredient.name + ' already exists',
-      });
-      return;
+  search() : void {
+    let search = this.nameSearch.trim();
+    let type = "";
+    if(!this.selectedType) {
+      this.selectedType = {name: ""};
+      
+    }
+    if(this.selectedType.name == "Just allergens") {
+      type = "allergen";
+    } else if(this.selectedType.name == "No allergens") {
+      type = "notAllergen"
+    }
+    this.ingredientService.searchIngredients(search, type).subscribe(res => {
+      this.ingredients = res;
+    })
   }
+
+  update() : void {
+  //   if (this.ingredients.filter(ing => ing.name == this.ingredient.name && ing.id != this.selectedIngredient.id).length != 0) {
+  //     this.messageService.add({
+  //       key: 'tc',
+  //       severity: 'warn',
+  //       summary: 'Fail',
+  //       detail: 'Ingredient with name ' + this.ingredient.name + ' already exists',
+  //     });
+  //     return;
+  // }
   this.ingredient.name = this.ingredient.name == '' ? this.selectedIngredient.name : this.ingredient.name;
   this.ingredientService.updateIngredients(this.selectedIngredient.id!, this.ingredient).subscribe(res=> 
     {

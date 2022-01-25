@@ -4,23 +4,23 @@
         <div class="p-fluid">
             <div class="p-field">
                 <label styleClass="p-col-fixed" >Name:</label>
-                <input type="text" pInputText [(ngModel)]="ingredient.name">
+                <input type="text" pInputText [(ngModel)]="ingredient.name" id="create-name">
             </div>
             <div class="p-field">
                 <label>Is an allergen:</label>
                 <br>
-                <p-checkbox [binary]="true" [(ngModel)]="ingredient.allergen"></p-checkbox>
+                <p-checkbox [binary]="true" [(ngModel)]="ingredient.allergen" id="checkbox-allergen"></p-checkbox>
             </div>
         </div>
-        <button pButton type="button" class="p-sm-12 p-md-12 p-lg-3 p-m-1 p-button-success" label="Create" (click)="create()" [disabled]="(ingredient.name || '').toString().trim().length === 0"></button>
-        <button pButton type="button" class="p-sm-12 p-md-12 p-lg-3 p-m-1" label="Update" [disabled]="selectedIngredient.id == 0" (click)="update()"></button>
-        <button pButton type="button" class="p-sm-12 p-md-12 p-lg-3 p-m-1 p-button-danger" label="Delete" [disabled]="selectedIngredient.id == 0" (click)="delete()"></button>
+        <button pButton type="button" class="p-sm-12 p-md-12 p-lg-3 p-m-1 p-button-success" label="Create" (click)="create()" [disabled]="(ingredient.name || '').toString().trim().length === 0" id="create-button"></button>
+        <button pButton type="button" class="p-sm-12 p-md-12 p-lg-3 p-m-1" label="Update" [disabled]="selectedIngredient.id == 0" (click)="update()" id="update-button"></button>
+        <button pButton type="button" class="p-sm-12 p-md-12 p-lg-3 p-m-1 p-button-danger" label="Delete" [disabled]="selectedIngredient.id == 0" (click)="delete()" id="delete-button"></button>
     </div>
     <div class="p-sm-12 p-lg-9 p-mt-2">
         <div class="p-mb-2 p-mt-4 p-d-flex p-jc-center">
-            <input type="text" class = "p-mx-2" pInputText placeholder="Search by name">
+            <input type="text" class = "p-mx-2" pInputText placeholder="Search by name" [(ngModel)]="nameSearch" id="search-name">
             <p-dropdown [options]="ingredientType" placeholder="Select type of ingredients" optionLabel="name" [showClear]="true" [(ngModel)]="selectedType" ></p-dropdown>
-            <button pButton type="button" class="p-col-3 p-mr-1 p-ml-1" label="Search"></button>
+            <button pButton type="button" class="p-col-3 p-mr-1 p-ml-1" label="Search" (click)="search()" id="search-button"></button>
         </div>
         <p-table selectionMode="single" [value]="ingredients" [(selection)]="selectedIngredient" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" >
             <ng-template pTemplate="header">
