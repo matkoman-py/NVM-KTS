@@ -13,7 +13,14 @@ import { AuthGuard } from './auth.guard';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'home', component: HomeComponent },
+  {
+    path: 'home',
+    component: HomeComponent,
+    canActivate: [AuthGuard],
+    data: {
+      expectedRoles: ['ROLE_MANAGER', 'COOK', 'BARMAN', 'WAITER'],
+    },
+  },
   {
     path: 'articles',
     component: ArticlesComponent,

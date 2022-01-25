@@ -87,52 +87,10 @@ export class NavbarComponent implements OnInit {
         visible: this.role === 'ROLE_MANAGER',
       },
     ];
-    // this.role = role;
-    // this.items = [
-    //   {
-    //     label: 'Home',
-    //     icon: 'pi pi-fw pi-home',
-    //     routerLink: '/home',
-    //   },
-    //   {
-    //     label: 'Login',
-    //     icon: 'pi pi-fw pi-user',
-    //     routerLink: '/login',
-    //   },
-    //   {
-    //     label: 'Articles',
-    //     icon: 'pi pi-fw pi-user',
-    //     routerLink: '/articles',
-    //     visible: this.role === 'ROLE_MANAGER',
-    //   },
-    //   {
-    //     label: 'Orders',
-    //     icon: 'pi pi-fw pi-user',
-    //     routerLink: '/active-orders',
-    //     visible: this.role === 'BARMAN' || this.role === 'COOK',
-    //   },
-    //   {
-    //     label: 'Reports',
-    //     icon: 'pi pi-fw pi-user',
-    //     routerLink: '/reports',
-    //     visible: this.role === 'ROLE_MANAGER',
-    //   },
-    //   {
-    //     label: 'Employees',
-    //     icon: 'pi pi-fw pi-user',
-    //     routerLink: '/employees',
-    //     visible: this.role === 'ROLE_MANAGER',
-    //   },
-    //   {
-    //     label: 'Create Article',
-    //     icon: 'pi pi-fw pi-plus-circle',
-    //     routerLink: '/create-article',
-    //     visible: this.role === 'ROLE_MANAGER',
-    //   },
-    // ];
   };
 
   ngOnInit(): void {
+    //NEOPHODNO RESETOVANJE ZBOG NAVIGIRANJA
     this.setNavbarItems('');
     this.loginService.getUserRole.subscribe((role) => {
       this.setNavbarItems(role);
