@@ -205,6 +205,15 @@ export class EditTableLayoutComponent implements OnInit {
   removeTable() {
     var itemsToRemove = this.canvas.getActiveObject();
     this.canvas.remove(itemsToRemove);
+    this.table_num = 0;
+    
+    this.canvas.forEachObject((o : any) => {
+      o.id = ++this.table_num;
+      let text : fabric.Text = <fabric.Text> o.getObjects("text")[0];
+      text.set('text', "Table " + this.table_num);
+    })
+    
+    this.canvas.renderAll();
   }
 
 }
