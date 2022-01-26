@@ -60,7 +60,7 @@ import { LogoutComponent } from './logout/component/logout.component';
     IngredientsComponent,
     ReportsComponent,
     TableLayoutComponent,
-    EditTableLayoutComponent
+    EditTableLayoutComponent,
     LogoutComponent,
   ],
   imports: [
