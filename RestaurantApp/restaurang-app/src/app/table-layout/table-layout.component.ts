@@ -35,9 +35,10 @@ export class TableLayoutComponent implements OnInit {
   setTableEvents() {
     this.canvas.forEachObject((o : any) => {
       o.selectable = false;
-      o.order_id = 1;
+
       if(o.order_id !== undefined)
         o.getObjects('rect')[0].set('fill', 'green');
+        
       o.on('mousedown', (e : any) => {
         if(o.order_id !== undefined) {
           // ovde se radi rutiranje na stranicu
@@ -46,5 +47,6 @@ export class TableLayoutComponent implements OnInit {
     })
     this.canvas.renderAll();
   }
+
 
 }
