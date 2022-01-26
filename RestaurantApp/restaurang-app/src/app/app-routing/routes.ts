@@ -1,3 +1,4 @@
+import { AuthGuard } from './auth.guard';
 import { Routes } from '@angular/router';
 import { ArticlesComponent } from '../articles/articles.component';
 import { EmployeesComponent } from '../employees/employees.component';
@@ -11,7 +12,6 @@ import { IngredientsComponent } from '../ingredients/ingredients.component';
 import { ReportsComponent } from '../reports/reports.component';
 import { TableLayoutComponent } from '../table-layout/table-layout.component';
 import { EditTableLayoutComponent } from '../edit-table-layout/edit-table-layout.component';
-import { AuthGuard } from './auth.guard';
 import { LogoutComponent } from '../logout/component/logout.component';
 
 export const routes: Routes = [
@@ -23,7 +23,10 @@ export const routes: Routes = [
       expectedRoles: ['ROLE_MANAGER', 'COOK', 'BARMAN', 'WAITER'],
     },
   },
-  { path: 'login', component: LoginComponent },
+  { 
+    path: 'login',
+    component: LoginComponent,
+  },
   { path: 'table-layout', component: TableLayoutComponent },
   { path: 'edit-table-layout', component: EditTableLayoutComponent },
   {
@@ -97,5 +100,10 @@ export const routes: Routes = [
     data: {
       expectedRoles: ['ROLE_MANAGER'],
     },
+  },
+  {
+    path: '**',
+    redirectTo: '/login',
+    pathMatch: 'full'
   },
 ];
