@@ -1,7 +1,9 @@
+import { i18nMetaToJSDoc } from '@angular/compiler/src/render3/view/i18n/meta';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import jwt_decode from 'jwt-decode';
 import { MenuItem } from 'primeng/api';
 import { LoginService } from '../login/services/login.service';
+import { LogoutService } from '../logout/service/logout.service';
 
 @Component({
   selector: 'app-navbar',
@@ -9,20 +11,7 @@ import { LoginService } from '../login/services/login.service';
   styleUrls: ['./navbar.component.css'],
 })
 export class NavbarComponent implements OnInit {
-  role : string = '';
-
-  findUserRole = () => {
-    let role = localStorage.getItem('token');
-    console.log(role);
-    let user : any;
-
-    if(role) {
-      user = jwt_decode(role);
-    }
-
-    if(user !== undefined)
-      return user.authority[0].name === undefined ? user.authority[0].authority : user.authority[0].name;
-  }
+  role: string | null = '';
 
   items: MenuItem[] = [
     {
@@ -33,38 +22,62 @@ export class NavbarComponent implements OnInit {
   ];
 
   constructor(
-    private ref : ChangeDetectorRef,
-    private loginService : LoginService) {
+    private loginService: LoginService,
+    private logoutService: LogoutService
+  ) {
+    this.loginService.getUserRole.subscribe(() => {
+      this.setNavbarItems();
+    });
+    this.logoutService.logout.subscribe(() => {
+      this.setLogoutItems();
+    });
   }
 
+  setLogoutItems = () => {
+    this.items = [
+      {
+        label: 'Login',
+        icon: 'pi pi-fw pi-user',
+        routerLink: '/login',
+      },
+    ];
+  };
+
   setNavbarItems = () => {
-    this.loginService.getUserRole.subscribe(role => {
-      this.role = role;
+    this.role = localStorage.getItem('role');
+    if (this.role === '') {
       this.items = [
-        {
-          label: 'Home',
-          icon: 'pi pi-fw pi-home',
-          routerLink: '/home',
-        },
         {
           label: 'Login',
           icon: 'pi pi-fw pi-user',
           routerLink: '/login',
         },
+      ];
+    } else {
+      this.items = [
+        {
+          label: 'Home',
+          icon: 'pi pi-fw pi-home',
+          routerLink: '/home',
+          visible: this.role === 'ROLE_MANAGER' || this.role === 'WAITER',
+        },
         {
           label: 'Articles',
           icon: 'pi pi-fw pi-user',
           routerLink: '/articles',
+          visible: this.role === 'ROLE_MANAGER',
         },
         {
           label: 'Orders',
           icon: 'pi pi-fw pi-user',
           routerLink: '/active-orders',
+          visible: this.role === 'BARMAN' || this.role === 'COOK',
         },
         {
           label: 'Reports',
           icon: 'pi pi-fw pi-user',
           routerLink: '/reports',
+          visible: this.role === 'ROLE_MANAGER',
         },
         {
           label: 'Employees',
@@ -78,9 +91,25 @@ export class NavbarComponent implements OnInit {
           routerLink: '/create-article',
           visible: this.role === 'ROLE_MANAGER',
         },
+        {
+          label: 'Ingredients',
+          icon: 'pi pi-fw pi-plus-circle',
+          routerLink: '/ingredients',
+          visible: this.role === 'ROLE_MANAGER',
+        },
+        {
+          label: 'Logout',
+          icon: 'pi pi-fw pi-user',
+          routerLink: '/logout',
+          visible:
+            this.role === 'ROLE_MANAGER' ||
+            this.role === 'COOK' ||
+            this.role === 'WAITER' ||
+            this.role === 'BARMAN',
+        },
       ];
-    });
-  }
+    }
+  };
 
   ngOnInit(): void {
     this.setNavbarItems();

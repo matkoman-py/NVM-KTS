@@ -21,6 +21,7 @@ public class LoginTest {
 	@Before
 	public void setupSelenium() {
 		// instantiate browser
+		System.out.println("DASDSAD");
 		System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
 		browser = new ChromeDriver();
 		// maximize window
@@ -83,8 +84,6 @@ public class LoginTest {
 		assertEquals("http://localhost:4200/home", browser.getCurrentUrl());
 	}
 	
-	
-	//OVO KOMENTARISI ZA VREME DEVELOPMENTA
 	@After
 	public void closeSelenium() {
 		// Shutdown the browser

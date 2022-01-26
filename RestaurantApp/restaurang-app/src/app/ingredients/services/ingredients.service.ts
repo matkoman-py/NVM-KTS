@@ -28,4 +28,7 @@ export class IngredientsService {
   updateIngredients(id: number, ingredient: Ingredient): Observable<Ingredient> {
     return this.http.put<Ingredient>('/api/ingredient/'+id, ingredient);
   }
+  searchIngredients(name: String, type: String): Observable<Ingredient[]> {
+    return this.http.get<Ingredient[]>("/api/ingredient/search?name="+name+"&type="+type);
+  }
 }

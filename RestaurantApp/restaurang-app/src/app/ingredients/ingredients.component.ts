@@ -19,7 +19,10 @@ export class IngredientType {
 export class IngredientsComponent implements OnInit {
 
   ingredients: Ingredient[] = [];
-  selectedIngredient: Ingredient = {id:0, name: '', allergen: false};
+  nameSearch: String = "";
+  typeSearch: String = "";
+
+  selectedIngredient: Ingredient | null = {id:0, name: '', allergen: false};
   ingredient: Ingredient = {};
   ingredientId: number = 0;
   value: boolean = true;
@@ -61,36 +64,27 @@ export class IngredientsComponent implements OnInit {
   }
 
   isAnAllergen(): boolean {
-    if(this.selectedIngredient.allergen) {
+    if(this.selectedIngredient!.allergen) {
       return true;
     }
     return false;
   }
 
   create() : void {
-    if (this.ingredients.filter(ing => ing.name == this.ingredient.name).length != 0) {
+    this.ingredientService.createIngredient(this.ingredient).subscribe(res=> {
       this.messageService.add({
         key: 'tc',
-        severity: 'warn',
-        summary: 'Fail',
-        detail: 'Ingredient with name ' + this.ingredient.name + ' already exists',
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Ingredient successfully created',
       });
-      return;
-  }
-  this.ingredientService.createIngredient(this.ingredient).subscribe(res=> {
-    this.messageService.add({
-      key: 'tc',
-      severity: 'success',
-      summary: 'Success',
-      detail: 'Ingredient successfully created',
-    });
-    this.getAllIngredients();
-    this.selectedIngredient = {id:0};
-  })
+      this.getAllIngredients();
+      this.selectedIngredient = null;
+    })
 }
 
 delete() : void {
-  if (this.selectedIngredient.id == 0) {
+  if (this.selectedIngredient!.id == 0) {
     this.messageService.add({
       key: 'tc',
       severity: 'warn',
@@ -99,7 +93,7 @@ delete() : void {
     });
     return;
   }
-    this.ingredientService.deleteIngredients(this.selectedIngredient.id).subscribe(res=> {
+    this.ingredientService.deleteIngredients(this.selectedIngredient!.id).subscribe(res=> {
       this.getAllIngredients();
       this.messageService.add({
         key: 'tc',
@@ -108,32 +102,49 @@ delete() : void {
         detail: res,
       });
       console.log(res);
-      this.selectedIngredient = {id:0};
+      this.selectedIngredient = null;
       
     })
   }
 
-  update() : void {
-    if (this.ingredients.filter(ing => ing.name == this.ingredient.name && ing.id != this.selectedIngredient.id).length != 0) {
-      this.messageService.add({
-        key: 'tc',
-        severity: 'warn',
-        summary: 'Fail',
-        detail: 'Ingredient with name ' + this.ingredient.name + ' already exists',
-      });
-      return;
+  search() : void {
+    let search = this.nameSearch.trim();
+    let type = "";
+    if(!this.selectedType) {
+      this.selectedType = {name: ""};
+      
+    }
+    if(this.selectedType.name == "Just allergens") {
+      type = "allergen";
+    } else if(this.selectedType.name == "No allergens") {
+      type = "notAllergen"
+    }
+    this.ingredientService.searchIngredients(search, type).subscribe(res => {
+      this.ingredients = res;
+    })
   }
-  this.ingredient.name = this.ingredient.name == '' ? this.selectedIngredient.name : this.ingredient.name;
-  this.ingredientService.updateIngredients(this.selectedIngredient.id!, this.ingredient).subscribe(res=> 
+
+  update() : void {
+  //   if (this.ingredients.filter(ing => ing.name == this.ingredient.name && ing.id != this.selectedIngredient.id).length != 0) {
+  //     this.messageService.add({
+  //       key: 'tc',
+  //       severity: 'warn',
+  //       summary: 'Fail',
+  //       detail: 'Ingredient with name ' + this.ingredient.name + ' already exists',
+  //     });
+  //     return;
+  // }
+  this.ingredient.name = this.ingredient.name == '' ? this.selectedIngredient!.name : this.ingredient.name;
+  this.ingredientService.updateIngredients(this.selectedIngredient!.id!, this.ingredient).subscribe(res=> 
     {
       this.messageService.add({
         key: 'tc',
         severity: 'success',
         summary: 'Success',
-        detail: 'Ingredient with id ' + this.selectedIngredient.id + ' successfully updated',
+        detail: 'Ingredient with id ' + this.selectedIngredient!.id + ' successfully updated',
       });
       this.getAllIngredients();
-      this.selectedIngredient = {id:0};
+      this.selectedIngredient = null;
     
     })
 }

@@ -41,6 +41,18 @@ public class IngredientControllerTest {
         assertEquals(ingredients.length, 8);
 
     }
+    
+    @Test
+    void testSearch() {
+        ResponseEntity<IngredientDTO[]> response = restTemplate.withBasicAuth("manager_test", "test")
+                .getForEntity("/api/ingredient/search?name=ba&type=allergen", IngredientDTO[].class);
+
+        IngredientDTO[] ingredients = response.getBody();
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(ingredients.length, 1);
+
+    }
 
     @Test
     void testGetOne_ValidId() {

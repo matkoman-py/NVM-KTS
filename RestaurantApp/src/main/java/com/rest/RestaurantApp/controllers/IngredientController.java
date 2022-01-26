@@ -43,6 +43,12 @@ public class IngredientController {
         IngredientDTO ingredient = ingredientService.getOne(id);
         return new ResponseEntity<>(ingredient, HttpStatus.OK);
     }
+    
+    @GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<IngredientDTO>> search(@RequestParam(value = "type", required = false, defaultValue = "") String type,
+			@RequestParam(value = "name", required = false, defaultValue = "") String name) {
+        return new ResponseEntity<>(ingredientService.search(name, type), HttpStatus.OK);
+    }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<IngredientDTO> create(@RequestBody IngredientDTO ingredientDTO) {

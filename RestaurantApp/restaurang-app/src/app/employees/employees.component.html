@@ -5,35 +5,39 @@
     <div class="p-formgroup-">
       <div class="p-field p-grid">
         <label styleClass="p-col-fixed" style="width:100px">Name:</label>
-        <input type="text" pInputText [(ngModel)]="nameInput" value="{{selectedEmployee.name}}" />
+        <input type="text" pInputText [(ngModel)]="employee.name"/>
       </div>
       <div class="p-field p-grid">
         <label styleClass="p-col-fixed" style="width:100px">Surname:</label>
-        <input type="text" pInputText [(ngModel)]="surnameInput" value={{selectedEmployee.surname}} />
+        <input type="text" pInputText [(ngModel)]="employee.surname" />
       </div>
       <div class="p-field p-grid">
         <label styleClass="p-col-fixed" style="width:100px">Email:</label>
-        <input type="text" pInputText [(ngModel)]="emailInput" value={{selectedEmployee.email}} />
+        <input type="text" pInputText [(ngModel)]="employee.email" />
       </div>
       <div class="p-field p-grid">
         <label styleClass="p-col-fixed" style="width:100px">Type:</label>
-        <p-dropdown [options]="employeeTypes" [(ngModel)]="typeInput" optionLabel="name" placeholder='Select a type'>
+        <p-dropdown [options]="employeeTypes" [(ngModel)]="employeeType" optionLabel="name" placeholder='Select a type'>
         </p-dropdown>
       </div>
       <div class="p-field p-grid">
         <label styleClass="p-col-fixed" style="width:100px">Salary:</label>
-        <input type="text" pInputText [(ngModel)]="salaryInput" value={{selectedEmployee.salary}} />
+        <p-inputNumber [(ngModel)]="employee.salary" mode="currency" inputId="currency-germany" currency="EUR" locale="de-DE"></p-inputNumber>
       </div>
       <div class="p-field p-grid">
         <label styleClass="p-col-fixed" style="width:100px">Pincode:</label>
-        <input type="text" pInputText [(ngModel)]="pincodeInput" value={{selectedEmployee.pincode}} />
+        <p-inputNumber [(ngModel)]="employee.pincode" mode="decimal" inputId="withoutgrouping" [useGrouping]="false"></p-inputNumber>
+      </div>
+      <div class="p-field p-grid">
+        <label styleClass="p-col-fixed" style="width:100px">Birthday:</label>
+        <p-calendar [(ngModel)]="date1" ></p-calendar>
       </div>
       <div class="p-field p-grid">
         <span class="p-buttonset">
-          <button pButton pRipple label="Create" [disabled]="isDataValid()" class="p-button-success"
+          <button pButton pRipple label="Create" [disabled]="!checkEmployeeValid()" class="p-button-success"
             (click)="createEmployee()"></button>
-          <button pButton pRipple label="Update" [disabled]="isSelected()" (click)="updateEmployee()"></button>
-          <button pButton pRipple label="Delete" [disabled]="isSelected()" class="p-button-danger"
+          <button pButton pRipple label="Update" [disabled]="selectedEmployee == null" (click)="updateEmployee()"></button>
+          <button pButton pRipple label="Delete" [disabled]="selectedEmployee == null" class="p-button-danger"
             (click)="deleteEmployee()"></button>
         </span>
       </div>
@@ -51,14 +55,46 @@
         <input type="text" pInputText [(ngModel)]="emailSearchParam" placeholder="Email" />
       </div>
       <div class="p-field">
-        <input type="text" pInputText [(ngModel)]="pincodeSearchParam" placeholder="Pincode" />
+        <p-calendar [(ngModel)]="dateFrom" placeholder="Birthday from"></p-calendar>
+      </div>
+      <div class="p-field">
+        <p-calendar [(ngModel)]="dateTo" placeholder="Birthday to"></p-calendar>
       </div>
       <div class="p-field">
         <button pButton type="button" label="Submit" (click)="search()"></button>
       </div>
     </div>
 
-    <p-table selectionMode="single" [value]="employees" [(selection)]="selectedEmployee" [paginator]="true" [rows]="5">
+
+    <p-table selectionMode="single" [value]="employees" [(selection)]="selectedEmployee" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Name</th>
+          <th>Surname</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Salary</th>
+          <th>Pincode</th>
+          <th>Birthday</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-employee>
+        <tr [pSelectableRowDblClick]="employee" (dblclick)="mapToEmployee(employee)">
+          <td>{{ employee.name }}</td>
+          <td>{{ employee.surname }}</td>
+          <td>{{ employee.email }}</td>
+          <td>{{ employee.employeeType }}</td>
+          <td>{{ employee.salary }}</td>
+          <td>{{ employee.pincode }}</td>
+          <td>{{formatToDate(employee.birthday)}}</td>
+        </tr>
+        <ng-template pTemplate="paginatorleft"> </ng-template>
+        <ng-template pTemplate="paginatorright"> </ng-template>
+      </ng-template>
+    </p-table>
+
+
+    <!-- <p-table selectionMode="single" [value]="employees" [(selection)]="selectedEmployee" [paginator]="true" [rows]="5">
       <ng-template pTemplate="header">
         <tr>
           <th>Name</th>
@@ -70,7 +106,7 @@
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-employee>
-        <tr [pSelectableRow]="employee">
+        <tr [pSelectableRow]="employee" (click)="foo(employee)">
           <td>{{ employee.name }}</td>
           <td>{{ employee.surname }}</td>
           <td>{{ employee.email }}</td>
@@ -81,6 +117,6 @@
         <ng-template pTemplate="paginatorleft"> </ng-template>
         <ng-template pTemplate="paginatorright"> </ng-template>
       </ng-template>
-    </p-table>
+    </p-table> -->
   </div>
 </div>

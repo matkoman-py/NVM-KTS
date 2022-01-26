@@ -1,5 +1,7 @@
 package com.rest.RestaurantApp.services;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 import com.rest.RestaurantApp.domain.enums.EmployeeType;
@@ -10,7 +12,7 @@ public interface IEmployeeService {
 
 	List<EmployeeDTO> getAll();
 	
-	List<EmployeeDTO> search(String name, String surname, String email, String pincode);
+	List<EmployeeDTO> search(String name, String surname, String email, String dateBefore, String dateAfter) throws ParseException;
 	
 	EmployeeDTO getOne(int id);
 	
