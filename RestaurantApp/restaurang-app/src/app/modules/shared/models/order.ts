@@ -8,14 +8,20 @@
 //         "employeeId": 3
 //         "orderStatus": "NOT_STARTED"
 
-export interface Order{
-    id?: number;
-    description?: string;
-    articles?: number[];
-    orderStatus?: string;
+export interface Order {
+  id?: number;
+  description?: string;
+  articles?: number[];
+  orderStatus?: string;
+  price?: number;
 }
 
 export interface OrderStatus {
-    name: string;
-    value: string;
-  }
+  name: string;
+  value: string;
+}
+
+export interface ArticlesAndOrderDTO {
+  articleIds: number[];
+  orderId: number;
+}

@@ -1,0 +1,13 @@
+.tables {
+  display: flex;
+  flex-direction: row;
+}
+.articleTable {
+  padding: 0 10px;
+}
+.statusDiv {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+}

@@ -11,6 +11,7 @@ import { IngredientsComponent } from '../ingredients/ingredients.component';
 import { ReportsComponent } from '../reports/reports.component';
 import { AuthGuard } from './auth.guard';
 import { LogoutComponent } from '../logout/component/logout.component';
+import { ViewOrderWaiterComponent } from '../view-order-waiter/view-order-waiter.component';
 
 export const routes: Routes = [
   {
@@ -92,6 +93,14 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     data: {
       expectedRoles: ['ROLE_MANAGER'],
+    },
+  },
+  {
+    path: 'view-order-waiter/:id',
+    component: ViewOrderWaiterComponent,
+    canActivate: [AuthGuard],
+    data: {
+      expectedRoles: ['WAITER'],
     },
   },
 ];

@@ -42,6 +42,7 @@ import { ReportsComponent } from './reports/reports.component';
 import { ChartModule } from 'primeng/chart';
 import { CalendarModule } from 'primeng/calendar';
 import { LogoutComponent } from './logout/component/logout.component';
+import { ViewOrderWaiterComponent } from './view-order-waiter/view-order-waiter.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { LogoutComponent } from './logout/component/logout.component';
     IngredientsComponent,
     ReportsComponent,
     LogoutComponent,
+    ViewOrderWaiterComponent,
   ],
   imports: [
     CalendarModule,
