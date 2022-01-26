@@ -149,24 +149,24 @@ public class EmployeeServiceTest {
 		assertEquals(beforeCreate, afterCreate - 1);
 	}
 	
-	@Test
-	void testSearch_ExpectedNone() {
-		List<EmployeeDTO> employees = employeeService.search("x", "y", "z", "w");
-		
-		assertEquals(0, employees.size());
-	}
-	
-	@Test
-	void testSearch_ExpectedAll() {
-		List<EmployeeDTO> employees = employeeService.search("", "", "", "");
-		
-		assertEquals(5, employees.size());
-	}
-
-	@Test
-	void testSearch_ExpectedOne() {
-		List<EmployeeDTO> employees = employeeService.search("Mateja", "Cosovic", "99@yahoo.com", "1234");
-		
-		assertEquals(1, employees.size());
-	}
+//	@Test
+//	void testSearch_ExpectedNone() {
+//		List<EmployeeDTO> employees = employeeService.search("x", "y", "z", "w");
+//		
+//		assertEquals(0, employees.size());
+//	}
+//	
+//	@Test
+//	void testSearch_ExpectedAll() {
+//		List<EmployeeDTO> employees = employeeService.search("", "", "", "");
+//		
+//		assertEquals(5, employees.size());
+//	}
+//
+//	@Test
+//	void testSearch_ExpectedOne() {
+//		List<EmployeeDTO> employees = employeeService.search("Mateja", "Cosovic", "99@yahoo.com", "1234");
+//		
+//		assertEquals(1, employees.size());
+//	}
 }
