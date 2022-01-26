@@ -40,6 +40,8 @@ import { IngredientsComponent } from './ingredients/ingredients.component';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ReportsComponent } from './reports/reports.component';
 import { ChartModule } from 'primeng/chart';
+import { TableLayoutComponent } from './table-layout/table-layout.component';
+import { EditTableLayoutComponent } from './edit-table-layout/edit-table-layout.component';
 import { CalendarModule } from 'primeng/calendar';
 import { LogoutComponent } from './logout/component/logout.component';
 
@@ -57,6 +59,8 @@ import { LogoutComponent } from './logout/component/logout.component';
     ViewOrderComponent,
     IngredientsComponent,
     ReportsComponent,
+    TableLayoutComponent,
+    EditTableLayoutComponent
     LogoutComponent,
   ],
   imports: [

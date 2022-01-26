@@ -9,6 +9,8 @@ import { OrdersComponent } from '../orders/orders.component';
 import { ViewOrderComponent } from '../view-order/view-order.component';
 import { IngredientsComponent } from '../ingredients/ingredients.component';
 import { ReportsComponent } from '../reports/reports.component';
+import { TableLayoutComponent } from '../table-layout/table-layout.component';
+import { EditTableLayoutComponent } from '../edit-table-layout/edit-table-layout.component';
 import { AuthGuard } from './auth.guard';
 import { LogoutComponent } from '../logout/component/logout.component';
 
@@ -22,6 +24,8 @@ export const routes: Routes = [
     },
   },
   { path: 'login', component: LoginComponent },
+  { path: 'table-layout', component: TableLayoutComponent },
+  { path: 'edit-table-layout', component: EditTableLayoutComponent },
   {
     path: 'home',
     component: HomeComponent,
