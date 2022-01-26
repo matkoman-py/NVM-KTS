@@ -32,13 +32,15 @@ export class EmployeesService {
     nameSearchParam: string,
     surnameSearchParam: string,
     emailSearchParam: string,
-    pincodeSearchParam: string
+    dateBefore: string,
+    dateAfter: string
   ): Observable<Employee[]> {
     let params = new HttpParams()
       .set('name', nameSearchParam)
       .set('surname', surnameSearchParam)
       .set('email', emailSearchParam)
-      .set('pincode', pincodeSearchParam);
+      .set('dateBefore', dateBefore)
+      .set('dateAfter', dateAfter)
     return this.http.get<Employee[]>(`api/employee/search`, { params: params });
   }
 }

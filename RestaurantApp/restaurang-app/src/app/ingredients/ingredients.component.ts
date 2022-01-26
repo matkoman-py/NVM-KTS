@@ -22,7 +22,7 @@ export class IngredientsComponent implements OnInit {
   nameSearch: String = "";
   typeSearch: String = "";
 
-  selectedIngredient: Ingredient = {id:0, name: '', allergen: false};
+  selectedIngredient: Ingredient | null = {id:0, name: '', allergen: false};
   ingredient: Ingredient = {};
   ingredientId: number = 0;
   value: boolean = true;
@@ -64,7 +64,7 @@ export class IngredientsComponent implements OnInit {
   }
 
   isAnAllergen(): boolean {
-    if(this.selectedIngredient.allergen) {
+    if(this.selectedIngredient!.allergen) {
       return true;
     }
     return false;
@@ -79,12 +79,12 @@ export class IngredientsComponent implements OnInit {
         detail: 'Ingredient successfully created',
       });
       this.getAllIngredients();
-      this.selectedIngredient = {id:0};
+      this.selectedIngredient = null;
     })
 }
 
 delete() : void {
-  if (this.selectedIngredient.id == 0) {
+  if (this.selectedIngredient!.id == 0) {
     this.messageService.add({
       key: 'tc',
       severity: 'warn',
@@ -93,7 +93,7 @@ delete() : void {
     });
     return;
   }
-    this.ingredientService.deleteIngredients(this.selectedIngredient.id).subscribe(res=> {
+    this.ingredientService.deleteIngredients(this.selectedIngredient!.id).subscribe(res=> {
       this.getAllIngredients();
       this.messageService.add({
         key: 'tc',
@@ -102,7 +102,7 @@ delete() : void {
         detail: res,
       });
       console.log(res);
-      this.selectedIngredient = {id:0};
+      this.selectedIngredient = null;
       
     })
   }
@@ -134,17 +134,17 @@ delete() : void {
   //     });
   //     return;
   // }
-  this.ingredient.name = this.ingredient.name == '' ? this.selectedIngredient.name : this.ingredient.name;
-  this.ingredientService.updateIngredients(this.selectedIngredient.id!, this.ingredient).subscribe(res=> 
+  this.ingredient.name = this.ingredient.name == '' ? this.selectedIngredient!.name : this.ingredient.name;
+  this.ingredientService.updateIngredients(this.selectedIngredient!.id!, this.ingredient).subscribe(res=> 
     {
       this.messageService.add({
         key: 'tc',
         severity: 'success',
         summary: 'Success',
-        detail: 'Ingredient with id ' + this.selectedIngredient.id + ' successfully updated',
+        detail: 'Ingredient with id ' + this.selectedIngredient!.id + ' successfully updated',
       });
       this.getAllIngredients();
-      this.selectedIngredient = {id:0};
+      this.selectedIngredient = null;
     
     })
 }

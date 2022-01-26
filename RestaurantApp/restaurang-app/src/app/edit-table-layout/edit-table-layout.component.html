@@ -1,0 +1,7 @@
+<canvas width="1400" height="550" id="demoCanvas"></canvas>
+<div style="margin-top: 0.5rem;">
+    <button pButton class="add-button p-button-success" label="Add table" icon="pi pi-plus-circle" (click)="addTable()"></button>
+    <p-dropdown [options]="numOfSeats" [(ngModel)]="selectedNumOfSeats" placeholder="Number of seats" [showClear]="true"></p-dropdown>
+    <button pButton class="save-button p-button-danger" label="Remove table" icon="pi pi-minus-circle" (click)="removeTable()"></button>
+    <button pButton class="save-button" label="Save layout" icon="pi pi-save" (click)="saveLayout()"></button>
+</div>

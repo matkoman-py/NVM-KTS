@@ -1,5 +1,7 @@
 package com.rest.RestaurantApp.services;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -124,7 +126,7 @@ public class EmployeeService implements IEmployeeService{
 	}
 
 	@Override
-	public List<EmployeeDTO> search(String name, String surname, String email, String pincode) {
+	public List<EmployeeDTO> search(String name, String surname, String email, String dateBefore, String dateAfter) throws ParseException {
 		List<EmployeeDTO> employees = getAll();
 		List<EmployeeDTO> employeesToCut;
 		if(name != "") {
@@ -148,6 +150,31 @@ public class EmployeeService implements IEmployeeService{
 			}
 			employees.removeAll(employeesToCut);
 		}
+
+
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		Date dateFrom = formatter.parse("1900-01-01");
+		Date dateTo = new Date();
+		if(!dateBefore.equals("")) {
+			dateFrom = formatter.parse(dateBefore);
+		}
+		if(!dateAfter.equals("")) {
+			dateTo = formatter.parse(dateAfter);
+		}
+		
+		employeesToCut = new ArrayList<>();
+		for(EmployeeDTO e:employees) {
+			
+			if(e.getBirthday().after(dateTo) || e.getBirthday().before(dateFrom)) {
+				employeesToCut.add(e);
+			}
+			
+		}
+		employees.removeAll(employeesToCut);
+		System.out.println(dateBefore + " ODD");
+		System.out.println(dateAfter + " DOO");
+		System.out.println("DASDSADSA");
+		
 		return employees;
 	}
 }
