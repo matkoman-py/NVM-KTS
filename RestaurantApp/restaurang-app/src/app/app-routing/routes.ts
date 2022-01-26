@@ -13,6 +13,7 @@ import { ReportsComponent } from '../reports/reports.component';
 import { TableLayoutComponent } from '../table-layout/table-layout.component';
 import { EditTableLayoutComponent } from '../edit-table-layout/edit-table-layout.component';
 import { LogoutComponent } from '../logout/component/logout.component';
+import { ViewOrderWaiterComponent } from '../view-order-waiter/view-order-waiter.component';
 
 export const routes: Routes = [
   {
@@ -27,7 +28,7 @@ export const routes: Routes = [
     path: 'login',
     component: LoginComponent,
   },
-  { path: 'table-layout', component: TableLayoutComponent },
+  { path: 'table-layout', component: TableLayoutComponent, },
   { path: 'edit-table-layout', component: EditTableLayoutComponent },
   {
     path: 'home',
@@ -102,11 +103,20 @@ export const routes: Routes = [
     },
   },
   {
+
+    path: 'view-order-waiter/:id',
+    component: ViewOrderWaiterComponent,
+    canActivate: [AuthGuard],
+    data: {
+      expectedRoles: ['WAITER'],
+    },
+  },
+  {
     path: '**',
     canActivate: [AuthGuard],
     component: LoginComponent,
     data: {
       expectedRoles: []
     }
-  }
+  },
 ];

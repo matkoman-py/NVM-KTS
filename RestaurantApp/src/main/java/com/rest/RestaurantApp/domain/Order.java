@@ -55,7 +55,7 @@ public class Order extends BaseEntity{
 		this.orderDate = orderDate;
 		this.employee = employee;
 		this.orderedArticles = new ArrayList<>();
-		this.orderStatus = OrderStatus.NOT_STARTED;
+		this.orderStatus = OrderStatus.ACTIVE;
 		this.price = price;
 	}
 

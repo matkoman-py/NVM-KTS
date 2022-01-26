@@ -44,6 +44,7 @@ import { TableLayoutComponent } from './table-layout/table-layout.component';
 import { EditTableLayoutComponent } from './edit-table-layout/edit-table-layout.component';
 import { CalendarModule } from 'primeng/calendar';
 import { LogoutComponent } from './logout/component/logout.component';
+import { ViewOrderWaiterComponent } from './view-order-waiter/view-order-waiter.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { LogoutComponent } from './logout/component/logout.component';
     TableLayoutComponent,
     EditTableLayoutComponent,
     LogoutComponent,
+    ViewOrderWaiterComponent,
   ],
   imports: [
     CalendarModule,
