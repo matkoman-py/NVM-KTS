@@ -103,7 +103,10 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: '/login',
-    pathMatch: 'full'
-  },
+    canActivate: [AuthGuard],
+    component: LoginComponent,
+    data: {
+      expectedRoles: []
+    }
+  }
 ];
