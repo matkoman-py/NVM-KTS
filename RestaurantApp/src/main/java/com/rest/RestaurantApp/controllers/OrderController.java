@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rest.RestaurantApp.domain.enums.ArticleStatus;
 import com.rest.RestaurantApp.domain.enums.OrderStatus;
 import com.rest.RestaurantApp.dto.ArticleDTO;
+import com.rest.RestaurantApp.dto.ArticlesAndOrderDTO;
 import com.rest.RestaurantApp.dto.OrderDTO;
 import com.rest.RestaurantApp.dto.OrderedArticleDTO;
 import com.rest.RestaurantApp.exceptions.ChangeFinishedStateException;
@@ -121,9 +122,15 @@ public class OrderController {
 		return new ResponseEntity<OrderedArticleDTO>(article, HttpStatus.OK);
 	}
 	
+	@PutMapping(value = "/add-articles-to-order", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<OrderDTO> addArticlesToDTO(@RequestBody ArticlesAndOrderDTO dto) {
+		OrderDTO article = orderService.addArticlesToOrder(dto);
+		return new ResponseEntity<OrderDTO>(article, HttpStatus.OK);
+	}
+	
 	@PostMapping(value = "addArticle/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<OrderedArticleDTO> addArticle(@RequestBody OrderedArticleDTO article, @PathVariable("id") int orderId) {
-		OrderedArticleDTO orderedArticle = orderService.createArticleForOrder(article, orderId);
+		OrderedArticleDTO orderedArticle = orderService.createArticleForOrder(article.getArticleId(), orderId);
 		return new ResponseEntity<OrderedArticleDTO>(orderedArticle, HttpStatus.OK);
 	}
 	
@@ -155,4 +162,9 @@ public class OrderController {
 			@RequestParam(value = "articleStatus", required = false, defaultValue = "") String articleStatus) {
 		return ResponseEntity.ok(orderService.searchArticles(id, ArticleStatus.valueOf(articleStatus)));	
 	}
+	
+	//finish order
+	//proversis pin 
+	//stavis order status na finished
+	
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.rest.RestaurantApp.dto.ArticlesAndOrderDTO;
 import com.rest.RestaurantApp.dto.OrderDTO;
 import com.rest.RestaurantApp.dto.OrderedArticleDTO;
 
@@ -25,9 +26,11 @@ public interface IOrderService {
 	
 	OrderedArticleDTO changeStatusOfArticle(int employeePin, int articleId); //++++++
 	
-	OrderedArticleDTO createArticleForOrder(OrderedArticleDTO article, int orderId); //++++
+	OrderedArticleDTO createArticleForOrder(int articleId, int orderId); //++++
 	
 	OrderedArticleDTO deleteArticleForOrder(int articleId);
 	
 	OrderedArticleDTO updateArticleForOrder(int articleId, OrderedArticleDTO article);
+	
+	OrderDTO addArticlesToOrder(ArticlesAndOrderDTO dto);
 }

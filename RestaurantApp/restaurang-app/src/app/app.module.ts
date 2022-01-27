@@ -40,8 +40,11 @@ import { IngredientsComponent } from './ingredients/ingredients.component';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ReportsComponent } from './reports/reports.component';
 import { ChartModule } from 'primeng/chart';
+import { TableLayoutComponent } from './table-layout/table-layout.component';
+import { EditTableLayoutComponent } from './edit-table-layout/edit-table-layout.component';
 import { CalendarModule } from 'primeng/calendar';
 import { LogoutComponent } from './logout/component/logout.component';
+import { ViewOrderWaiterComponent } from './view-order-waiter/view-order-waiter.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +60,10 @@ import { LogoutComponent } from './logout/component/logout.component';
     ViewOrderComponent,
     IngredientsComponent,
     ReportsComponent,
+    TableLayoutComponent,
+    EditTableLayoutComponent,
     LogoutComponent,
+    ViewOrderWaiterComponent,
   ],
   imports: [
     CalendarModule,
@@ -66,7 +72,6 @@ import { LogoutComponent } from './logout/component/logout.component';
     CardModule,
     BrowserModule,
     BrowserAnimationsModule,
-    AppRoutingModule,
     MenubarModule,
     InputTextModule,
     ButtonModule,
@@ -89,6 +94,7 @@ import { LogoutComponent } from './logout/component/logout.component';
     InputNumberModule,
     SidebarModule,
     BadgeModule,
+    AppRoutingModule,
   ],
   providers: [LoginService],
   bootstrap: [AppComponent],
