@@ -1,3 +1,4 @@
+import { AuthGuard } from './auth.guard';
 import { Routes } from '@angular/router';
 import { ArticlesComponent } from '../articles/articles.component';
 import { EmployeesComponent } from '../employees/employees.component';
@@ -9,8 +10,10 @@ import { OrdersComponent } from '../orders/orders.component';
 import { ViewOrderComponent } from '../view-order/view-order.component';
 import { IngredientsComponent } from '../ingredients/ingredients.component';
 import { ReportsComponent } from '../reports/reports.component';
-import { AuthGuard } from './auth.guard';
+import { TableLayoutComponent } from '../table-layout/table-layout.component';
+import { EditTableLayoutComponent } from '../edit-table-layout/edit-table-layout.component';
 import { LogoutComponent } from '../logout/component/logout.component';
+import { ViewOrderWaiterComponent } from '../view-order-waiter/view-order-waiter.component';
 
 export const routes: Routes = [
   {
@@ -21,7 +24,12 @@ export const routes: Routes = [
       expectedRoles: ['ROLE_MANAGER', 'COOK', 'BARMAN', 'WAITER'],
     },
   },
-  { path: 'login', component: LoginComponent },
+  { 
+    path: 'login',
+    component: LoginComponent,
+  },
+  { path: 'table-layout', component: TableLayoutComponent, },
+  { path: 'edit-table-layout', component: EditTableLayoutComponent },
   {
     path: 'home',
     component: HomeComponent,
@@ -93,5 +101,22 @@ export const routes: Routes = [
     data: {
       expectedRoles: ['ROLE_MANAGER'],
     },
+  },
+  {
+
+    path: 'view-order-waiter/:id',
+    component: ViewOrderWaiterComponent,
+    canActivate: [AuthGuard],
+    data: {
+      expectedRoles: ['WAITER'],
+    },
+  },
+  {
+    path: '**',
+    canActivate: [AuthGuard],
+    component: LoginComponent,
+    data: {
+      expectedRoles: []
+    }
   },
 ];

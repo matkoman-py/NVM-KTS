@@ -223,7 +223,7 @@ class OrderServiceTest {
 	
 	@Test
 	void testCreate_ValidOrder() {
-		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), Arrays.asList(1), 5, 1, OrderStatus.NOT_STARTED, 5000);
+		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), Arrays.asList(1), 5, 1, OrderStatus.ACTIVE, 5000);
 		OrderDTO createdOrder = orderService.create(orderToCreate);
 		
 		assertEquals(createdOrder.getId(), 4);
@@ -236,19 +236,19 @@ class OrderServiceTest {
 	
 	@Test
 	void testCreate_InvalidOrder_NoArticles() {
-		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), null, 5, 1, OrderStatus.NOT_STARTED, 6000);
+		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), null, 5, 1, OrderStatus.ACTIVE, 6000);
 		assertThrows(NullArticlesException.class, () -> {OrderDTO createdOrder = orderService.create(orderToCreate);});
 	}
 	
 	@Test
 	void testCreate_InvalidOrder_OrderTakenByCookOrBarman() {
-		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), null, 5, 3, OrderStatus.NOT_STARTED, 7000);
+		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), null, 5, 3, OrderStatus.ACTIVE, 7000);
 		assertThrows(OrderTakenByWrongEmployeeTypeException.class, () -> {OrderDTO createdOrder = orderService.create(orderToCreate);});
 	}
 	
 	@Test
 	void testUpdate_ValidOrder() {
-		OrderDTO orderToUpdate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), Arrays.asList(1), 5, 1, OrderStatus.NOT_STARTED, 8000);
+		OrderDTO orderToUpdate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), Arrays.asList(1), 5, 1, OrderStatus.ACTIVE, 8000);
 		OrderDTO updatedOrder = orderService.update(3, orderToUpdate);
 		
 		assertEquals(updatedOrder.getId(), 4);
@@ -261,7 +261,7 @@ class OrderServiceTest {
 	
 	@Test
 	void testUpdate_InvalidOrder_NoArticles() {
-		OrderDTO orderToUpdate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), null, 5, 1, OrderStatus.NOT_STARTED, 9000);
+		OrderDTO orderToUpdate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), null, 5, 1, OrderStatus.ACTIVE, 9000);
 		assertThrows(NotFoundException.class, () -> {OrderDTO updatedOrder = orderService.update(6, orderToUpdate);});
 
 	}
@@ -313,7 +313,7 @@ class OrderServiceTest {
 		orderedArticle.setDescription("One plate");
 		orderedArticle.setArticleId(1);
 		
-		OrderedArticleDTO addedArticle = orderService.createArticleForOrder(orderedArticle, 1);
+		OrderedArticleDTO addedArticle = orderService.createArticleForOrder(orderedArticle.getArticleId(), 1);
 		
 		assertEquals(addedArticle.getId(), 4);
 		assertEquals(addedArticle.getDescription(), "One plate");
@@ -327,7 +327,7 @@ class OrderServiceTest {
 		orderedArticle.setDescription("One plate");
 		orderedArticle.setArticleId(5);
 		
-		assertThrows(NotFoundException.class, () -> {orderService.createArticleForOrder(orderedArticle, 1);});
+		assertThrows(NotFoundException.class, () -> {orderService.createArticleForOrder(orderedArticle.getArticleId(), 1);});
 	}
 	
 	@Test
@@ -336,7 +336,7 @@ class OrderServiceTest {
 		orderedArticle.setDescription("One plate");
 		orderedArticle.setArticleId(1);
 		
-		assertThrows(NotFoundException.class, () -> {orderService.createArticleForOrder(orderedArticle, 6);});
+		assertThrows(NotFoundException.class, () -> {orderService.createArticleForOrder(orderedArticle.getArticleId(), 6);});
 	}
 	
 

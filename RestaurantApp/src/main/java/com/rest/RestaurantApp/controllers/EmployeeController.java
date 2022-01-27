@@ -1,5 +1,7 @@
 package com.rest.RestaurantApp.controllers;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 import com.rest.RestaurantApp.domain.enums.EmployeeType;
@@ -38,8 +40,9 @@ public class EmployeeController {
 	public ResponseEntity<List<EmployeeDTO>> search(@RequestParam(value = "name", required = false, defaultValue = "") String name,
 													@RequestParam(value = "surname", required = false, defaultValue = "") String surname,
 													@RequestParam(value = "email", required = false, defaultValue = "") String email,
-													@RequestParam(value = "pincode", required = false, defaultValue = "") String pincode) {
-		return ResponseEntity.ok(employeeService.search(name, surname, email, pincode));	
+													@RequestParam(value = "dateBefore", required = false, defaultValue = "") String dateBefore,
+													@RequestParam(value = "dateAfter", required = false, defaultValue = "") String dateAfter) throws ParseException {
+		return ResponseEntity.ok(employeeService.search(name, surname, email, dateBefore,dateAfter));	
 	}
 	
 	//

@@ -13,8 +13,8 @@
             </div>
         </div>
         <button pButton type="button" class="p-sm-12 p-md-12 p-lg-3 p-m-1 p-button-success" label="Create" (click)="create()" [disabled]="(ingredient.name || '').toString().trim().length === 0" id="create-button"></button>
-        <button pButton type="button" class="p-sm-12 p-md-12 p-lg-3 p-m-1" label="Update" [disabled]="selectedIngredient.id == 0" (click)="update()" id="update-button"></button>
-        <button pButton type="button" class="p-sm-12 p-md-12 p-lg-3 p-m-1 p-button-danger" label="Delete" [disabled]="selectedIngredient.id == 0" (click)="delete()" id="delete-button"></button>
+        <button pButton type="button" class="p-sm-12 p-md-12 p-lg-3 p-m-1" label="Update" [disabled]="selectedIngredient == null" (click)="update()" id="update-button"></button>
+        <button pButton type="button" class="p-sm-12 p-md-12 p-lg-3 p-m-1 p-button-danger" label="Delete" [disabled]="selectedIngredient == null" (click)="delete()" id="delete-button"></button>
     </div>
     <div class="p-sm-12 p-lg-9 p-mt-2">
         <div class="p-mb-2 p-mt-4 p-d-flex p-jc-center">

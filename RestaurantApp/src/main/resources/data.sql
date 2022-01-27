@@ -15,14 +15,10 @@ INSERT INTO article (name, description, type, menu_id, image) VALUES
   ('Espreso', 'Kafa', 'DRINK', 420, ''),
   ('Coca cola', 'sokic', 'DRINK', 420, ''),
   ('Princes krofna', 'Ubica', 'DESSERT', 420, '');
-
-  INSERT INTO suggested_article (name, description, suggested_making_price, suggested_selling_price, type) VALUES
-  ('Nova torta', 'Jako fina', 100, 350, 'APPETIZER'),
-  ('Nova krofna', 'Ubica', 120, 410, 'APPETIZER');
   
 INSERT INTO users (type, birthday, email, name, surname, employee_type, pincode) VALUES
   ('EMPLOYEE', '1999-8-21 ', 'mateja99@yahoo.com', 'Mateja', 'Cosovic', 'WAITER', 1234),
-  ('EMPLOYEE', '1999-3-05 ', 'suljak99@yahoo.com', 'Marko', 'Suljak', 'BARMAN', 4322),
+  ('EMPLOYEE', '1999-3-06 ', 'suljak99@yahoo.com', 'Marko', 'Suljak', 'BARMAN', 4322),
   ('EMPLOYEE', '1999-11-25 ', 'cepic@yahoo.com', 'Aleksandar', 'Cepic', 'BARMAN', 5321),
   ('EMPLOYEE', '1999-11-25 ', 'perica@yahoo.com', 'Petar', 'Petrovic', 'COOK', 4269),
   ('EMPLOYEE', '1999-11-25 ', 'maric@yahoo.com', 'Marko', 'Maric', 'COOK', 2910);
@@ -78,10 +74,6 @@ INSERT INTO ingredient (name, is_allergen) VALUES
   ('Luk', TRUE),
   ('Slanina', TRUE);
 
-INSERT INTO suggested_article_ingredient (suggested_article_id, ingredient_id) VALUES
-  (1, 1),
-  (1, 2),
-  (2, 1);
   
 INSERT INTO article_ingredient (article_id, ingredient_id) VALUES
   (1, 1),

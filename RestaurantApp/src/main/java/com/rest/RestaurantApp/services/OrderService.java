@@ -16,6 +16,7 @@ import com.rest.RestaurantApp.domain.enums.ArticleStatus;
 import com.rest.RestaurantApp.domain.enums.ArticleType;
 import com.rest.RestaurantApp.domain.enums.EmployeeType;
 import com.rest.RestaurantApp.domain.enums.OrderStatus;
+import com.rest.RestaurantApp.dto.ArticlesAndOrderDTO;
 import com.rest.RestaurantApp.dto.OrderDTO;
 import com.rest.RestaurantApp.dto.OrderedArticleDTO;
 import com.rest.RestaurantApp.exceptions.ChangeFinishedStateException;
@@ -271,11 +272,11 @@ public class OrderService implements IOrderService {
 	}
 
 	@Override
-	public OrderedArticleDTO createArticleForOrder(OrderedArticleDTO article, int orderId) {
+	public OrderedArticleDTO createArticleForOrder(int articleId, int orderId) {
 		// TODO Auto-generated method stub
-		Optional<Article> articleData = articleRepository.findById(article.getArticleId());
+		Optional<Article> articleData = articleRepository.findById(articleId);
 		if(articleData.isEmpty()) {
-			throw new NotFoundException("Article with id " + article.getArticleId() + " was not found");
+			throw new NotFoundException("Article with id " + articleId + " was not found");
 		}
 		Article newArticle = articleData.get();
 		Optional<Order> orderData = orderRepository.findById(orderId);
@@ -283,7 +284,7 @@ public class OrderService implements IOrderService {
 			throw new NotFoundException("Order with id " + orderId + " was not found");
 		}
 		Order order = orderData.get();
-		OrderedArticle orderedArticle = new OrderedArticle(ArticleStatus.NOT_TAKEN, newArticle, order, article.getDescription());
+		OrderedArticle orderedArticle = new OrderedArticle(ArticleStatus.NOT_TAKEN, newArticle, order, articleData.get().getDescription());
 		if(orderedArticle.getArticle().getActivePrice() != null) {
 			order.setPrice(order.getPrice() + orderedArticle.getArticle().getActivePrice().getSellingPrice());
 		}
@@ -307,7 +308,8 @@ public class OrderService implements IOrderService {
 		if(!orderedArticle.getStatus().equals(ArticleStatus.NOT_TAKEN)) {
 			throw new OrderAlreadyTakenException("Can't delete ordered article with id " + orderedArticle.getId() + " because it is already taken");
 		}
-		
+		Order order = orderedArticle.getOrder();
+		order.setPrice(order.getPrice() - orderedArticle.getArticle().getActivePrice().getSellingPrice());
 		orderedArticle.setDeleted(true);
 		notifyCooksAndBarmenArticleDeleted(orderedArticle);
 		return new OrderedArticleDTO(orderedArticleRepository.save(orderedArticle));
@@ -352,5 +354,14 @@ public class OrderService implements IOrderService {
 		order.setOrderStatus(orderStatus);
 		Order updatedOrder = orderRepository.save(order);
 		return new OrderDTO(updatedOrder);
+	}
+
+	@Override
+	public OrderDTO addArticlesToOrder(ArticlesAndOrderDTO dto) {
+		for(Integer id : dto.getArticleIds()) {
+			this.createArticleForOrder(id, dto.getOrderId());
+		}
+		
+		return this.getOne(dto.getOrderId());
 	}
 }
