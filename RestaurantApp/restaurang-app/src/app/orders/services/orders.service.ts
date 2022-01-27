@@ -15,7 +15,7 @@ export class OrdersService {
   constructor(private http: HttpClient) {}
 
   getOrders(): Observable<Order[]> {
-    return this.http.get<Order[]>('/api/order');
+    return this.http.get<Order[]>('/api/order/active');
   }
 
   updateOrderStatus(id?: number, orderStatus?: String): Observable<Order[]> {

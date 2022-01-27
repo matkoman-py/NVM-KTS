@@ -2,12 +2,8 @@
 <br>
 <div class="p-formgroup-inline search">
   <div class="p-field">
-    <p-dropdown
-      [options]="articleStatuses"
-      [(ngModel)]="selectedArticleStatus"
-      optionLabel="name"
-      placeholder="Article Status"
-    ></p-dropdown>
+    <p-dropdown [options]="articleStatuses" [(ngModel)]="selectedArticleStatus" optionLabel="name"
+      placeholder="Article Status"></p-dropdown>
   </div>
   <button pButton type="button" label="Submit" (click)="search()"></button>
 </div>
@@ -17,6 +13,7 @@
 
   <p>
     Order description: {{article.description}}
+    <br>
     Article description: {{article.articleDescription}}
   </p>
 
@@ -27,15 +24,17 @@
       FINISHED
     </h3>
   </ng-template>
+  <img [src]="article.image" [alt]="article.articleName" width="150" height="150" style="float: right; position: relative; top: -110px;" class="p-shadow-4" />
 </p-card>
+
 <p-dialog header="Input your personal pin to finish the action" [(visible)]="display" [breakpoints]="{'960px': '75vw'}"
   [style]="{width: '50vw'}" [draggable]="false" [resizable]="false">
   <div class="p-field">
-    <input type="number" pInputText [(ngModel)]="employeePin" />
+    <input type="number" pInputText [(ngModel)]="employeePin"/>
   </div>
   <ng-template pTemplate="footer">
     <p-button (click)="handleClose()" label="Cancel" styleClass="p-button-text"></p-button>
-    <p-button [disabled]="employeePin === undefined" (click)="updateStatus()" label="Confirm"
+    <p-button id="submit-btn" [disabled]="employeePin === undefined" (click)="updateStatus()" label="Confirm"
       styleClass="p-button-text"></p-button>
   </ng-template>
 </p-dialog>

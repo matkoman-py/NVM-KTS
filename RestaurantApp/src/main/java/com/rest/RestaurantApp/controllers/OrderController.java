@@ -46,6 +46,11 @@ public class OrderController {
 		return ResponseEntity.ok(orderService.getAll());
 	}
 	
+	@GetMapping(value = "/active",produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<OrderDTO>> getAllActive() {
+		return ResponseEntity.ok(orderService.getAllActive());
+	}
+	
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<OrderDTO> getOne(@PathVariable("id") int id) {
 		OrderDTO order = orderService.getOne(id);

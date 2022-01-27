@@ -25,7 +25,6 @@ export class OrdersComponent implements OnInit {
 
   orderStatuses: OrderStatus[] = [
     { name: 'Not started', value: 'NOT_STARTED' },
-    { name: 'Preparing', value: 'PREPARING' },
     { name: 'Finished', value: 'FINISHED' },
   ];
 
@@ -43,13 +42,13 @@ export class OrdersComponent implements OnInit {
     this.getOrders();
   }
 
-  search() {
-    this.ordersService
-      .search(this.selectedOrderStatus)
-      .subscribe((data) => {
-        this.orders = data;
-      });
-  }
+  // search() {
+  //   this.ordersService
+  //     .search(this.selectedOrderStatus)
+  //     .subscribe((data) => {
+  //       this.orders = data;
+  //     });
+  // }
 
   getOrders() {
     this.ordersService.getOrders().subscribe((data) => {
