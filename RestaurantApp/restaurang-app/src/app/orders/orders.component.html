@@ -1,6 +1,6 @@
 <p-toast position="top-center" key="tc"></p-toast>
 <h2>Orders</h2>
-<div class="p-formgroup-inline">
+<!-- <div class="p-formgroup-inline">
   <div class="p-field">
     <p-dropdown
       [options]="orderStatuses"
@@ -10,7 +10,7 @@
     ></p-dropdown>
   </div>
   <button pButton type="button" label="Submit" (click)="search()"></button>
-</div>
+</div> -->
 <div class="card">
   <h3 *ngIf="orders.length == 0" style="text-align: center;"> No orders found</h3>
   <p-table *ngIf="orders.length != 0" selectionMode="single" [value]="orders" [(selection)]="selectedOrder" [paginator]="true" [rows]="5">
@@ -31,5 +31,5 @@
       </tr>
     </ng-template>    
   </p-table>
-  <button *ngIf="orders.length != 0" pButton type="button" label="See order" class="p-button-info" (click)="seeOrder()"></button>
+  <button id="see-order-btn" *ngIf="orders.length != 0" pButton type="button" label="See order" class="p-button-info" (click)="seeOrder()"></button>
 </div>

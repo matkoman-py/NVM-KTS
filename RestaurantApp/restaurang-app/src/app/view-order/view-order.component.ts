@@ -81,6 +81,7 @@ export class ViewOrderComponent implements OnInit {
         this.viewOrderService.getArticle(article.articleId).subscribe((result) => {
             article.articleName = result.name;
             article.articleDescription = result.description;
+            article.image = result.image;
         });
     }
   }
@@ -92,7 +93,7 @@ export class ViewOrderComponent implements OnInit {
             key: 'tc',
             severity: 'success',
             summary: 'Success!',
-            detail: "Status of article successfully updaed",
+            detail: "Status of article successfully updated",
             });
         this.handleClose();
     },err => {
@@ -113,41 +114,11 @@ export class ViewOrderComponent implements OnInit {
     });
   }
 
-  updateOrderStatus(){
-    let not_taken = 0;
-    let finished = 0;
-    for(let article of this.articles) {
-      switch(article.status){
-        case 'NOT_TAKEN' :
-          {not_taken++; break};
-        case 'FINISHED' :
-          {finished++; break};
-      }
-    }
-
-    if(finished == this.articles.length){
-     if (this.order.orderStatus != 'FINISHED') {
-      this.orderService.updateOrderStatus(this.orderId, 'FINISHED').subscribe((data) =>{});
-     }
-    }
-    else if(not_taken == this.articles.length) { 
-      if (this.order.orderStatus != 'NOT_STARTED') {
-        this.orderService.updateOrderStatus(this.orderId, 'NOT_STARTED').subscribe((data) =>{});
-      }
-    }
-    else{
-      if(this.order.orderStatus != 'PREPARING') {
-        this.orderService.updateOrderStatus(this.orderId, 'PREPARING').subscribe((data) =>{});
-      } 
-    }
-  }
-
   getArticlesForOrder(id: number) {
     this.viewOrderService.getArticlesForOrder(id).subscribe((data) => {
       this.articles = data;
     
     this.getArticleNamesAndDescriptions();
-    this.updateOrderStatus();
     });
   }
 

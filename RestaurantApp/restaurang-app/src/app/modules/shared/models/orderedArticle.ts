@@ -5,6 +5,7 @@ export interface OrderedArticle{
     description?: string;
     articleName?: String;
     articleDescription?: String;
+    image?: String;
 }
 
 export interface ArticleStatus {
