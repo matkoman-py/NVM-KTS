@@ -124,7 +124,6 @@ public class IngredientsPage {
 	public void clickOnRow(int rowNum) {
 		Actions act = new Actions(driver);
 		act.doubleClick(getIngredients().get(rowNum)).perform();
-		
 	}
 
 	

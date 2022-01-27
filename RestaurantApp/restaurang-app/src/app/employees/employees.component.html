@@ -5,15 +5,15 @@
     <div class="p-formgroup-">
       <div class="p-field p-grid">
         <label styleClass="p-col-fixed" style="width:100px">Name:</label>
-        <input type="text" pInputText [(ngModel)]="employee.name"/>
+        <input type="text" id="employee-name" pInputText [(ngModel)]="employee.name"/>
       </div>
       <div class="p-field p-grid">
         <label styleClass="p-col-fixed" style="width:100px">Surname:</label>
-        <input type="text" pInputText [(ngModel)]="employee.surname" />
+        <input type="text" pInputText id="employee-surname" [(ngModel)]="employee.surname" />
       </div>
       <div class="p-field p-grid">
         <label styleClass="p-col-fixed" style="width:100px">Email:</label>
-        <input type="text" pInputText [(ngModel)]="employee.email" />
+        <input type="text" pInputText id="employee-email" [(ngModel)]="employee.email" />
       </div>
       <div class="p-field p-grid">
         <label styleClass="p-col-fixed" style="width:100px">Type:</label>
@@ -21,12 +21,12 @@
         </p-dropdown>
       </div>
       <div class="p-field p-grid">
-        <label styleClass="p-col-fixed" style="width:100px">Salary:</label>
-        <p-inputNumber [(ngModel)]="employee.salary" mode="currency" inputId="currency-germany" currency="EUR" locale="de-DE"></p-inputNumber>
+        <label styleClass="p-col-fixed"  style="width:100px">Salary:</label>
+        <p-inputNumber [(ngModel)]="employee.salary" id="employee-salary" mode="currency" inputId="currency-germany" currency="EUR" locale="de-DE"></p-inputNumber>
       </div>
       <div class="p-field p-grid">
         <label styleClass="p-col-fixed" style="width:100px">Pincode:</label>
-        <p-inputNumber [(ngModel)]="employee.pincode" mode="decimal" inputId="withoutgrouping" [useGrouping]="false"></p-inputNumber>
+        <p-inputNumber [(ngModel)]="employee.pincode" id="employee-pin" mode="decimal" inputId="withoutgrouping" [useGrouping]="false"></p-inputNumber>
       </div>
       <div class="p-field p-grid">
         <label styleClass="p-col-fixed" style="width:100px">Birthday:</label>
@@ -34,10 +34,10 @@
       </div>
       <div class="p-field p-grid">
         <span class="p-buttonset">
-          <button pButton pRipple label="Create" [disabled]="!checkEmployeeValid()" class="p-button-success"
+          <button pButton pRipple label="Create" [disabled]="!checkEmployeeValid()" id="create-button" class="p-button-success"
             (click)="createEmployee()"></button>
-          <button pButton pRipple label="Update" [disabled]="selectedEmployee == null" (click)="updateEmployee()"></button>
-          <button pButton pRipple label="Delete" [disabled]="selectedEmployee == null" class="p-button-danger"
+          <button pButton pRipple label="Update" [disabled]="selectedEmployee == null" id="update-button" (click)="updateEmployee()"></button>
+          <button pButton pRipple label="Delete" [disabled]="selectedEmployee == null" id="delete-button" class="p-button-danger"
             (click)="deleteEmployee()"></button>
         </span>
       </div>
@@ -46,13 +46,13 @@
   <div class="col card special2">
     <div class="p-formgroup-inline search">
       <div class="p-field">
-        <input type="text" pInputText [(ngModel)]="nameSearchParam" placeholder="Name" />
+        <input type="text" pInputText [(ngModel)]="nameSearchParam" id="name-search" placeholder="Name" />
       </div>
       <div class="p-field">
-        <input type="text" pInputText [(ngModel)]="surnameSearchParam" placeholder="Surname" />
+        <input type="text" pInputText [(ngModel)]="surnameSearchParam" id="surname-search" placeholder="Surname" />
       </div>
       <div class="p-field">
-        <input type="text" pInputText [(ngModel)]="emailSearchParam" placeholder="Email" />
+        <input type="text" pInputText [(ngModel)]="emailSearchParam" id="email-search" placeholder="Email" />
       </div>
       <div class="p-field">
         <p-calendar [(ngModel)]="dateFrom" placeholder="Birthday from"></p-calendar>
@@ -61,7 +61,7 @@
         <p-calendar [(ngModel)]="dateTo" placeholder="Birthday to"></p-calendar>
       </div>
       <div class="p-field">
-        <button pButton type="button" label="Submit" (click)="search()"></button>
+        <button pButton type="button" label="Submit" (click)="search()" id="search-button"></button>
       </div>
     </div>
 
