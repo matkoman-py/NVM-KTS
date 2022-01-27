@@ -106,39 +106,13 @@ public class EmployeeTest {
 		Thread.sleep(1000);
 		int countAfterSearch = employeePage.getEmployeeCount();
 		assertTrue(count >= countAfterSearch);
-//		
-//		ingredientsPage.clickOnRow(2);
-//		ingredientsPage.setCreateUpdateName("Updatiran sastojak");
-//		ingredientsPage.clickUpdateBtn();
-//		
-//		Thread.sleep(600);
-//		int countAfterUpdate = ingredientsPage.getIngredientCount();
-//		assertEquals(count, countAfterUpdate);
-//		
-//		count = countAfterUpdate;
-//		
-//		ingredientsPage.setSearchInput("a");
-//		ingredientsPage.clickDropdown();
-//		ingredientsPage.clickOption(1);
-//		ingredientsPage.clickSearchBtn();
-//		
-//		Thread.sleep(600);
-//		int countAfterSearch = ingredientsPage.getIngredientCount();
-//		
-//		assertTrue(countAfterSearch <= count);
-		
-		
-		
-		
-		
 	
 	}
 	
 	
-	//OVO KOMENTARISI ZA VREME DEVELOPMENTA
-//	@After
-//	public void closeSelenium() {
-//		// Shutdown the browser
-//		browser.quit();
-//	}
+	@After
+	public void closeSelenium() {
+		// Shutdown the browser
+		browser.quit();
+	}
 }

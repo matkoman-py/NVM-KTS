@@ -47,7 +47,11 @@
       <td>{{ article.articleName }}</td>
       <td>
         <img
-          [src]="article.image"
+          src="{{
+            article.image
+              ? article.image
+              : 'https://www.nicepng.com/png/detail/54-548349_food-png-icon-food-blue.png'
+          }}"
           [alt]="article.articleName"
           width="100"
           class="p-shadow-4"
@@ -164,7 +168,11 @@
             <td>{{ article.name }}</td>
             <td>
               <img
-                [src]="article.image"
+                src="{{
+                  article.image
+                    ? article.image
+                    : 'https://www.nicepng.com/png/detail/54-548349_food-png-icon-food-blue.png'
+                }}"
                 [alt]="article.name"
                 width="100"
                 class="p-shadow-4"

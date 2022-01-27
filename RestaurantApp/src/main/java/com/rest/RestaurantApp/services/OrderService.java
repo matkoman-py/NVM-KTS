@@ -66,7 +66,7 @@ public class OrderService implements IOrderService {
 		// TODO Auto-generated method stub
 		List<OrderDTO> orders = orderRepository.findAll().stream().map(order -> new OrderDTO(order))
 				.collect(Collectors.toList()).stream().filter(order -> {
-                    return order.getOrderStatus().equals(OrderStatus.NOT_STARTED);
+                    return order.getOrderStatus().equals(OrderStatus.ACTIVE);
                 })
                 .collect(Collectors.toList());
 		return orders;

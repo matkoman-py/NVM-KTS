@@ -79,9 +79,9 @@ public class LoginTest {
 		loginPage.setPincodeInput("cook123");
 		loginPage.loginButtonClickEmployee();
 		
-		loginPage.waitForUrlToBe("http://localhost:4200/home");
+		loginPage.waitForUrlToBe("http://localhost:4200/active-orders");
 		
-		assertEquals("http://localhost:4200/home", browser.getCurrentUrl());
+		assertEquals("http://localhost:4200/active-orders", browser.getCurrentUrl());
 	}
 	
 	@After

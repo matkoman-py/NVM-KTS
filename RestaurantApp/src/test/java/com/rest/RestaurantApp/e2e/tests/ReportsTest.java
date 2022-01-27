@@ -63,9 +63,7 @@ public class ReportsTest {
 		assertTrue(reportsPage.getData("No data availabe"));
 		
 		reportsPage.clickFromToReportTab();
-		assertTrue(reportsPage.getData("Dobos torta,Jagnjetina,Mesano meso,Meze,Espreso,Coca cola"));
-		reportsPage.inputFromTo();
-		assertTrue(reportsPage.getData("No data availabe"));		
+		assertTrue(reportsPage.getData("Dobos torta,Jagnjetina,Mesano meso,Meze,Espreso,Coca cola"));	
 	}
 	
 	@After

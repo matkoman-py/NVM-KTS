@@ -3,6 +3,7 @@ package com.rest.RestaurantApp.e2e.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
@@ -49,25 +50,9 @@ public class IngredientTest {
 		assertEquals("http://localhost:4200/home", browser.getCurrentUrl());
 		browser.navigate().to("http://localhost:4200/ingredients");
 		
-//		//Ovo ce izvuci trenutni broj ingredienta
-//		int totalCount = ingredientsPage.getIngredientCount();
-//		
-//		//Broj redova
-//		int rowCount = ingredientsPage.getRowCount();
-//		String text = "Showing 1 to ";
-//		
-//		//Ako ima vise ukupno elemenata od broja redova (tabela prikazuje max 10 elemenata po stranici)
-//		if(rowCount < totalCount) {
-//			text += rowCount + " of " + (totalCount-1) + " entries";
-//		} else {
-//			text += (totalCount-1) + " of " + (totalCount-1) + " entries";
-//		}
-//		System.out.println(text);
-		
 		int count = ingredientsPage.getIngredientCount();
 		ingredientsPage.clickOnRow(2);
 		ingredientsPage.clickDeleteBtn();
-		
 		
 		//sacekaj da se ocita promena
 		Thread.sleep(600);
@@ -79,8 +64,6 @@ public class IngredientTest {
 		ingredientsPage.setCreateUpdateName("Novi sastojak");
 		ingredientsPage.clickCheckbox();
 		ingredientsPage.clickCreateBtn();
-		
-		
 		
 		//sacekaj da se ocita promena
 		Thread.sleep(600);
@@ -109,19 +92,12 @@ public class IngredientTest {
 		int countAfterSearch = ingredientsPage.getIngredientCount();
 		
 		assertTrue(countAfterSearch <= count);
-		
-		
-		
-		
-		
-	
 	}
 	
-	
-	//OVO KOMENTARISI ZA VREME DEVELOPMENTA
-//	@After
-//	public void closeSelenium() {
-//		// Shutdown the browser
-//		browser.quit();
-//	}
+
+	@After
+	public void closeSelenium() {
+		// Shutdown the browser
+		browser.quit();
+	}
 }

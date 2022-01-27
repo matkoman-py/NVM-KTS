@@ -16,7 +16,7 @@ export class NavbarComponent implements OnInit {
   items: MenuItem[] = [
     {
       label: 'Login',
-      icon: 'pi pi-fw pi-user',
+      icon: 'pi pi-fw pi-sign-in',
       routerLink: '/login',
     },
   ];
@@ -37,7 +37,7 @@ export class NavbarComponent implements OnInit {
     this.items = [
       {
         label: 'Login',
-        icon: 'pi pi-fw pi-user',
+        icon: 'pi pi-fw pi-sign-in',
         routerLink: '/login',
       },
     ];
@@ -49,7 +49,7 @@ export class NavbarComponent implements OnInit {
       this.items = [
         {
           label: 'Login',
-          icon: 'pi pi-fw pi-user',
+          icon: 'pi pi-fw pi-sign-in',
           routerLink: '/login',
         },
       ];
@@ -63,7 +63,7 @@ export class NavbarComponent implements OnInit {
         },
         {
           label: 'Articles',
-          icon: 'pi pi-fw pi-user',
+          icon: 'pi pi-fw pi-shopping-bag',
           routerLink: '/articles',
           visible: this.role === 'ROLE_MANAGER',
         },
@@ -75,7 +75,7 @@ export class NavbarComponent implements OnInit {
         },
         {
           label: 'Reports',
-          icon: 'pi pi-fw pi-user',
+          icon: 'pi pi-fw pi-chart-pie',
           routerLink: '/reports',
           visible: this.role === 'ROLE_MANAGER',
         },
@@ -93,13 +93,13 @@ export class NavbarComponent implements OnInit {
         },
         {
           label: 'Ingredients',
-          icon: 'pi pi-fw pi-plus-circle',
+          icon: 'pi pi-fw pi-list',
           routerLink: '/ingredients',
           visible: this.role === 'ROLE_MANAGER',
         },
         {
           label: 'Logout',
-          icon: 'pi pi-fw pi-user',
+          icon: 'pi pi-fw pi-sign-out',
           routerLink: '/logout',
           visible:
             this.role === 'ROLE_MANAGER' ||

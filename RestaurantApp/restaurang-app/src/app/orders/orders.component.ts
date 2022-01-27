@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { OrdersService } from './services/orders.service';
 import { MessageService, PrimeNGConfig } from 'primeng/api';
-import {Router} from "@angular/router"
+import { Router } from '@angular/router';
 import { Order, OrderStatus } from '../modules/shared/models/order';
-
 
 @Component({
   selector: 'app-orders',
@@ -18,9 +17,8 @@ export class OrdersComponent implements OnInit {
   rows = 5;
 
   statusDict = new Map<string, string>([
-    ["NOT_STARTED", "Not started"],
-    ["PREPARING", "Preparing"],
-    ["FINISHED", "Finished"]
+    ['ACTIVE', 'Active'],
+    ['FINISHED', 'Finished'],
   ]);
 
   orderStatuses: OrderStatus[] = [
@@ -66,7 +64,7 @@ export class OrdersComponent implements OnInit {
       });
       return;
     }
-    this.router.navigate(['/view-order-kitchen/'+this.selectedOrder.id]);
+    this.router.navigate(['/view-order-kitchen/' + this.selectedOrder.id]);
   }
 
   next() {
@@ -82,9 +80,7 @@ export class OrdersComponent implements OnInit {
   }
 
   isLastPage(): boolean {
-    return this.orders ?
-      this.first === this.orders.length - this.rows :
-      true;
+    return this.orders ? this.first === this.orders.length - this.rows : true;
   }
 
   isFirstPage(): boolean {
