@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { fabric } from 'fabric';
 import { MessageService, PrimeNGConfig } from 'primeng/api';
 import { ArticlesService } from '../articles/services/articles.service';
 import { Article, ArticleType } from '../modules/shared/models/article';
@@ -9,6 +10,7 @@ import {
   OrderedArticle,
 } from '../modules/shared/models/orderedArticle';
 import { OrdersService } from '../orders/services/orders.service';
+import { TableLayoutService } from '../table-layout/services/table-layout.service';
 import { ViewOrderService } from '../view-order/services/view-order.service';
 
 @Component({
@@ -56,8 +58,9 @@ export class ViewOrderWaiterComponent implements OnInit {
     private viewOrderService: ViewOrderService,
     private orderService: OrdersService,
     private messageService: MessageService,
+    private tableService: TableLayoutService,
     private primengConfig: PrimeNGConfig,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -156,7 +159,42 @@ export class ViewOrderWaiterComponent implements OnInit {
   }
 
   finishOrder() {
-    //ovde salji da se zavrsi, nzm dal ima metoda na beku i provera sa pinom
+    let canvas = new fabric.Canvas(null);
+
+    this.tableService.getTableLayout().subscribe(res => {
+      canvas.loadFromJSON(res, () => {
+        canvas.renderAll();
+        canvas.forEachObject((o : any) => {
+          if(o.order_id === this.orderId) {
+            o.getObjects("rect")[0].set('fill', 'gray');
+            o.toObject = ((toObject) => {
+              return (propertiesToInclude: any) => {
+                return fabric.util.object.extend(toObject.call(o, propertiesToInclude), {
+                  id: o.id,
+                  order_id: ""
+                });
+              };
+            })(o.toObject);
+          } else {
+            o.toObject = ((toObject) => {
+              return (propertiesToInclude: any) => {
+                return fabric.util.object.extend(toObject.call(o, propertiesToInclude), {
+                  id: o.id,
+                  order_id: o.order_id
+                });
+              };
+            })(o.toObject);
+          }
+        });
+        this.tableService.postTableLayout(JSON.stringify(canvas)).subscribe(() =>
+        {
+          this.displayConfirmDialog = false;
+          this.displayFinishOrderDialog = false;
+          this.router.navigate(['table-layout']);
+          this.messageService.add({key: 'tc', severity:'success', summary: 'Order is finished', detail: 'Finished'});
+        });
+      })
+    })
   }
 
   getOrder(id: number) {

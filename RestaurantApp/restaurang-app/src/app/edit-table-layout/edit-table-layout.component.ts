@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { fabric } from 'fabric';
+import { MessageService, PrimeNGConfig } from 'primeng/api';
 import { TableSerialization } from '../modules/shared/models/table';
 import { EditTableLayoutService } from './services/edit-table-layout.service';
 
@@ -7,6 +8,7 @@ import { EditTableLayoutService } from './services/edit-table-layout.service';
   selector: 'app-edit-table-layout',
   templateUrl: './edit-table-layout.component.html',
   styleUrls: ['./edit-table-layout.component.css'],
+  providers: [MessageService]
 })
 export class EditTableLayoutComponent implements OnInit {
 
@@ -18,10 +20,13 @@ export class EditTableLayoutComponent implements OnInit {
   selectedTable = new fabric.Object();
 
   constructor(
-    private editTableLayoutService: EditTableLayoutService
+    private editTableLayoutService: EditTableLayoutService,
+    private messageService: MessageService,
+    private primengConfig: PrimeNGConfig
     ) { }
 
   ngOnInit(): void {
+    this.primengConfig.ripple = true;
     this.canvas = new fabric.Canvas('demoCanvas');
 
     this.loadTableLayout();
@@ -34,11 +39,13 @@ export class EditTableLayoutComponent implements OnInit {
         .subscribe((data: any) =>{
         this.canvas.loadFromJSON(data, () => this.canvas.renderAll())
       
+        this.table_num = 0;
+
         this.canvas.forEachObject((o: any) => {
           let table: fabric.Rect = o.getObjects('rect')[0];
           table.set('fill', 'gray');
-
-          console.log(table + " DSAF")
+          
+          this.table_num++;
 
           o.toObject = ((toObject) => {
             return (propertiesToInclude:any) => {
@@ -67,7 +74,10 @@ export class EditTableLayoutComponent implements OnInit {
         var table = this.makeTableWithSixSeats();
         this.canvas.add(table);
       } else {
+        this.messageService.add({key: 'tc', severity:'success', summary: 'Select table seat number!', detail: 'Warning'});
+        return;
       }
+      this.messageService.add({key: 'tc', severity:'success', summary: 'Table successfully added!', detail: 'Added'});
   }
 
   makeTableWithSixSeats() {
@@ -109,7 +119,7 @@ export class EditTableLayoutComponent implements OnInit {
       radius: 20
     })
 
-    var text = new fabric.Text('Table ' + (this.table_num), {
+    var text = new fabric.Text('Table ' + (++this.table_num), {
       fontSize: 25,
       fontFamily: "sans-serif",
       left: rect.left + 60,
@@ -165,7 +175,7 @@ export class EditTableLayoutComponent implements OnInit {
       radius: 20
     })
 
-    var text = new fabric.Text('Table ' + (this.table_num), {
+    var text = new fabric.Text('Table ' + (++this.table_num), {
       fontSize: 25,
       fontFamily: "sans-serif",
       left: rect.left + 10,
@@ -261,7 +271,8 @@ export class EditTableLayoutComponent implements OnInit {
     });
     
     this.editTableLayoutService.postTableLayout(JSON.stringify(this.canvas))
-        .subscribe(res => alert("saved"));    
+        .subscribe(res => this.messageService.add({key: 'tc', severity:'success', summary: 'Table layout saved!', detail: 'Saved'})
+        );    
   }
 
   removeTable() {
@@ -285,6 +296,8 @@ export class EditTableLayoutComponent implements OnInit {
       })(o.toObject);
     })
     
+    this.messageService.add({key: 'tc', severity:'error', summary: 'Table deleted!', detail: 'Remove'});
+
     this.canvas.renderAll();
   }
 
