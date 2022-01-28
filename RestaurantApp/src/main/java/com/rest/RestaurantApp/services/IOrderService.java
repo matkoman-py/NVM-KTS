@@ -26,7 +26,7 @@ public interface IOrderService {
 	
 	OrderedArticleDTO changeStatusOfArticle(int employeePin, int articleId); //++++++
 	
-	OrderedArticleDTO createArticleForOrder(int articleId, int orderId); //++++
+	OrderedArticleDTO createArticleForOrder(OrderedArticleDTO article, int orderId); //++++
 	
 	OrderedArticleDTO deleteArticleForOrder(int articleId);
 	

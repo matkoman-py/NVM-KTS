@@ -24,6 +24,7 @@ import com.rest.RestaurantApp.domain.enums.UserType;
 public class Employee extends User {
 	
 	//@Column(nullable = false)
+	@Column(unique = true)
 	private int pincode;
 	
 	@Enumerated(EnumType.STRING)

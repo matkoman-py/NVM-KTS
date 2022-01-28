@@ -11,6 +11,11 @@ export interface Article {
   image?: String;
 }
 
+export interface ArticleForAdding {
+  id: number;
+  description: string;
+}
+
 export interface ArticlesDTO {
   articles: Article[];
 }

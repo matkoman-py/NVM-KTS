@@ -73,13 +73,23 @@
             <th>Selling price</th>
             <th>Type</th>
             <th></th>
+            <th></th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-article>
-          <tr [id]="article.id" >
+        <ng-template pTemplate="body" let-article let-rowIndex="rowIndex">
+          <tr [id]="article.id">
             <td>{{ article.name }}</td>
             <td>{{ article.sellingPrice }}</td>
             <td>{{ article.type }}</td>
+            <td>
+              <button
+                pButton
+                type="button"
+                label="Note"
+                class="p-button-submit"
+                (click)="openAddNoteDialogue(rowIndex)"
+              ></button>
+            </td>
             <td>
               <button
                 pButton
@@ -132,8 +142,14 @@
   </ng-template>
 </p-dialog>
 
-<p-dialog header="Input your personal pin to finish the action" [(visible)]="displayConfirmDialog" [breakpoints]="{'960px': '75vw'}"
-  [style]="{width: '50vw'}" [draggable]="false" [resizable]="false">
+<p-dialog
+  header="Input your personal pin to finish the action"
+  [(visible)]="displayConfirmDialog"
+  [breakpoints]="{ '960px': '75vw' }"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+>
   <div class="p-field">
     <input type="number" pInputText [(ngModel)]="employeePin" id="input-pin"/>
   </div>
@@ -141,5 +157,26 @@
     <p-button (click)="handleClose()" label="Cancel" styleClass="p-button-text"></p-button>
     <p-button id="confirm-pin-button" [disabled]="employeePin === undefined" (click)="checkPin()" label="Confirm"
       styleClass="p-button-text"></p-button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  header="Add note for article"
+  [(visible)]="displayAddNoteDialog"
+  [breakpoints]="{ '960px': '75vw' }"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div class="p-field">
+    <input type="text" pInputText [(ngModel)]="note" />
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button
+      [disabled]="checkNote()"
+      (click)="addNote()"
+      label="Add note"
+      styleClass="p-button-text"
+    ></p-button>
   </ng-template>
 </p-dialog>

@@ -25,8 +25,10 @@ export class AuthGuard implements CanActivate {
       return false;
     }
     if (!expectedRole.includes(tokenPayload)) {
-      if (tokenPayload === 'WAITER' || tokenPayload === 'ROLE_MANAGER') {
-        this.router.navigate(['home']);
+      if (tokenPayload === 'ROLE_MANAGER') {
+        this.router.navigate(['reports']);
+      } else if (tokenPayload === 'WAITER') {
+        this.router.navigate(['table-layout']);
       } else {
         this.router.navigate(['active-orders']);
       }

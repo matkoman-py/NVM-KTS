@@ -135,7 +135,7 @@ public class OrderController {
 	
 	@PostMapping(value = "addArticle/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<OrderedArticleDTO> addArticle(@RequestBody OrderedArticleDTO article, @PathVariable("id") int orderId) {
-		OrderedArticleDTO orderedArticle = orderService.createArticleForOrder(article.getArticleId(), orderId);
+		OrderedArticleDTO orderedArticle = orderService.createArticleForOrder(article, orderId);
 		return new ResponseEntity<OrderedArticleDTO>(orderedArticle, HttpStatus.OK);
 	}
 	

@@ -6,13 +6,16 @@ import { fabric } from 'fabric';
 import { ArticlesService } from '../articles/services/articles.service';
 import { EmployeesService } from '../employees/services/employees.service';
 import { Article } from '../modules/shared/models/article';
-import { Order } from '../modules/shared/models/order';
-import { ArticleStatus, OrderedArticle } from '../modules/shared/models/orderedArticle';
+import { Order, OrderedArticleWithDTO } from '../modules/shared/models/order';
+import {
+  ArticleStatus,
+  OrderedArticle,
+} from '../modules/shared/models/orderedArticle';
 import { OrdersService } from '../orders/services/orders.service';
 import { ViewOrderService } from '../view-order/services/view-order.service';
 import { TableLayoutService } from './services/table-layout.service';
-import { OrderCreation } from '../modules/shared/models/order_creation'
 import { MessageService } from 'primeng/api';
+import { OrderCreation } from '../modules/shared/models/order_creation';
 
 @Component({
   selector: 'app-table-layout',
@@ -21,14 +24,13 @@ import { MessageService } from 'primeng/api';
   providers: [MessageService]
 })
 export class TableLayoutComponent implements OnInit {
-
   private canvas = new fabric.Canvas('demoCanvas');
-  private json = "";
+  private json = '';
 
   selectedTableId: number = 0;
 
   order: Order = {};
-  employeePin? : number;
+  employeePin?: number;
   articles: OrderedArticle[] = [];
   allArticles: Article[] = [];
   addedArticles: Article[] = [];
@@ -43,7 +45,9 @@ export class TableLayoutComponent implements OnInit {
   displayFinishOrderDialog: boolean = false;
   displayArticleAddingDialog: boolean = false;
   displayQuantityDialog: boolean = false;
-
+  displayAddNoteDialog: boolean = false;
+  indexForAddingNote: number;
+  note: string = '';
   statusDict = new Map<string, string>([
     ['NOT_TAKEN', 'Take article'],
     ['TAKEN', 'Start preparing'],
@@ -70,6 +74,7 @@ export class TableLayoutComponent implements OnInit {
     private messageService: MessageService
     ) { }
 
+
   addArticles() {
     // var articlesAndOrderDto = {
     //   articleIds: this.addedArticles.map((article) =>
@@ -81,21 +86,48 @@ export class TableLayoutComponent implements OnInit {
     this.displayConfirmDialog = true;
   }
 
+  convertToDto(article: Article): OrderedArticleWithDTO {
+    console.log(article.id);
+    return {
+      articleId: article.id,
+      description: article.description ? article.description : '',
+    };
+  }
+
+  openAddNoteDialogue(index: number) {
+    this.indexForAddingNote = index;
+    this.displayAddNoteDialog = true;
+  }
+
+  addNote() {
+    this.addedArticles[this.indexForAddingNote].description = this.note;
+    this.note = '';
+    this.indexForAddingNote = -1;
+    this.displayAddNoteDialog = false;
+  }
+
+  checkNote() {
+    if (this.note.trim() === '') {
+      return true;
+    }
+    return false;
+  }
+
   handleClose() {
     this.displayConfirmDialog = false;
     this.employeePin = undefined;
   }
 
   checkPin() {
-
     // var date: string = new Date().toLocaleString('en-US', datetimeOptions);
     var date: string = this.parseDate(new Date());
 
-    this.employeeService.getEmployeeIdByPincode(this.employeePin).subscribe(() =>
-    {
-      var order: OrderCreation = {
-        articles: this.addedArticles.map((article) => 
-          article.id ? article.id : 0
+    this.employeeService
+      .getEmployeeIdByPincode(this.employeePin)
+      .subscribe(() => {
+        var order: OrderCreation = {
+          articlesWithDescription: this.addedArticles.map((article) =>
+            this.convertToDto(article)
           ),
         orderDate: date,
         deleted: false,
@@ -179,9 +211,16 @@ export class TableLayoutComponent implements OnInit {
     this.displayArticleAddingDialog = true;
   }
 
+  // addArticlesToArray() {
+  //   for (var i = 0; i < this.quantity; i++) {
+  //     this.addedArticles.push(this.articleForAdding);
+  //   }
+  //   this.displayQuantityDialog = false;
+  // }
+
   addArticlesToArray() {
     for (var i = 0; i < this.quantity; i++) {
-      this.addedArticles.push(this.articleForAdding);
+      this.addedArticles.push({ ...this.articleForAdding, description: '' });
     }
     this.displayQuantityDialog = false;
   }
@@ -228,46 +267,40 @@ export class TableLayoutComponent implements OnInit {
   }
 
   deserialize() {
-    this.tableLayoutService.getTableLayout()
-        .subscribe((data: any) => {
-          console.log(data);    
+    this.tableLayoutService.getTableLayout().subscribe((data: any) => {
+      console.log(data);
 
-          this.canvas.loadFromJSON(data, () => {
-            this.canvas.renderAll();
-            this.setTableEvents();
-          })
-  });
+      this.canvas.loadFromJSON(data, () => {
+        this.canvas.renderAll();
+        this.setTableEvents();
+      });
+    });
   }
 
   setTableEvents() {
-    this.canvas.forEachObject((o : any) => {
+    this.canvas.forEachObject((o: any) => {
       var table = o.getObjects('rect')[0];
 
       o.selectable = false;
-      if(o.order_id !== "")
-        table.set('fill', 'green');
-      
-      o.on('mousedown', (e : any) => {
-        if(o.order_id !== "") {
-          this.router.navigate(['view-order-waiter/' + o.order_id])
-        }
-        else {
+      if (o.order_id !== '') table.set('fill', 'green');
+
+      o.on('mousedown', (e: any) => {
+        if (o.order_id !== '') {
+          this.router.navigate(['view-order-waiter/' + o.order_id]);
+        } else {
           this.selectedTableId = o.id;
           this.openModalForAddingArticles();
         }
-      })
-    })
+      });
+    });
     this.canvas.renderAll();
   }
 
   checkIfTablesHaveOrders() {
-    this.canvas.forEachObject((o : any) => {
+    this.canvas.forEachObject((o: any) => {
       var table = o.getObjects('rect')[0];
 
-      if(o.order_id !== undefined)
-        table.set('fill', 'green');
-    })
+      if (o.order_id !== undefined) table.set('fill', 'green');
+    });
   }
-
-
 }

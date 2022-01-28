@@ -19,6 +19,7 @@ import com.rest.RestaurantApp.domain.enums.OrderStatus;
 import com.rest.RestaurantApp.dto.ArticlesAndOrderDTO;
 import com.rest.RestaurantApp.dto.OrderDTO;
 import com.rest.RestaurantApp.dto.OrderedArticleDTO;
+import com.rest.RestaurantApp.dto.OrderedArticleWithDescDTO;
 import com.rest.RestaurantApp.exceptions.ChangeFinishedStateException;
 import com.rest.RestaurantApp.exceptions.IncompatibleEmployeeTypeException;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
@@ -103,28 +104,30 @@ public class OrderService implements IOrderService {
 	@Override
 	public OrderDTO create(OrderDTO order) {
 		// TODO Auto-generated method stub
-		// List<Article> articles = order.getOrderedArticles().stream().map(article ->
-		// article)
-		// dodati proveru jel sto slobodan
+		
 		Employee employee = employeeRepository.findByPincode(order.getEmployeePin()).get();
 		
 		if(!employee.getEmployeeType().equals(EmployeeType.WAITER)) {
 			throw new OrderTakenByWrongEmployeeTypeException("An employee of type " + employee.getEmployeeType().toString() +" can't create a new order");
 		}
 		
-		if(order.getArticles() == null) {
+		if(order.getArticlesWithDescription() == null) {
 			throw new NullArticlesException("Order must have at least 1 article");
 		}
 		
-		if(order.getArticles().size() == 0) {
+		if(order.getArticlesWithDescription().size() == 0) {
 			throw new NullArticlesException("Order must have at least 1 article");
 		}
 		
-		List<Article> articles = order.getArticles().stream()
-				.map(article -> articleRepository.findById(article).get()).collect(Collectors.toList());
-		List<OrderedArticle> orderedArticles = articles.stream()
-				.map(orderedArticle -> new OrderedArticle(ArticleStatus.NOT_TAKEN, orderedArticle))
-				.collect(Collectors.toList());
+		List<Article> articles = order.getArticlesWithDescription().stream()
+				.map(articleWithDesc -> articleRepository.findById(articleWithDesc.getArticleId()).get()).collect(Collectors.toList());
+
+		
+		List<OrderedArticle> orderedArticles = order.getArticlesWithDescription().stream()
+				.map(articleWithDesc -> 
+				new OrderedArticle(ArticleStatus.NOT_TAKEN, 
+						articleRepository.findById(articleWithDesc.getArticleId()).get(), articleWithDesc.getDescription())
+				         ).collect(Collectors.toList());
 		
 		//dodaj cenu
 		double priceOfOrder = articles.stream().map(x -> {
@@ -146,7 +149,8 @@ public class OrderService implements IOrderService {
 	}
 	
 	public void notifyCooksAndBarmen(Order order) {
-		template.convertAndSend("/orders/new-order", new OrderDTO(order));
+		String orderString = "There is a new order! Order id: "+order.getId() + " Number of articles: " + order.getOrderedArticles().size();
+		template.convertAndSend("/orders/new-order", orderString);
 	}
 	
 	@Override
@@ -268,15 +272,18 @@ public class OrderService implements IOrderService {
 
 
 	public void notifyWaiters(OrderedArticle orderedArticle) {
-		template.convertAndSend("/orders/article-status-changed", new OrderedArticleDTO(orderedArticle));
+		String articleChanged = "Article status has been changed! Article: " + orderedArticle.getArticle().getName() + " Article Status: " + 
+					orderedArticle.getStatus().toString() + "! For table: " + orderedArticle.getOrder().getTableNumber();
+		template.convertAndSend("/orders/article-status-changed", articleChanged);
 	}
 
 	@Override
-	public OrderedArticleDTO createArticleForOrder(int articleId, int orderId) {
+	public OrderedArticleDTO createArticleForOrder(OrderedArticleDTO article, int orderId) {
 		// TODO Auto-generated method stub
-		Optional<Article> articleData = articleRepository.findById(articleId);
+		
+		Optional<Article> articleData = articleRepository.findById(article.getArticleId());
 		if(articleData.isEmpty()) {
-			throw new NotFoundException("Article with id " + articleId + " was not found");
+			throw new NotFoundException("Article with id " + article.getArticleId() + " was not found");
 		}
 		Article newArticle = articleData.get();
 		Optional<Order> orderData = orderRepository.findById(orderId);
@@ -284,17 +291,20 @@ public class OrderService implements IOrderService {
 			throw new NotFoundException("Order with id " + orderId + " was not found");
 		}
 		Order order = orderData.get();
-		OrderedArticle orderedArticle = new OrderedArticle(ArticleStatus.NOT_TAKEN, newArticle, order, articleData.get().getDescription());
+		OrderedArticle orderedArticle = new OrderedArticle(ArticleStatus.NOT_TAKEN, newArticle, order, article.getDescription());
 		if(orderedArticle.getArticle().getActivePrice() != null) {
 			order.setPrice(order.getPrice() + orderedArticle.getArticle().getActivePrice().getSellingPrice());
 		}
 		OrderedArticle savedArticle = orderedArticleRepository.save(orderedArticle);
 		notifyCooksAndBarmenArticleCreated(savedArticle);
 		return new OrderedArticleDTO(savedArticle);
+
 	}
 	
 	public void notifyCooksAndBarmenArticleCreated(OrderedArticle orderedArticle) {
-		template.convertAndSend("/orders/article-status-changed", "New article" + new OrderedArticleDTO(orderedArticle));
+		String articleChanged = "New article has been added to order: "+  orderedArticle.getOrder().getId() + "! "
+				+ "Article: " + orderedArticle.getArticle().getName();
+		template.convertAndSend("/orders/new-order", articleChanged);
 	}
 	
 	@Override
@@ -316,7 +326,9 @@ public class OrderService implements IOrderService {
 	}
 	
 	public void notifyCooksAndBarmenArticleDeleted(OrderedArticle orderedArticle) {
-		template.convertAndSend("/orders/article-status-changed", "Deleted article" + new OrderedArticleDTO(orderedArticle));
+		String articleChanged = "Article has been deleted from order: "+  orderedArticle.getOrder().getId() + "! "
+				+ "Article: " + orderedArticle.getArticle().getName();
+		template.convertAndSend("/orders/new-order", articleChanged);
 	}
 	
 	@Override
@@ -358,10 +370,11 @@ public class OrderService implements IOrderService {
 
 	@Override
 	public OrderDTO addArticlesToOrder(ArticlesAndOrderDTO dto) {
-		for(Integer id : dto.getArticleIds()) {
-			this.createArticleForOrder(id, dto.getOrderId());
-		}
 		
+		for(OrderedArticleWithDescDTO article : dto.getArticles()) {
+			this.createArticleForOrder(new OrderedArticleDTO(article.getArticleId(), article.getDescription()), dto.getOrderId());
+		}
+
 		return this.getOne(dto.getOrderId());
 	}
 }

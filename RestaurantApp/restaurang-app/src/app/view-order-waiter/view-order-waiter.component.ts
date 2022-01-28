@@ -3,8 +3,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { fabric } from 'fabric';
 import { MessageService, PrimeNGConfig } from 'primeng/api';
 import { ArticlesService } from '../articles/services/articles.service';
-import { Article, ArticleType } from '../modules/shared/models/article';
-import { Order } from '../modules/shared/models/order';
+import {
+  Article,
+  ArticleForAdding,
+  ArticleType,
+} from '../modules/shared/models/article';
+import { Order, OrderedArticleWithDTO } from '../modules/shared/models/order';
 import {
   ArticleStatus,
   OrderedArticle,
@@ -35,6 +39,9 @@ export class ViewOrderWaiterComponent implements OnInit {
   displayFinishOrderDialog: boolean = false;
   displayArticleAddingDialog: boolean = false;
   displayQuantityDialog: boolean = false;
+  displayAddNoteDialog: boolean = false;
+  indexForAddingNote: number;
+  note: string = '';
 
   statusDict = new Map<string, string>([
     ['NOT_TAKEN', 'Take article'],
@@ -78,21 +85,34 @@ export class ViewOrderWaiterComponent implements OnInit {
     this.updateArticleStatusId = undefined;
   }
 
+  convertToDto(article: Article): OrderedArticleWithDTO {
+    return {
+      articleId: article.id,
+      description: article.description ? article.description : '',
+    };
+  }
+
   addArticles() {
     var articlesAndOrderDto = {
-      articleIds: this.addedArticles.map((article) =>
-        article.id ? article.id : 0
-      ),
+      articles: this.addedArticles.map((article) => this.convertToDto(article)),
       orderId: this.orderId,
     };
-
+    articlesAndOrderDto.articles.map((article) =>
+      console.log(article.articleId)
+    );
     this.orderService.addArticlesToOrder(articlesAndOrderDto).subscribe(() => {
       this.getOrder(this.orderId);
       this.getArticlesForOrder(this.orderId);
     });
+    this.addedArticles = [];
+    this.messageService.add({
+      key: 'tc',
+      severity: 'success',
+      summary: 'Success!',
+      detail: 'Successfully added articles to order!',
+    });
 
     this.displayArticleAddingDialog = false;
-    this.addedArticles = [];
   }
 
   openConfirmDialog() {
@@ -111,9 +131,28 @@ export class ViewOrderWaiterComponent implements OnInit {
     );
   }
 
+  openAddNoteDialogue(index: number) {
+    this.indexForAddingNote = index;
+    this.displayAddNoteDialog = true;
+  }
+
+  addNote() {
+    this.addedArticles[this.indexForAddingNote].description = this.note;
+    this.note = '';
+    this.indexForAddingNote = -1;
+    this.displayAddNoteDialog = false;
+  }
+
+  checkNote() {
+    if (this.note.trim() === '') {
+      return true;
+    }
+    return false;
+  }
+
   addArticlesToArray() {
     for (var i = 0; i < this.quantity; i++) {
-      this.addedArticles.push(this.articleForAdding);
+      this.addedArticles.push({ ...this.articleForAdding, description: '' });
     }
     this.displayQuantityDialog = false;
   }
@@ -137,25 +176,28 @@ export class ViewOrderWaiterComponent implements OnInit {
     this.displayFinishOrderDialog = true;
   }
 
-  getArticleNamesAndDescriptions() {
-    for (let article of this.articles) {
-      this.viewOrderService
-        .getArticle(article.articleId)
-        .subscribe((result) => {
-          article.articleName = result.name;
-          article.articleDescription = result.description;
-          article.price = result.sellingPrice;
-          article.image = result.image;
-          article.type = result.type;
-        });
-    }
-  }
-
   deleteArticleFromOrder(id: number) {
-    this.orderService.deleteArticleFromOrder(id).subscribe(() => {
-      this.getOrder(this.orderId);
-      this.getArticlesForOrder(this.orderId);
-    });
+    this.orderService.deleteArticleFromOrder(id).subscribe(
+      () => {
+        this.getOrder(this.orderId);
+        this.getArticlesForOrder(this.orderId);
+        this.messageService.add({
+          key: 'tc',
+          severity: 'success',
+          summary: 'Success!',
+          detail: `Successfully deleted article with id: ${id} to order!`,
+        });
+      },
+      (err) => {
+        this.messageService.add({
+          key: 'tc',
+          severity: 'warn',
+          summary: 'Fail',
+          detail: err.error,
+        });
+        console.log(err.error);
+      }
+    );
   }
 
   finishOrder() {
@@ -206,7 +248,6 @@ export class ViewOrderWaiterComponent implements OnInit {
   getArticlesForOrder(id: number) {
     this.viewOrderService.getArticlesForOrder(id).subscribe((data) => {
       this.articles = data;
-      this.getArticleNamesAndDescriptions();
     });
   }
 

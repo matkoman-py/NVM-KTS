@@ -1,8 +1,10 @@
+import { OrderedArticleWithDTO } from './order';
+
 export interface OrderCreation {
-    articles?: number[],
-    orderDate?: string,
-    deleted?: boolean,
-    tableNumber?: number,
-    description?: string,
-    employeePin?: number
+  articlesWithDescription?: OrderedArticleWithDTO[];
+  orderDate?: string;
+  deleted?: boolean;
+  tableNumber?: number;
+  description?: string;
+  employeePin?: number;
 }

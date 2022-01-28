@@ -56,12 +56,6 @@ export class NavbarComponent implements OnInit {
     } else {
       this.items = [
         {
-          label: 'Home',
-          icon: 'pi pi-fw pi-home',
-          routerLink: '/home',
-          visible: this.role === 'ROLE_MANAGER' || this.role === 'WAITER',
-        },
-        {
           label: 'Articles',
           icon: 'pi pi-fw pi-shopping-bag',
           routerLink: '/articles',
@@ -101,13 +95,13 @@ export class NavbarComponent implements OnInit {
           label: 'Tables',
           icon: 'pi pi-fw pi-microsoft',
           routerLink: '/table-layout',
-          visible: this.role === 'WAITER'
+          visible: this.role === 'WAITER',
         },
         {
           label: 'Edit tables',
           icon: 'pi pi-fw pi-microsoft',
           routerLink: '/edit-table-layout',
-          visible: this.role === 'ROLE_MANAGER'
+          visible: this.role === 'ROLE_MANAGER',
         },
         {
           label: 'Logout',
@@ -119,7 +113,6 @@ export class NavbarComponent implements OnInit {
             this.role === 'WAITER' ||
             this.role === 'BARMAN',
         },
-        
       ];
     }
   };

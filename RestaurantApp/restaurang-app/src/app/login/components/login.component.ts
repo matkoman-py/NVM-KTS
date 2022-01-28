@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('isLoggedIn', 'true');
         }
         this.loginService.emitLogin();
-        this.router.navigate(['home']);
+        this.router.navigate(['reports']);
 
         console.log(jwt_decode(response.body.accessToken));
         //if((<any>jwt_decode(response.body.accessToken)).roles.filter((o: { name: string; }) => {o.name === 'ROLE_MANAGER'})) alert('jaj');
@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit {
         }
         this.loginService.emitLogin();
         if (role === 'WAITER') {
-          this.router.navigate(['home']);
+          this.router.navigate(['table-layout']);
         } else {
           this.router.navigate(['active-orders']);
         }
