@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import com.rest.RestaurantApp.domain.enums.EmployeeType;
 import com.rest.RestaurantApp.dto.EmployeeAuthDTO;
+import com.rest.RestaurantApp.exceptions.EmployeeWithEmailAlreadyExists;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,6 +66,17 @@ public class EmployeeService implements IEmployeeService{
 
 	@Override//
 	public EmployeeDTO create(EmployeeDTO employee) {
+		
+		Optional<Employee> hasPin = employeeRepository.findByPincode(employee.getPincode());
+		if(!hasPin.isEmpty()) {
+			throw new EmployeeWithEmailAlreadyExists("Employee with pincode " + employee.getPincode() + " already exists");
+		}
+		
+		Optional<Employee> hasEmail = employeeRepository.findByEmail(employee.getEmail());
+		if(!hasEmail.isEmpty()) {
+			throw new EmployeeWithEmailAlreadyExists("Employee with email " + employee.getEmail() + " already exists");
+		}
+		
 		Employee newEmpolyee = new Employee(employee.getEmail(), employee.getName(), employee.getSurname(), 
 				employee.getBirthday(), employee.getType(), employee.getPincode(), employee.getEmployeeType());
 		Employee createdEmployee = employeeRepository.save(newEmpolyee);
@@ -72,7 +84,7 @@ public class EmployeeService implements IEmployeeService{
 		SalaryInfo salaryInfo = new SalaryInfo(new Date(), employee.getSalary(), newEmpolyee);
 		salaryInfoRepository.save(salaryInfo);
 		createdEmployee.setNewSalary(salaryInfo);
-		
+	
 		Employee createdEmployeeWithSalary = employeeRepository.save(newEmpolyee);
 		
 		return new EmployeeDTO(createdEmployeeWithSalary);

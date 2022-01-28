@@ -64,7 +64,7 @@ export class ViewOrderComponent implements OnInit {
     this.updateArticleStatusId = undefined;
   }
 
-  openConfirmDialog(articleId?: number) {
+  openConfirmDialog(articleId?: number){
     this.display = true;
     this.updateArticleStatusId = articleId;
   }
@@ -113,6 +113,7 @@ export class ViewOrderComponent implements OnInit {
   getArticlesForOrder(id: number) {
     this.viewOrderService.getArticlesForOrder(id).subscribe((data) => {
       this.articles = data;
+      this.articles.sort((a, b) => a.id - b.id);
     });
   }
 

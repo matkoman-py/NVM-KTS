@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rest.RestaurantApp.dto.ArticleDTO;
 import com.rest.RestaurantApp.dto.EmployeeDTO;
+import com.rest.RestaurantApp.exceptions.EmployeeWithEmailAlreadyExists;
+import com.rest.RestaurantApp.exceptions.EmployeeWithPinAlreadyExists;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.services.EmployeeService;
 
@@ -92,5 +94,15 @@ public class EmployeeController {
 	@ExceptionHandler(value = NotFoundException.class)
 	public ResponseEntity handleNullArticlesException(NotFoundException notFoundException) {
         return new ResponseEntity(notFoundException.getMessage(), HttpStatus.NOT_FOUND);
+    }
+	
+	@ExceptionHandler(value = EmployeeWithEmailAlreadyExists.class)
+	public ResponseEntity handleEmailAlreadyExistsException(EmployeeWithEmailAlreadyExists notFoundException) {
+        return new ResponseEntity(notFoundException.getMessage(), HttpStatus.CONFLICT);
+    }
+	
+	@ExceptionHandler(value = EmployeeWithPinAlreadyExists.class)
+	public ResponseEntity handlePincodeAlreadyExistsException(EmployeeWithPinAlreadyExists notFoundException) {
+        return new ResponseEntity(notFoundException.getMessage(), HttpStatus.CONFLICT);
     }
 }

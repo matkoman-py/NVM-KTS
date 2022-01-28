@@ -26,7 +26,7 @@
       </div>
       <div class="p-field p-grid">
         <label styleClass="p-col-fixed" style="width:100px">Pincode:</label>
-        <p-inputNumber [(ngModel)]="employee.pincode" id="employee-pin" mode="decimal" inputId="withoutgrouping" [useGrouping]="false"></p-inputNumber>
+        <p-inputNumber [(ngModel)]="employee.pincode" [max]="100" id="employee-pin" mode="decimal" inputId="withoutgrouping" [useGrouping]="false"></p-inputNumber>
       </div>
       <div class="p-field p-grid">
         <label styleClass="p-col-fixed" style="width:100px">Birthday:</label>
@@ -64,7 +64,6 @@
         <button pButton type="button" label="Submit" (click)="search()" id="search-button"></button>
       </div>
     </div>
-
 
     <p-table selectionMode="single" [value]="employees" [(selection)]="selectedEmployee" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" >
       <ng-template pTemplate="header">
