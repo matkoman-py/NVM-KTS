@@ -6,7 +6,7 @@ import { fabric } from 'fabric';
 import { ArticlesService } from '../articles/services/articles.service';
 import { EmployeesService } from '../employees/services/employees.service';
 import { Article } from '../modules/shared/models/article';
-import { Order } from '../modules/shared/models/order';
+import { Order, OrderedArticleWithDTO } from '../modules/shared/models/order';
 import {
   ArticleStatus,
   OrderedArticle,
@@ -43,7 +43,9 @@ export class TableLayoutComponent implements OnInit {
   displayFinishOrderDialog: boolean = false;
   displayArticleAddingDialog: boolean = false;
   displayQuantityDialog: boolean = false;
-
+  displayAddNoteDialog: boolean = false;
+  indexForAddingNote: number;
+  note: string = '';
   statusDict = new Map<string, string>([
     ['NOT_TAKEN', 'Take article'],
     ['TAKEN', 'Start preparing'],
@@ -80,6 +82,33 @@ export class TableLayoutComponent implements OnInit {
     this.displayConfirmDialog = true;
   }
 
+  convertToDto(article: Article): OrderedArticleWithDTO {
+    console.log(article.id);
+    return {
+      articleId: article.id,
+      description: article.description ? article.description : '',
+    };
+  }
+
+  openAddNoteDialogue(index: number) {
+    this.indexForAddingNote = index;
+    this.displayAddNoteDialog = true;
+  }
+
+  addNote() {
+    this.addedArticles[this.indexForAddingNote].description = this.note;
+    this.note = '';
+    this.indexForAddingNote = -1;
+    this.displayAddNoteDialog = false;
+  }
+
+  checkNote() {
+    if (this.note.trim() === '') {
+      return true;
+    }
+    return false;
+  }
+
   handleClose() {
     this.displayConfirmDialog = false;
     this.employeePin = undefined;
@@ -93,8 +122,8 @@ export class TableLayoutComponent implements OnInit {
       .getEmployeeIdByPincode(this.employeePin)
       .subscribe(() => {
         var order: OrderCreation = {
-          articles: this.addedArticles.map((article) =>
-            article.id ? article.id : 0
+          articlesWithDescription: this.addedArticles.map((article) =>
+            this.convertToDto(article)
           ),
           orderDate: date,
           deleted: false,
@@ -189,9 +218,16 @@ export class TableLayoutComponent implements OnInit {
     this.displayArticleAddingDialog = true;
   }
 
+  // addArticlesToArray() {
+  //   for (var i = 0; i < this.quantity; i++) {
+  //     this.addedArticles.push(this.articleForAdding);
+  //   }
+  //   this.displayQuantityDialog = false;
+  // }
+
   addArticlesToArray() {
     for (var i = 0; i < this.quantity; i++) {
-      this.addedArticles.push(this.articleForAdding);
+      this.addedArticles.push({ ...this.articleForAdding, description: '' });
     }
     this.displayQuantityDialog = false;
   }

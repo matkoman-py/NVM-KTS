@@ -49,7 +49,14 @@ public class OrderedArticle extends BaseEntity{
 		this.status = status;
 		this.article = article;
 	}
-
+	
+	public OrderedArticle(ArticleStatus status, Article article, String description) {
+		super();
+		this.status = status;
+		this.article = article;
+		this.description = description;
+	}
+	
 	public OrderedArticle() {
 		super();
 	}

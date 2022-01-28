@@ -206,7 +206,7 @@
             <th></th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-article>
+        <ng-template pTemplate="body" let-article let-rowIndex="rowIndex">
           <tr [id]="article.id">
             <td>{{ article.name }}</td>
             <td>{{ article.sellingPrice }}</td>
@@ -217,7 +217,7 @@
                 type="button"
                 label="Note"
                 class="p-button-submit"
-                (click)="openAddNoteDialogue(article.id)"
+                (click)="openAddNoteDialogue(rowIndex)"
               ></button>
             </td>
             <td>

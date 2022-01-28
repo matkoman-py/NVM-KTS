@@ -38,7 +38,7 @@ export class ViewOrderWaiterComponent implements OnInit {
   displayArticleAddingDialog: boolean = false;
   displayQuantityDialog: boolean = false;
   displayAddNoteDialog: boolean = false;
-  idForAddingNote: number;
+  indexForAddingNote: number;
   note: string = '';
 
   statusDict = new Map<string, string>([
@@ -63,8 +63,7 @@ export class ViewOrderWaiterComponent implements OnInit {
     private viewOrderService: ViewOrderService,
     private orderService: OrdersService,
     private messageService: MessageService,
-    private primengConfig: PrimeNGConfig,
-    private router: Router
+    private primengConfig: PrimeNGConfig
   ) {}
 
   ngOnInit(): void {
@@ -83,7 +82,6 @@ export class ViewOrderWaiterComponent implements OnInit {
   }
 
   convertToDto(article: Article): OrderedArticleWithDTO {
-    console.log(article.id);
     return {
       articleId: article.id,
       description: article.description ? article.description : '',
@@ -129,18 +127,15 @@ export class ViewOrderWaiterComponent implements OnInit {
     );
   }
 
-  openAddNoteDialogue(id: number) {
-    this.idForAddingNote = id;
+  openAddNoteDialogue(index: number) {
+    this.indexForAddingNote = index;
     this.displayAddNoteDialog = true;
   }
 
   addNote() {
-    var articleToAddNote = this.addedArticles.find(
-      (elem) => elem.id === this.idForAddingNote && elem.description === ''
-    );
-    if (articleToAddNote) articleToAddNote.description = this.note;
+    this.addedArticles[this.indexForAddingNote].description = this.note;
     this.note = '';
-    this.idForAddingNote = 0;
+    this.indexForAddingNote = -1;
     this.displayAddNoteDialog = false;
   }
 
@@ -178,16 +173,27 @@ export class ViewOrderWaiterComponent implements OnInit {
   }
 
   deleteArticleFromOrder(id: number) {
-    this.orderService.deleteArticleFromOrder(id).subscribe(() => {
-      this.getOrder(this.orderId);
-      this.getArticlesForOrder(this.orderId);
-      this.messageService.add({
-        key: 'tc',
-        severity: 'success',
-        summary: 'Success!',
-        detail: `Successfully deleted article with id: ${id} to order!`,
-      });
-    });
+    this.orderService.deleteArticleFromOrder(id).subscribe(
+      () => {
+        this.getOrder(this.orderId);
+        this.getArticlesForOrder(this.orderId);
+        this.messageService.add({
+          key: 'tc',
+          severity: 'success',
+          summary: 'Success!',
+          detail: `Successfully deleted article with id: ${id} to order!`,
+        });
+      },
+      (err) => {
+        this.messageService.add({
+          key: 'tc',
+          severity: 'warn',
+          summary: 'Fail',
+          detail: err.error,
+        });
+        console.log(err.error);
+      }
+    );
   }
 
   finishOrder() {

@@ -25,6 +25,7 @@ import com.rest.RestaurantApp.domain.enums.ArticleStatus;
 import com.rest.RestaurantApp.domain.enums.OrderStatus;
 import com.rest.RestaurantApp.dto.OrderDTO;
 import com.rest.RestaurantApp.dto.OrderedArticleDTO;
+import com.rest.RestaurantApp.dto.OrderedArticleWithDescDTO;
 import com.rest.RestaurantApp.exceptions.IncompatibleEmployeeTypeException;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.exceptions.OrderAlreadyTakenException;
@@ -81,8 +82,9 @@ class OrderControllerTest {
 	@Test
 	public void testCreateOrder_ValidOrder() throws Exception {
 		int size = orderService.getAll().size(); 
+		List<OrderedArticleWithDescDTO> list = Arrays.asList(new OrderedArticleWithDescDTO(1,"dobar"), new OrderedArticleWithDescDTO(2,"dobar"));
 		OrderDTO order = new OrderDTO(false, "No honey", LocalDateTime.of(2021, 1, 3, 12, 43, 33), Arrays.asList(1,2), 3, 1234, OrderStatus.ACTIVE, 0);
-		
+		order.setArticlesWithDescription(list);
 		ResponseEntity<OrderDTO> responseEntity = restTemplate.postForEntity("/api/order", order, OrderDTO.class);
 		
 		OrderDTO createdOrder = responseEntity.getBody();
@@ -172,7 +174,11 @@ class OrderControllerTest {
 	
 	@Test
 	public void testDelete_ValidId() throws Exception {
-		OrderDTO order = orderService.create(new OrderDTO(false, "No honey", LocalDateTime.of(2021, 1, 3, 12, 43, 33), Arrays.asList(1,2), 3, 1234, OrderStatus.ACTIVE, 0));
+		List<OrderedArticleWithDescDTO> list = Arrays.asList(new OrderedArticleWithDescDTO(1,"dobar"), new OrderedArticleWithDescDTO(2,"dobar"));
+		OrderDTO orderDTO = new OrderDTO(false, "No honey", LocalDateTime.of(2021, 1, 3, 12, 43, 33), Arrays.asList(1,2), 3, 1234, OrderStatus.ACTIVE, 0);
+		orderDTO.setArticlesWithDescription(list);
+		OrderDTO order = orderService.create(orderDTO);
+		
 		int size = orderService.getAll().size();
 		ResponseEntity<Void> responseEntity = restTemplate.exchange(
 				"/api/order/" + order.getId(), HttpMethod.DELETE, new HttpEntity<Object>(null),
