@@ -129,8 +129,6 @@ public class OrderController {
 	
 	@PutMapping(value = "/add-articles-to-order", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<OrderDTO> addArticlesToDTO(@RequestBody ArticlesAndOrderDTO dto) {
-		System.out.println("EVO GA" + dto.getArticles().get(0).getArticleId());
-				
 		OrderDTO article = orderService.addArticlesToOrder(dto);
 		return new ResponseEntity<OrderDTO>(article, HttpStatus.OK);
 	}

@@ -30,6 +30,7 @@ import com.rest.RestaurantApp.domain.enums.OrderStatus;
 import com.rest.RestaurantApp.domain.enums.UserType;
 import com.rest.RestaurantApp.dto.OrderDTO;
 import com.rest.RestaurantApp.dto.OrderedArticleDTO;
+import com.rest.RestaurantApp.dto.OrderedArticleWithDescDTO;
 import com.rest.RestaurantApp.exceptions.ChangeFinishedStateException;
 import com.rest.RestaurantApp.exceptions.IncompatibleEmployeeTypeException;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
@@ -224,6 +225,8 @@ class OrderServiceTest {
 	@Test
 	void testCreate_ValidOrder() {
 		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), Arrays.asList(1), 5, 1234, OrderStatus.ACTIVE, 5000);
+		List<OrderedArticleWithDescDTO> list = Arrays.asList(new OrderedArticleWithDescDTO(1,"dobar"), new OrderedArticleWithDescDTO(2,"dobar"));
+		orderToCreate.setArticlesWithDescription(list);
 		OrderDTO createdOrder = orderService.create(orderToCreate);
 		
 		assertEquals(createdOrder.getId(), 4);
