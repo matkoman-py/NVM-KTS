@@ -104,28 +104,30 @@ public class OrderService implements IOrderService {
 	@Override
 	public OrderDTO create(OrderDTO order) {
 		// TODO Auto-generated method stub
-		// List<Article> articles = order.getOrderedArticles().stream().map(article ->
-		// article)
-		// dodati proveru jel sto slobodan
+		
 		Employee employee = employeeRepository.findByPincode(order.getEmployeePin()).get();
 		
 		if(!employee.getEmployeeType().equals(EmployeeType.WAITER)) {
 			throw new OrderTakenByWrongEmployeeTypeException("An employee of type " + employee.getEmployeeType().toString() +" can't create a new order");
 		}
 		
-		if(order.getArticles() == null) {
+		if(order.getArticlesWithDescription() == null) {
 			throw new NullArticlesException("Order must have at least 1 article");
 		}
 		
-		if(order.getArticles().size() == 0) {
+		if(order.getArticlesWithDescription().size() == 0) {
 			throw new NullArticlesException("Order must have at least 1 article");
 		}
 		
-		List<Article> articles = order.getArticles().stream()
-				.map(article -> articleRepository.findById(article).get()).collect(Collectors.toList());
-		List<OrderedArticle> orderedArticles = articles.stream()
-				.map(orderedArticle -> new OrderedArticle(ArticleStatus.NOT_TAKEN, orderedArticle))
-				.collect(Collectors.toList());
+		List<Article> articles = order.getArticlesWithDescription().stream()
+				.map(articleWithDesc -> articleRepository.findById(articleWithDesc.getArticleId()).get()).collect(Collectors.toList());
+
+		
+		List<OrderedArticle> orderedArticles = order.getArticlesWithDescription().stream()
+				.map(articleWithDesc -> 
+				new OrderedArticle(ArticleStatus.NOT_TAKEN, 
+						articleRepository.findById(articleWithDesc.getArticleId()).get(), articleWithDesc.getDescription())
+				         ).collect(Collectors.toList());
 		
 		//dodaj cenu
 		double priceOfOrder = articles.stream().map(x -> {

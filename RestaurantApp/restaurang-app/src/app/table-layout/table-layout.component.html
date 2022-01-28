@@ -1,3 +1,4 @@
+<p-toast position="top-center" key="tc" id="message"></p-toast>
 <canvas width="1400" height="550" id="demoCanvas"></canvas>
 
 <p-dialog
@@ -7,6 +8,7 @@
   [style]="{ width: '80vw' }"
   [draggable]="false"
   [resizable]="false"
+  id="create-order-form"
 >
   <div class="p-field">
     <p-dropdown
@@ -54,6 +56,7 @@
                 label="Add"
                 class="p-button-success"
                 (click)="openQuantityDialog(article)"
+                id="add-button"
               ></button>
             </td>
           </tr>
@@ -63,16 +66,17 @@
 
     <div class="articleTable">
       <h2>Articles to add</h2>
-      <p-table [value]="addedArticles">
+      <p-table [value]="addedArticles" id="added-articles">
         <ng-template pTemplate="header">
           <tr>
             <th>Name</th>
             <th>Selling price</th>
             <th>Type</th>
             <th></th>
+            <th></th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-article>
+        <ng-template pTemplate="body" let-article let-rowIndex="rowIndex">
           <tr [id]="article.id">
             <td>{{ article.name }}</td>
             <td>{{ article.sellingPrice }}</td>
@@ -81,9 +85,19 @@
               <button
                 pButton
                 type="button"
+                label="Note"
+                class="p-button-submit"
+                (click)="openAddNoteDialogue(rowIndex)"
+              ></button>
+            </td>
+            <td>
+              <button
+                pButton
+                type="button"
                 label="Remove"
                 class="p-button-danger"
                 (click)="removeFromArray(article.id)"
+                id="remove-button"
               ></button>
             </td>
           </tr>
@@ -101,6 +115,7 @@
       (click)="addArticles()"
       class="p-button-info"
       label="Add articles"
+      id="add-articles-button"
     ></button>
   </ng-template>
 </p-dialog>
@@ -114,7 +129,7 @@
   [resizable]="false"
 >
   <div class="p-field">
-    <input type="number" pInputText [(ngModel)]="quantity" />
+    <input id="article-quantity" type="number" pInputText [(ngModel)]="quantity" />
   </div>
   <ng-template pTemplate="footer">
     <p-button
@@ -122,18 +137,46 @@
       (click)="addArticlesToArray()"
       label="Confirm"
       styleClass="p-button-text"
+      id="quantity-confirm-btn"
     ></p-button>
   </ng-template>
 </p-dialog>
 
-<p-dialog header="Input your personal pin to finish the action" [(visible)]="displayConfirmDialog" [breakpoints]="{'960px': '75vw'}"
-  [style]="{width: '50vw'}" [draggable]="false" [resizable]="false">
+<p-dialog
+  header="Input your personal pin to finish the action"
+  [(visible)]="displayConfirmDialog"
+  [breakpoints]="{ '960px': '75vw' }"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+>
   <div class="p-field">
-    <input type="number" pInputText [(ngModel)]="employeePin" />
+    <input type="number" pInputText [(ngModel)]="employeePin" id="input-pin"/>
   </div>
   <ng-template pTemplate="footer">
     <p-button (click)="handleClose()" label="Cancel" styleClass="p-button-text"></p-button>
-    <p-button [disabled]="employeePin === undefined" (click)="checkPin()" label="Confirm"
+    <p-button id="confirm-pin-button" [disabled]="employeePin === undefined" (click)="checkPin()" label="Confirm"
       styleClass="p-button-text"></p-button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  header="Add note for article"
+  [(visible)]="displayAddNoteDialog"
+  [breakpoints]="{ '960px': '75vw' }"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div class="p-field">
+    <input type="text" pInputText [(ngModel)]="note" />
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button
+      [disabled]="checkNote()"
+      (click)="addNote()"
+      label="Add note"
+      styleClass="p-button-text"
+    ></p-button>
   </ng-template>
 </p-dialog>

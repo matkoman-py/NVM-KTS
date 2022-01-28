@@ -6,6 +6,7 @@ import com.rest.RestaurantApp.dto.ArticleDTO;
 import com.rest.RestaurantApp.dto.IngredientDTO;
 import com.rest.RestaurantApp.dto.OrderDTO;
 import com.rest.RestaurantApp.dto.OrderedArticleDTO;
+import com.rest.RestaurantApp.dto.OrderedArticleWithDescDTO;
 import com.rest.RestaurantApp.exceptions.ChangeFinishedStateException;
 import com.rest.RestaurantApp.exceptions.IncompatibleEmployeeTypeException;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
@@ -71,7 +72,10 @@ class OrderServiceTest {
 	
 	@Test
     public void testDelete_ValidId() {
-        OrderDTO createdOrder = orderService.create(new OrderDTO(false, "Nothing", LocalDateTime.of(2021, 1,1,13,13,13), Arrays.asList(1,2,2), 3, 1234, OrderStatus.ACTIVE, 4000));
+		OrderDTO orderDTO = new OrderDTO(false, "Nothing", LocalDateTime.of(2021, 1,1,13,13,13), Arrays.asList(1,2,2), 3, 1234, OrderStatus.ACTIVE, 4000);
+		List<OrderedArticleWithDescDTO> list = Arrays.asList(new OrderedArticleWithDescDTO(1,"dobar"), new OrderedArticleWithDescDTO(2,"dobar"));
+		orderDTO.setArticlesWithDescription(list);
+        OrderDTO createdOrder = orderService.create(orderDTO);
         int oldSize = orderService.getAll().size();
         OrderDTO order = orderService.delete(createdOrder.getId());
 
@@ -95,7 +99,9 @@ class OrderServiceTest {
     public void testCreate_ValidOrder() {
         int oldSize = orderService.getAll().size();
         OrderDTO orderDTO = new OrderDTO(false, "", LocalDateTime.of(2021, 1,1,1,1,1), Arrays.asList(1,3), 3, 1234, OrderStatus.ACTIVE, 4000);
-
+        
+        List<OrderedArticleWithDescDTO> list = Arrays.asList(new OrderedArticleWithDescDTO(1,"dobar"), new OrderedArticleWithDescDTO(2,"dobar"));
+		orderDTO.setArticlesWithDescription(list);
         OrderDTO created = orderService.create(orderDTO);
         List<OrderDTO> orders = orderService.getAll();
         int newSize = orders.size();

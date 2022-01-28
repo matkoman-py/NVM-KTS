@@ -19,6 +19,7 @@ public class OrderDTO {
 	private int employeePin;
 	private OrderStatus orderStatus;
 	private double price;
+	private List<OrderedArticleWithDescDTO> articlesWithDescription;
 	
 	public OrderDTO(Integer id, boolean deleted, String description, LocalDateTime orderDate, int tableNumber, int employeePin, OrderStatus orderStatus, double price) {
 		super();
@@ -157,6 +158,14 @@ public class OrderDTO {
 
 	public void setPrice(double price) {
 		this.price = price;
+	}
+
+	public List<OrderedArticleWithDescDTO> getArticlesWithDescription() {
+		return articlesWithDescription;
+	}
+
+	public void setArticlesWithDescription(List<OrderedArticleWithDescDTO> articlesWithDescription) {
+		this.articlesWithDescription = articlesWithDescription;
 	}
 	
 }

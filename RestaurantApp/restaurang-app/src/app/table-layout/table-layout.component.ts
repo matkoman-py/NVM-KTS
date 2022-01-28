@@ -6,7 +6,7 @@ import { fabric } from 'fabric';
 import { ArticlesService } from '../articles/services/articles.service';
 import { EmployeesService } from '../employees/services/employees.service';
 import { Article } from '../modules/shared/models/article';
-import { Order } from '../modules/shared/models/order';
+import { Order, OrderedArticleWithDTO } from '../modules/shared/models/order';
 import {
   ArticleStatus,
   OrderedArticle,
@@ -14,12 +14,14 @@ import {
 import { OrdersService } from '../orders/services/orders.service';
 import { ViewOrderService } from '../view-order/services/view-order.service';
 import { TableLayoutService } from './services/table-layout.service';
+import { MessageService } from 'primeng/api';
 import { OrderCreation } from '../modules/shared/models/order_creation';
 
 @Component({
   selector: 'app-table-layout',
   templateUrl: './table-layout.component.html',
   styleUrls: ['./table-layout.component.css'],
+  providers: [MessageService]
 })
 export class TableLayoutComponent implements OnInit {
   private canvas = new fabric.Canvas('demoCanvas');
@@ -43,7 +45,9 @@ export class TableLayoutComponent implements OnInit {
   displayFinishOrderDialog: boolean = false;
   displayArticleAddingDialog: boolean = false;
   displayQuantityDialog: boolean = false;
-
+  displayAddNoteDialog: boolean = false;
+  indexForAddingNote: number;
+  note: string = '';
   statusDict = new Map<string, string>([
     ['NOT_TAKEN', 'Take article'],
     ['TAKEN', 'Start preparing'],
@@ -66,8 +70,10 @@ export class TableLayoutComponent implements OnInit {
     private orderService: OrdersService,
     private articlesService: ArticlesService,
     private viewOrderService: ViewOrderService,
-    private employeeService: EmployeesService
-  ) {}
+    private employeeService: EmployeesService,
+    private messageService: MessageService
+    ) { }
+
 
   addArticles() {
     // var articlesAndOrderDto = {
@@ -78,6 +84,33 @@ export class TableLayoutComponent implements OnInit {
     // };
 
     this.displayConfirmDialog = true;
+  }
+
+  convertToDto(article: Article): OrderedArticleWithDTO {
+    console.log(article.id);
+    return {
+      articleId: article.id,
+      description: article.description ? article.description : '',
+    };
+  }
+
+  openAddNoteDialogue(index: number) {
+    this.indexForAddingNote = index;
+    this.displayAddNoteDialog = true;
+  }
+
+  addNote() {
+    this.addedArticles[this.indexForAddingNote].description = this.note;
+    this.note = '';
+    this.indexForAddingNote = -1;
+    this.displayAddNoteDialog = false;
+  }
+
+  checkNote() {
+    if (this.note.trim() === '') {
+      return true;
+    }
+    return false;
   }
 
   handleClose() {
@@ -93,80 +126,69 @@ export class TableLayoutComponent implements OnInit {
       .getEmployeeIdByPincode(this.employeePin)
       .subscribe(() => {
         var order: OrderCreation = {
-          articles: this.addedArticles.map((article) =>
-            article.id ? article.id : 0
+          articlesWithDescription: this.addedArticles.map((article) =>
+            this.convertToDto(article)
           ),
-          orderDate: date,
-          deleted: false,
-          tableNumber: this.selectedTableId,
-          description: 'mnogo dobro',
-          employeePin: this.employeePin,
-        };
-
-        this.orderService.createOrder(order).subscribe((res) => {
-          this.canvas.forEachObject((o: any) => {
-            var table = o.getObjects('rect')[0];
-            console.log(this.selectedTableId);
-            if (
-              o.id === this.selectedTableId &&
-              this.selectedTableId !== undefined
-            ) {
-              o.order_id = res.id;
-              table.set('fill', 'green');
-
-              o.toObject = ((toObject) => {
-                return (propertiesToInclude: any) => {
-                  return fabric.util.object.extend(
-                    toObject.call(o, propertiesToInclude),
-                    {
-                      id: o.id,
-                      order_id: res.id,
-                    }
-                  );
-                };
-              })(o.toObject);
-            } else {
-              o.toObject = ((toObject) => {
-                return (propertiesToInclude: any) => {
-                  return fabric.util.object.extend(
-                    toObject.call(o, propertiesToInclude),
-                    {
-                      id: o.id,
-                      order_id: o.order_id,
-                    }
-                  );
-                };
-              })(o.toObject);
-            }
-            this.canvas.renderAll();
-          });
-          console.log(JSON.stringify(this.canvas));
-          this.tableLayoutService
-            .postTableLayout(JSON.stringify(this.canvas))
-            .subscribe();
-        });
-
-        this.displayArticleAddingDialog = false;
-        this.addedArticles = [];
-        this.displayConfirmDialog = false;
+        orderDate: date,
+        deleted: false,
+        tableNumber: this.selectedTableId,
+        description: "mnogo dobro",
+        employeePin: this.employeePin
+      }
+      this.orderService.createOrder(order).subscribe(res => {
+        this.createOrder(res);
+      }, error => {
+        this.messageService.add({key: 'tc', severity:'error', summary: 'Order has no articles', detail: 'Error'});
       });
+    }, error => {
+      this.messageService.add({key: 'tc', severity:'error', summary: 'Pincode is invalid', detail: 'Error'});
+    })
+  }
+
+  createOrder(res: any) {
+    this.canvas.forEachObject((o : any) => {
+
+      var table = o.getObjects('rect')[0];
+      console.log(this.selectedTableId)
+      if(o.id === this.selectedTableId && this.selectedTableId !== undefined) {
+        console.log(res.id);
+        o.order_id = res.id;
+        table.set('fill', 'green');
+
+        o.toObject = ((toObject) => {
+          return (propertiesToInclude: any) => {
+            return fabric.util.object.extend(toObject.call(o, propertiesToInclude), {
+              id: o.id,
+              order_id: res.id
+            });
+          };
+        })(o.toObject);
+      }
+      else {
+        o.toObject = ((toObject) => {
+          return (propertiesToInclude: any) => {
+            return fabric.util.object.extend(toObject.call(o, propertiesToInclude), {
+              id: o.id,
+              order_id: o.order_id
+            });
+          };
+        })(o.toObject);
+      }
+      this.canvas.renderAll();
+      
+    })
+    console.log(JSON.stringify(this.canvas))
+    this.tableLayoutService.postTableLayout(JSON.stringify(this.canvas)).subscribe(() => {
+      this.displayArticleAddingDialog = false;
+      this.addedArticles = [];
+      this.displayConfirmDialog = false;
+      this.messageService.add({key: 'tc', severity:'success', summary: 'New order successfully created', detail: 'Created order'});
+    })
   }
 
   parseDate(date: Date) {
-    var dateString: string =
-      date.getFullYear() +
-      '-' +
-      ('0' + (date.getMonth() + 1)).slice(-2) +
-      '-' +
-      ('0' + date.getDate()).slice(-2) +
-      'T' +
-      ('0' + (date.getHours() + 1)).slice(-2) +
-      ':' +
-      ('0' + (date.getMinutes() + 1)).slice(-2) +
-      ':' +
-      ('0' + (date.getSeconds() + 1)).slice(-2) +
-      '.' +
-      date.getMilliseconds();
+    var dateString: string = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + (date.getDate())).slice(-2) + 'T' + 
+    ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2) + ":" + ("0" + date.getSeconds()).slice(-2) + '.' + date.getMilliseconds();
     return dateString;
   }
 
@@ -189,9 +211,16 @@ export class TableLayoutComponent implements OnInit {
     this.displayArticleAddingDialog = true;
   }
 
+  // addArticlesToArray() {
+  //   for (var i = 0; i < this.quantity; i++) {
+  //     this.addedArticles.push(this.articleForAdding);
+  //   }
+  //   this.displayQuantityDialog = false;
+  // }
+
   addArticlesToArray() {
     for (var i = 0; i < this.quantity; i++) {
-      this.addedArticles.push(this.articleForAdding);
+      this.addedArticles.push({ ...this.articleForAdding, description: '' });
     }
     this.displayQuantityDialog = false;
   }
