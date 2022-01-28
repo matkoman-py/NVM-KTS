@@ -31,18 +31,18 @@ export const routes: Routes = [
   { 
     path: 'table-layout',
     component: TableLayoutComponent,
-    // canActivate: [AuthGuard],
-    // data: {
-    //   expectedRoles: ['COOK', 'BARMAN', 'WAITER']
-    // }
+    canActivate: [AuthGuard],
+    data: {
+      expectedRoles: ['COOK', 'BARMAN', 'WAITER']
+    }
   },
   { 
     path: 'edit-table-layout', 
     component: EditTableLayoutComponent,
-    // canActivate: [AuthGuard],
-    // data: {
-    //   expectedRoles: ['ROLE_MANAGER']
-    // }
+    canActivate: [AuthGuard],
+    data: {
+      expectedRoles: ['ROLE_MANAGER']
+    }
   },
   {
     path: 'home',
