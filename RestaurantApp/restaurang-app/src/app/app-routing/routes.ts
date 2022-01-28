@@ -28,8 +28,22 @@ export const routes: Routes = [
     path: 'login',
     component: LoginComponent,
   },
-  { path: 'table-layout', component: TableLayoutComponent, },
-  { path: 'edit-table-layout', component: EditTableLayoutComponent },
+  { 
+    path: 'table-layout',
+    component: TableLayoutComponent,
+    // canActivate: [AuthGuard],
+    // data: {
+    //   expectedRoles: ['COOK', 'BARMAN', 'WAITER']
+    // }
+  },
+  { 
+    path: 'edit-table-layout', 
+    component: EditTableLayoutComponent,
+    // canActivate: [AuthGuard],
+    // data: {
+    //   expectedRoles: ['ROLE_MANAGER']
+    // }
+  },
   {
     path: 'home',
     component: HomeComponent,

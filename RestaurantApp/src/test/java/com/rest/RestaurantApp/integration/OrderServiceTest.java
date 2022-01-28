@@ -59,7 +59,7 @@ class OrderServiceTest {
         //  ('No mustard', '2021-1-3 12:43:33', 1, 3),
         assertEquals(order.getOrderDate(), LocalDateTime.of(2021, 1, 3, 12, 43,33));
         assertEquals(order.getTableNumber(), 1);
-        assertEquals(order.getEmployeeId(), 3);
+        assertEquals(order.getEmployeePin(), 1234);
     }
 	
 	@Test
@@ -107,7 +107,7 @@ class OrderServiceTest {
         //  ('No mustard', '2021-1-3 12:43:33', 1, 3),
         assertEquals(created.getOrderDate(), LocalDateTime.of(2021, 1, 1, 1, 1,1));
         assertEquals(created.getTableNumber(), 3);
-        assertEquals(created.getEmployeeId(), 3);
+        assertEquals(created.getEmployeePin(), 1234);
         assertEquals(oldSize + 1, newSize);
 
     }
@@ -136,7 +136,7 @@ class OrderServiceTest {
         assertEquals((int) updated.getId(), 2);
         assertEquals(updated.getOrderDate(), LocalDateTime.of(2021, 1, 1, 1, 1,1));
         assertEquals(updated.getTableNumber(), 3);
-        assertEquals(updated.getEmployeeId(), 3);
+        assertEquals(updated.getEmployeePin(), 1234);
         assertEquals(oldSize, newSize);
 	}
 	

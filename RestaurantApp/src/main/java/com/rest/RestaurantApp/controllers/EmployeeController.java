@@ -77,8 +77,15 @@ public class EmployeeController {
 	//
 	@GetMapping("/test_waiter/{pin}")
 	public ResponseEntity<Boolean> checkIfWaiterPin(@PathVariable("pin") int pin) {
-		boolean pinValid = employeeService.checkPin(pin, EmployeeType.WAITER);
-		if(pinValid) return new ResponseEntity<>(true, HttpStatus.OK);
+		boolean valid = employeeService.checkPin(pin, EmployeeType.WAITER);
+		if(valid) return new ResponseEntity<>(true, HttpStatus.OK);
+		return new ResponseEntity<>(false, HttpStatus.FORBIDDEN);
+	}
+	
+	@GetMapping("/getByPincode/{pin}")
+	public ResponseEntity<Boolean> getByPincode(@PathVariable("pin") int pin) {
+		boolean valid = employeeService.checkPin(pin, EmployeeType.WAITER);
+		if(valid) return new ResponseEntity<>(true, HttpStatus.OK);
 		return new ResponseEntity<>(false, HttpStatus.FORBIDDEN);
 	}
 	

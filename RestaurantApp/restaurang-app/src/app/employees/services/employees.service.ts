@@ -9,6 +9,7 @@ import { catchError, retry } from 'rxjs/operators';
   providedIn: 'any',
 })
 export class EmployeesService {
+  
   private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
   constructor(private http: HttpClient) {}
 
@@ -26,6 +27,10 @@ export class EmployeesService {
 
   createEmployee(employeeData: Employee):Observable<Employee>{
     return this.http.post<Employee>('/api/employee',  employeeData );
+  }
+
+  getEmployeeIdByPincode(employeePin: number | undefined) {
+    return this.http.get<boolean>('/api/employee/getByPincode/' + employeePin);
   }
 
   search(

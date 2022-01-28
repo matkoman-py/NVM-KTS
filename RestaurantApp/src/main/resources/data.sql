@@ -89,8 +89,8 @@ INSERT INTO article_ingredient (article_id, ingredient_id) VALUES
   (2, 1);
   
 INSERT INTO prices (from_date, making_price, selling_price, status, to_date, article_id) VALUES
-  ('2003-5-6', 200, 350, 'ACTIVE', NULL, 1),
-  ('2002-11-23', 100, 200, 'EXPIRED', '2003-5-6', 1),
+  ('2001-5-6', 200, 350, 'ACTIVE', NULL, 1),
+  ('2001-01-01', 100, 200, 'EXPIRED', '2001-5-6', 1),
   ('2002-11-23', 800, 1800, 'ACTIVE', NULL, 2),
   ('2002-11-23', 600, 1500, 'ACTIVE', NULL, 3),
   ('2002-11-23', 700, 1600, 'ACTIVE', NULL, 4),

@@ -63,7 +63,7 @@ class OrderControllerTest {
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 		assertEquals(order.getArticles().size(), 4);
 		assertEquals(order.getDescription(), "No mustard");
-		assertEquals(order.getEmployeeId(), 3);
+		assertEquals(order.getEmployeePin(), 1234);
 		assertEquals(order.getTableNumber(), 1);
 		assertEquals(order.getOrderDate(), LocalDateTime.of(2021, 1, 3, 12, 43, 33));
 	}
@@ -81,7 +81,7 @@ class OrderControllerTest {
 	@Test
 	public void testCreateOrder_ValidOrder() throws Exception {
 		int size = orderService.getAll().size(); 
-		OrderDTO order = new OrderDTO(false, "No honey", LocalDateTime.of(2021, 1, 3, 12, 43, 33), Arrays.asList(1,2), 3, 3, OrderStatus.ACTIVE, 0);
+		OrderDTO order = new OrderDTO(false, "No honey", LocalDateTime.of(2021, 1, 3, 12, 43, 33), Arrays.asList(1,2), 3, 1234, OrderStatus.ACTIVE, 0);
 		
 		ResponseEntity<OrderDTO> responseEntity = restTemplate.postForEntity("/api/order", order, OrderDTO.class);
 		
@@ -89,7 +89,7 @@ class OrderControllerTest {
 		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
 		assertEquals(order.getArticles().size(), 2);
 		assertEquals(order.getDescription(), "No honey");
-		assertEquals(order.getEmployeeId(), 3);
+		assertEquals(order.getEmployeePin(), 1234);
 		assertEquals(order.getTableNumber(), 3);
 		assertEquals(order.getOrderDate(), LocalDateTime.of(2021, 1, 3, 12, 43, 33));
 		
@@ -98,7 +98,7 @@ class OrderControllerTest {
 
 		assertEquals(order.getArticles().size(), orders.get(orders.size() - 1).getArticles().size());
 		assertEquals(order.getDescription(), orders.get(orders.size() - 1).getDescription());
-		assertEquals(order.getEmployeeId(), orders.get(orders.size() - 1).getEmployeeId());
+		assertEquals(order.getEmployeePin(), orders.get(orders.size() - 1).getEmployeePin());
 		assertEquals(order.getTableNumber(), orders.get(orders.size() - 1).getTableNumber());
 		assertEquals(order.getOrderDate(), orders.get(orders.size() - 1).getOrderDate());
 		orderService.delete(size+1);
@@ -107,7 +107,7 @@ class OrderControllerTest {
 	@Test
 	public void testCreateOrder_InvalidOrder_NoArticles() throws Exception {
 		int size = orderService.getAll().size(); 
-		OrderDTO order = new OrderDTO(false, "No honey", LocalDateTime.of(2021, 1, 3, 12, 43, 33), new ArrayList<Integer>(), 3, 3, OrderStatus.ACTIVE, 0);
+		OrderDTO order = new OrderDTO(false, "No honey", LocalDateTime.of(2021, 1, 3, 12, 43, 33), new ArrayList<Integer>(), 3, 1234, OrderStatus.ACTIVE, 0);
 		
 		ResponseEntity<String> responseEntity = restTemplate.postForEntity("/api/order", order, String.class);
 		
@@ -121,7 +121,7 @@ class OrderControllerTest {
 	@Test
 	public void testCreateOrder_InvalidOrder_OrderTakenByCookOrBarman() throws Exception {
 		int size = orderService.getAll().size(); 
-		OrderDTO order = new OrderDTO(false, "No honey", LocalDateTime.of(2021, 2, 3, 12, 43, 33), Arrays.asList(1, 2), 4, 4, OrderStatus.ACTIVE, 0);
+		OrderDTO order = new OrderDTO(false, "No honey", LocalDateTime.of(2021, 2, 3, 12, 43, 33), Arrays.asList(1, 2), 4, 4322, OrderStatus.ACTIVE, 0);
 		
 		ResponseEntity<String> responseEntity = restTemplate.postForEntity("/api/order", order, String.class);
 		
@@ -135,7 +135,7 @@ class OrderControllerTest {
 	@Test
 	void testUpdate_ValidOrder() {
 		int size = orderService.getAll().size(); 
-		OrderDTO order = new OrderDTO(false, "No honey", LocalDateTime.of(2021, 1, 3, 12, 43, 33), Arrays.asList(1,2), 3, 3, OrderStatus.ACTIVE, 0);
+		OrderDTO order = new OrderDTO(false, "No honey", LocalDateTime.of(2021, 1, 3, 12, 43, 33), Arrays.asList(1,2), 3, 1234, OrderStatus.ACTIVE, 0);
 		
 		ResponseEntity<OrderDTO> responseEntity = restTemplate.exchange(
 				"/api/order/2", HttpMethod.PUT, new HttpEntity<OrderDTO>(order), OrderDTO.class);
@@ -144,7 +144,7 @@ class OrderControllerTest {
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 		assertEquals(updatedOrder.getArticles().size(), 2);
 		assertEquals(updatedOrder.getDescription(), "No honey");
-		assertEquals(updatedOrder.getEmployeeId(), 3);
+		assertEquals(updatedOrder.getEmployeePin(), 1234);
 		assertEquals(updatedOrder.getTableNumber(), 3);
 		assertEquals(updatedOrder.getOrderDate(), LocalDateTime.of(2021, 1, 3, 12, 43, 33));
 		assertEquals(updatedOrder.getId(), 2);
@@ -172,7 +172,7 @@ class OrderControllerTest {
 	
 	@Test
 	public void testDelete_ValidId() throws Exception {
-		OrderDTO order = orderService.create(new OrderDTO(false, "No honey", LocalDateTime.of(2021, 1, 3, 12, 43, 33), Arrays.asList(1,2), 3, 3, OrderStatus.ACTIVE, 0));
+		OrderDTO order = orderService.create(new OrderDTO(false, "No honey", LocalDateTime.of(2021, 1, 3, 12, 43, 33), Arrays.asList(1,2), 3, 1234, OrderStatus.ACTIVE, 0));
 		int size = orderService.getAll().size();
 		ResponseEntity<Void> responseEntity = restTemplate.exchange(
 				"/api/order/" + order.getId(), HttpMethod.DELETE, new HttpEntity<Object>(null),

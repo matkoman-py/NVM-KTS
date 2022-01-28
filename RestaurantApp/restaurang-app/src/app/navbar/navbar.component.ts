@@ -98,6 +98,18 @@ export class NavbarComponent implements OnInit {
           visible: this.role === 'ROLE_MANAGER',
         },
         {
+          label: 'Tables',
+          icon: 'pi pi-fw pi-microsoft',
+          routerLink: '/table-layout',
+          visible: this.role === 'WAITER'
+        },
+        {
+          label: 'Edit tables',
+          icon: 'pi pi-fw pi-microsoft',
+          routerLink: '/edit-table-layout',
+          visible: this.role === 'ROLE_MANAGER'
+        },
+        {
           label: 'Logout',
           icon: 'pi pi-fw pi-user',
           routerLink: '/logout',
@@ -107,6 +119,7 @@ export class NavbarComponent implements OnInit {
             this.role === 'WAITER' ||
             this.role === 'BARMAN',
         },
+        
       ];
     }
   };

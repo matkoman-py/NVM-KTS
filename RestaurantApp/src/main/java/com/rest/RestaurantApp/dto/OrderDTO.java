@@ -16,31 +16,31 @@ public class OrderDTO {
 	private List<Integer> articles;
 	private List<Integer> orderedArticles;
 	private int tableNumber;
-	private int employeeId;
+	private int employeePin;
 	private OrderStatus orderStatus;
 	private double price;
 	
-	public OrderDTO(Integer id, boolean deleted, String description, LocalDateTime orderDate, int tableNumber, int employeeId, OrderStatus orderStatus, double price) {
+	public OrderDTO(Integer id, boolean deleted, String description, LocalDateTime orderDate, int tableNumber, int employeePin, OrderStatus orderStatus, double price) {
 		super();
 		this.id = id;
 		this.deleted = deleted;
 		this.description = description;
 		this.orderDate = orderDate;
 		this.tableNumber = tableNumber;
-		this.employeeId = employeeId;
+		this.employeePin = employeePin;
 		this.orderStatus = orderStatus;
 		this.price = price;
 	}
 
 	public OrderDTO(boolean deleted, String description, LocalDateTime orderDate, List<Integer> articles,
-			int tableNumber, int employeeId, OrderStatus orderStatus, double price) {
+			int tableNumber, int employeePin, OrderStatus orderStatus, double price) {
 		super();
 		this.deleted = deleted;
 		this.description = description;
 		this.orderDate = orderDate;
 		this.articles = articles;
 		this.tableNumber = tableNumber;
-		this.employeeId = employeeId;
+		this.employeePin = employeePin;
 		this.orderStatus = orderStatus;
 		this.price = price;
 	}
@@ -56,7 +56,7 @@ public class OrderDTO {
 		this.description = order.getDescription();
 		this.orderDate = order.getOrderDate();
 		this.tableNumber = order.getTableNumber();
-		this.employeeId = order.getEmployee().getId();
+		this.employeePin = order.getEmployee().getPincode();
 		this.articles = order.getOrderedArticles().stream().map(article -> article.getArticle().getId()).collect(Collectors.toList());
 		this.orderedArticles = order.getOrderedArticles().stream().map(article -> article.getId()).collect(Collectors.toList());
 		this.orderStatus = order.getOrderStatus();
@@ -64,7 +64,7 @@ public class OrderDTO {
 	}
 
 	public OrderDTO(Integer id, boolean deleted, String description, LocalDateTime orderDate,
-			List<Integer> orderedArticles, int tableNumber, int employeeId, OrderStatus orderStatus, double price) {
+			List<Integer> orderedArticles, int tableNumber, int employeePin, OrderStatus orderStatus, double price) {
 		super();
 		this.id = id;
 		this.deleted = deleted;
@@ -72,7 +72,7 @@ public class OrderDTO {
 		this.orderDate = orderDate;
 		this.articles = orderedArticles;
 		this.tableNumber = tableNumber;
-		this.employeeId = employeeId;
+		this.employeePin = employeePin;
 		this.orderStatus = orderStatus;
 		this.price = price;
 	}
@@ -135,12 +135,12 @@ public class OrderDTO {
 		this.tableNumber = tableNumber;
 	}
 
-	public int getEmployeeId() {
-		return employeeId;
+	public int getEmployeePin() {
+		return employeePin;
 	}
 
-	public void setEmployeeId(int employeeId) {
-		this.employeeId = employeeId;
+	public void setEmployeePin(int employeePin) {
+		this.employeePin = employeePin;
 	}
 
 	public List<Integer> getOrderedArticles() {
