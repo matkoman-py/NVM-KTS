@@ -1,8 +1,6 @@
 package com.rest.RestaurantApp.dto;
 
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 import com.rest.RestaurantApp.domain.Employee;
 import com.rest.RestaurantApp.domain.enums.EmployeeType;
 import com.rest.RestaurantApp.domain.enums.UserType;
