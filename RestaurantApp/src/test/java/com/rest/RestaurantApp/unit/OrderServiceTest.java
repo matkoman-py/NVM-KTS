@@ -7,7 +7,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
@@ -23,13 +25,17 @@ import com.rest.RestaurantApp.domain.Article;
 import com.rest.RestaurantApp.domain.Employee;
 import com.rest.RestaurantApp.domain.Order;
 import com.rest.RestaurantApp.domain.OrderedArticle;
+import com.rest.RestaurantApp.domain.PriceInfo;
 import com.rest.RestaurantApp.domain.enums.ArticleStatus;
 import com.rest.RestaurantApp.domain.enums.ArticleType;
 import com.rest.RestaurantApp.domain.enums.EmployeeType;
 import com.rest.RestaurantApp.domain.enums.OrderStatus;
+import com.rest.RestaurantApp.domain.enums.PriceStatus;
 import com.rest.RestaurantApp.domain.enums.UserType;
+import com.rest.RestaurantApp.dto.ArticlesAndOrderDTO;
 import com.rest.RestaurantApp.dto.OrderDTO;
 import com.rest.RestaurantApp.dto.OrderedArticleDTO;
+import com.rest.RestaurantApp.dto.OrderedArticleWithDescDTO;
 import com.rest.RestaurantApp.exceptions.ChangeFinishedStateException;
 import com.rest.RestaurantApp.exceptions.IncompatibleEmployeeTypeException;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
@@ -66,6 +72,8 @@ class OrderServiceTest {
 	
 	@BeforeEach
 	public void setup() {
+		List<PriceInfo> price1 = new ArrayList<>();
+		
 		Employee waiter = new Employee("petarns99@gmail.com", "Petar", "Markovic", new GregorianCalendar(1999, 10, 29).getTime(), UserType.EMPLOYEE, 1234, EmployeeType.WAITER);
 		waiter.setId(1);
 		
@@ -101,6 +109,8 @@ class OrderServiceTest {
 		
 		Article article = new Article("Cheeseburger", "Juicy burger", ArticleType.MAIN_COURSE);
 		article.setId(1);
+		price1.add(new PriceInfo(new Date(),500,600,article));
+		article.setPrices(price1);
 		
 		Article article1 = new Article("Cheesecake", "Creamy fruit cake", ArticleType.DESSERT);
 		article1.setId(2);
@@ -339,6 +349,24 @@ class OrderServiceTest {
 		assertThrows(NotFoundException.class, () -> {orderService.createArticleForOrder(orderedArticle, 6);});
 	}
 	
+	@Test
+	void testDeleteArticleForOrder_ValidArticle() {
+		
+		
+		OrderedArticleDTO deletedArticle = orderService.deleteArticleForOrder(1);
+		assertEquals(deletedArticle.getArticleName(), "Cheeseburger");
+		assertEquals(deletedArticle.getDescription(), null);
+
+		//assertEquals(addedArticle.getStatus(), ArticleStatus.NOT_TAKEN);
+	}
+	
+	@Test
+	void testDeleteArticleForOrder_InvalidArticle_ArticleAlreadyTaken() {
+		
+		
+		assertThrows(OrderAlreadyTakenException.class, () -> {		OrderedArticleDTO deletedArticle = orderService.deleteArticleForOrder(3);});
+		//assertEquals(addedArticle.getStatus(), ArticleStatus.NOT_TAKEN);
+	}
 
 	
 
