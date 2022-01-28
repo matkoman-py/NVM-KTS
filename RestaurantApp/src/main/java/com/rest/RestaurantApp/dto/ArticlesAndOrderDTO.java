@@ -3,13 +3,19 @@ package com.rest.RestaurantApp.dto;
 import java.util.List;
 
 public class ArticlesAndOrderDTO {
-	private List<Integer> articleIds;
+	private List<OrderedArticleWithDescDTO> articles;
 	private Integer orderId;
-	public List<Integer> getArticleIds() {
-		return articleIds;
+	
+	public ArticlesAndOrderDTO(List<OrderedArticleWithDescDTO> articles, Integer orderId) {
+		super();
+		this.articles = articles;
+		this.orderId = orderId;
 	}
-	public void setArticleIds(List<Integer> articleIds) {
-		this.articleIds = articleIds;
+	public List<OrderedArticleWithDescDTO> getArticles() {
+		return articles;
+	}
+	public void setArticles(List<OrderedArticleWithDescDTO> articles) {
+		this.articles = articles;
 	}
 	public Integer getOrderId() {
 		return orderId;
@@ -17,11 +23,7 @@ public class ArticlesAndOrderDTO {
 	public void setOrderId(Integer orderId) {
 		this.orderId = orderId;
 	}
-	public ArticlesAndOrderDTO(List<Integer> articleIds, Integer orderId) {
-		super();
-		this.articleIds = articleIds;
-		this.orderId = orderId;
-	}
+	
 	public ArticlesAndOrderDTO() {
 		super();
 	}

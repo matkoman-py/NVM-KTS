@@ -313,7 +313,7 @@ class OrderServiceTest {
 		orderedArticle.setDescription("One plate");
 		orderedArticle.setArticleId(1);
 		
-		OrderedArticleDTO addedArticle = orderService.createArticleForOrder(orderedArticle.getArticleId(), 1);
+		OrderedArticleDTO addedArticle = orderService.createArticleForOrder(orderedArticle, 1);
 		
 		assertEquals(addedArticle.getId(), 4);
 		assertEquals(addedArticle.getDescription(), "One plate");
@@ -327,7 +327,7 @@ class OrderServiceTest {
 		orderedArticle.setDescription("One plate");
 		orderedArticle.setArticleId(5);
 		
-		assertThrows(NotFoundException.class, () -> {orderService.createArticleForOrder(orderedArticle.getArticleId(), 1);});
+		assertThrows(NotFoundException.class, () -> {orderService.createArticleForOrder(orderedArticle, 1);});
 	}
 	
 	@Test
@@ -336,7 +336,7 @@ class OrderServiceTest {
 		orderedArticle.setDescription("One plate");
 		orderedArticle.setArticleId(1);
 		
-		assertThrows(NotFoundException.class, () -> {orderService.createArticleForOrder(orderedArticle.getArticleId(), 6);});
+		assertThrows(NotFoundException.class, () -> {orderService.createArticleForOrder(orderedArticle, 6);});
 	}
 	
 

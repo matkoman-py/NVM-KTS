@@ -2,7 +2,6 @@ import { AuthGuard } from './auth.guard';
 import { Routes } from '@angular/router';
 import { ArticlesComponent } from '../articles/articles.component';
 import { EmployeesComponent } from '../employees/employees.component';
-import { HomeComponent } from '../home/home.component';
 import { LoginComponent } from '../login/components/login.component';
 import { CreateArticleComponent } from '../create-article/create-article.component';
 import { UpdateArticleComponent } from '../update-article/update-article.component';
@@ -24,32 +23,24 @@ export const routes: Routes = [
       expectedRoles: ['ROLE_MANAGER', 'COOK', 'BARMAN', 'WAITER'],
     },
   },
-  { 
+  {
     path: 'login',
     component: LoginComponent,
   },
-  { 
+  {
     path: 'table-layout',
     component: TableLayoutComponent,
     canActivate: [AuthGuard],
     data: {
-      expectedRoles: ['COOK', 'BARMAN', 'WAITER']
-    }
+      expectedRoles: ['WAITER'],
+    },
   },
-  { 
-    path: 'edit-table-layout', 
+  {
+    path: 'edit-table-layout',
     component: EditTableLayoutComponent,
     canActivate: [AuthGuard],
     data: {
-      expectedRoles: ['ROLE_MANAGER']
-    }
-  },
-  {
-    path: 'home',
-    component: HomeComponent,
-    canActivate: [AuthGuard],
-    data: {
-      expectedRoles: ['ROLE_MANAGER', 'COOK', 'BARMAN', 'WAITER'],
+      expectedRoles: ['ROLE_MANAGER'],
     },
   },
   {
@@ -117,7 +108,6 @@ export const routes: Routes = [
     },
   },
   {
-
     path: 'view-order-waiter/:id',
     component: ViewOrderWaiterComponent,
     canActivate: [AuthGuard],
@@ -130,7 +120,7 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     component: LoginComponent,
     data: {
-      expectedRoles: []
-    }
+      expectedRoles: [],
+    },
   },
 ];

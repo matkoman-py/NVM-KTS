@@ -129,13 +129,15 @@ public class OrderController {
 	
 	@PutMapping(value = "/add-articles-to-order", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<OrderDTO> addArticlesToDTO(@RequestBody ArticlesAndOrderDTO dto) {
+		System.out.println("EVO GA" + dto.getArticles().get(0).getArticleId());
+				
 		OrderDTO article = orderService.addArticlesToOrder(dto);
 		return new ResponseEntity<OrderDTO>(article, HttpStatus.OK);
 	}
 	
 	@PostMapping(value = "addArticle/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<OrderedArticleDTO> addArticle(@RequestBody OrderedArticleDTO article, @PathVariable("id") int orderId) {
-		OrderedArticleDTO orderedArticle = orderService.createArticleForOrder(article.getArticleId(), orderId);
+		OrderedArticleDTO orderedArticle = orderService.createArticleForOrder(article, orderId);
 		return new ResponseEntity<OrderedArticleDTO>(orderedArticle, HttpStatus.OK);
 	}
 	
