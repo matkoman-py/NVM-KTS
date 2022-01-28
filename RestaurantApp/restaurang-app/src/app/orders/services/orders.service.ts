@@ -14,6 +14,11 @@ export class OrdersService {
   private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
   constructor(private http: HttpClient) {}
 
+  createOrder(order: any): Observable<any> {
+    return this.http.post<any>(
+      '/api/order', order);
+  }
+
   getOrders(): Observable<Order[]> {
     return this.http.get<Order[]>('/api/order/active');
   }

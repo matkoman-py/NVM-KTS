@@ -12,4 +12,8 @@ export class TableLayoutService {
   getTableLayout(): Observable<String> {
     return this.http.get<String>('/api/table');
   }
+
+  postTableLayout(canvas: String): Observable<String> {
+    return this.http.post<String>('/api/table', canvas);
+  }
 }

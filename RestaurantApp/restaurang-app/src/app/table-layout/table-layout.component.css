@@ -3,3 +3,18 @@ canvas {
     height: 34rem;
     border: lightgray 1px solid;
 }
+
+.tables {
+    display: flex;
+    flex-direction: row;
+  }
+  .articleTable {
+    padding: 0 10px;
+  }
+  .statusDiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+  }
+  

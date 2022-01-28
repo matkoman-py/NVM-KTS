@@ -156,8 +156,8 @@ class OrderServiceTest {
 		given(articleRepository.findById(1)).willReturn(Optional.of(article));
 		given(articleRepository.findById(2)).willReturn(Optional.of(article1));
 		given(articleRepository.findById(5)).willReturn(Optional.empty());
-		given(employeeRepository.findById(1)).willReturn(Optional.of(waiter));
-		given(employeeRepository.findById(2)).willReturn(Optional.of(waiter1));
+		given(employeeRepository.findByPincode(1234)).willReturn(Optional.of(waiter));
+		given(employeeRepository.findByPincode(2434)).willReturn(Optional.of(waiter1));
 		given(employeeRepository.findById(3)).willReturn(Optional.of(cook));
 		given(employeeRepository.findByPincode(5436)).willReturn(Optional.of(cook));
 		given(employeeRepository.findByPincode(7654)).willReturn(Optional.of(barman));
@@ -182,7 +182,7 @@ class OrderServiceTest {
 		
 		assertEquals(order.getId(), 1);
 		assertEquals(order.getDescription(), "Extra chair");
-		assertEquals(order.getEmployeeId(), 1);
+		assertEquals(order.getEmployeePin(), 1234);
 		assertEquals(order.getOrderDate(), LocalDateTime.of(2021, 3, 4, 13, 10, 12));
 		assertEquals(order.getTableNumber(), 31);
 	}
@@ -210,7 +210,7 @@ class OrderServiceTest {
 		
 		assertEquals(order.getId(), 2);
 		assertEquals(order.getDescription(), "");
-		assertEquals(order.getEmployeeId(), 2);
+		assertEquals(order.getEmployeePin(), 2434);
 		assertEquals(order.getOrderDate(), LocalDateTime.of(2021, 4, 5, 17, 9, 12));
 		assertEquals(order.getTableNumber(), 22);
 		assertTrue(order.isDeleted());
@@ -223,39 +223,39 @@ class OrderServiceTest {
 	
 	@Test
 	void testCreate_ValidOrder() {
-		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), Arrays.asList(1), 5, 1, OrderStatus.ACTIVE, 5000);
+		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), Arrays.asList(1), 5, 1234, OrderStatus.ACTIVE, 5000);
 		OrderDTO createdOrder = orderService.create(orderToCreate);
 		
 		assertEquals(createdOrder.getId(), 4);
 		assertEquals(createdOrder.getDescription(), "Appetizers first");
 		assertEquals(createdOrder.getOrderDate(),  LocalDateTime.of(2021, 2, 3, 17, 0, 2));
 		assertEquals(createdOrder.getTableNumber(), 5);
-		assertEquals(createdOrder.getEmployeeId(), 1);
+		assertEquals(createdOrder.getEmployeePin(), 1234);
 
 	}
 	
 	@Test
 	void testCreate_InvalidOrder_NoArticles() {
-		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), null, 5, 1, OrderStatus.ACTIVE, 6000);
+		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), null, 5, 1234, OrderStatus.ACTIVE, 6000);
 		assertThrows(NullArticlesException.class, () -> {OrderDTO createdOrder = orderService.create(orderToCreate);});
 	}
 	
 	@Test
 	void testCreate_InvalidOrder_OrderTakenByCookOrBarman() {
-		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), null, 5, 3, OrderStatus.ACTIVE, 7000);
+		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), null, 5, 5436, OrderStatus.ACTIVE, 7000);
 		assertThrows(OrderTakenByWrongEmployeeTypeException.class, () -> {OrderDTO createdOrder = orderService.create(orderToCreate);});
 	}
 	
 	@Test
 	void testUpdate_ValidOrder() {
-		OrderDTO orderToUpdate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), Arrays.asList(1), 5, 1, OrderStatus.ACTIVE, 8000);
+		OrderDTO orderToUpdate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), Arrays.asList(1), 5, 1234, OrderStatus.ACTIVE, 8000);
 		OrderDTO updatedOrder = orderService.update(3, orderToUpdate);
 		
 		assertEquals(updatedOrder.getId(), 4);
 		assertEquals(updatedOrder.getDescription(), "Appetizers first");
 		assertEquals(updatedOrder.getOrderDate(),  LocalDateTime.of(2021, 2, 3, 17, 0, 2));
 		assertEquals(updatedOrder.getTableNumber(), 5);
-		assertEquals(updatedOrder.getEmployeeId(), 1);
+		assertEquals(updatedOrder.getEmployeePin(), 1234);
 
 	}
 	

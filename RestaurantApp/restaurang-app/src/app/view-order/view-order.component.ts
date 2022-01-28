@@ -96,7 +96,7 @@ export class ViewOrderComponent implements OnInit {
             detail: "Status of article successfully updated",
             });
         this.handleClose();
-    },err => {
+    }, err => {
         this.messageService.add({
             key: 'tc',
             severity: 'warn',

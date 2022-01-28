@@ -106,7 +106,7 @@ public class OrderService implements IOrderService {
 		// List<Article> articles = order.getOrderedArticles().stream().map(article ->
 		// article)
 		// dodati proveru jel sto slobodan
-		Employee employee = employeeRepository.findById(order.getEmployeeId()).get();
+		Employee employee = employeeRepository.findByPincode(order.getEmployeePin()).get();
 		
 		if(!employee.getEmployeeType().equals(EmployeeType.WAITER)) {
 			throw new OrderTakenByWrongEmployeeTypeException("An employee of type " + employee.getEmployeeType().toString() +" can't create a new order");
@@ -168,7 +168,7 @@ public class OrderService implements IOrderService {
 		// STAVI CENU NA NULA? 
 		oldOrder.setPrice(0);
 		oldOrder.setDescription(order.getDescription());
-		oldOrder.setEmployee(employeeRepository.findById(order.getEmployeeId()).get());
+		oldOrder.setEmployee(employeeRepository.findByPincode(order.getEmployeePin()).get());
 		oldOrder.setOrderDate(order.getOrderDate());
 		oldOrder.setTableNumber(order.getTableNumber());
 		  

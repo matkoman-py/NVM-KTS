@@ -50,9 +50,6 @@ export class CreateArticleComponent implements OnInit {
     this.createArticleService.getIngredients().subscribe(res => this.ingredients = res);
   }
 
-
-  
-
   setType(type: ArticleType) {
     this.article.type = type.name;
   }
