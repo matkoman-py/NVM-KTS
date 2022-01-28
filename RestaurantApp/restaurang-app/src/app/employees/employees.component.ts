@@ -174,6 +174,14 @@ export class EmployeesComponent implements OnInit {
       });
       this.getEmployees();
       this.clearInputFields();
+    }, err => {
+      this.messageService.add({
+          key: 'tc',
+          severity: 'warn',
+          summary: 'Fail',
+          detail: err.error,
+          });
+      console.log(err.error);
     });
   }
 
