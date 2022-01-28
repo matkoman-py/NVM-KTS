@@ -42,8 +42,6 @@ public class EmployeePage {
 	@FindBy(id = "email-search")
 	private WebElement emailSearch;
 	
-	
-	
 	@FindBy(id = "create-button")
 	private WebElement createBtn;
 	
