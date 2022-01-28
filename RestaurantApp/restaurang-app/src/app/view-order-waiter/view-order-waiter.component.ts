@@ -2,8 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService, PrimeNGConfig } from 'primeng/api';
 import { ArticlesService } from '../articles/services/articles.service';
-import { Article, ArticleType } from '../modules/shared/models/article';
-import { Order } from '../modules/shared/models/order';
+import {
+  Article,
+  ArticleForAdding,
+  ArticleType,
+} from '../modules/shared/models/article';
+import { Order, OrderedArticleWithDTO } from '../modules/shared/models/order';
 import {
   ArticleStatus,
   OrderedArticle,
@@ -33,6 +37,9 @@ export class ViewOrderWaiterComponent implements OnInit {
   displayFinishOrderDialog: boolean = false;
   displayArticleAddingDialog: boolean = false;
   displayQuantityDialog: boolean = false;
+  displayAddNoteDialog: boolean = false;
+  idForAddingNote: number;
+  note: string = '';
 
   statusDict = new Map<string, string>([
     ['NOT_TAKEN', 'Take article'],
@@ -75,21 +82,35 @@ export class ViewOrderWaiterComponent implements OnInit {
     this.updateArticleStatusId = undefined;
   }
 
+  convertToDto(article: Article): OrderedArticleWithDTO {
+    console.log(article.id);
+    return {
+      articleId: article.id,
+      description: article.description ? article.description : '',
+    };
+  }
+
   addArticles() {
     var articlesAndOrderDto = {
-      articleIds: this.addedArticles.map((article) =>
-        article.id ? article.id : 0
-      ),
+      articles: this.addedArticles.map((article) => this.convertToDto(article)),
       orderId: this.orderId,
     };
-
+    articlesAndOrderDto.articles.map((article) =>
+      console.log(article.articleId)
+    );
     this.orderService.addArticlesToOrder(articlesAndOrderDto).subscribe(() => {
       this.getOrder(this.orderId);
       this.getArticlesForOrder(this.orderId);
     });
+    this.addedArticles = [];
+    this.messageService.add({
+      key: 'tc',
+      severity: 'success',
+      summary: 'Success!',
+      detail: 'Successfully added articles to order!',
+    });
 
     this.displayArticleAddingDialog = false;
-    this.addedArticles = [];
   }
 
   openConfirmDialog() {
@@ -108,9 +129,31 @@ export class ViewOrderWaiterComponent implements OnInit {
     );
   }
 
+  openAddNoteDialogue(id: number) {
+    this.idForAddingNote = id;
+    this.displayAddNoteDialog = true;
+  }
+
+  addNote() {
+    var articleToAddNote = this.addedArticles.find(
+      (elem) => elem.id === this.idForAddingNote && elem.description === ''
+    );
+    if (articleToAddNote) articleToAddNote.description = this.note;
+    this.note = '';
+    this.idForAddingNote = 0;
+    this.displayAddNoteDialog = false;
+  }
+
+  checkNote() {
+    if (this.note.trim() === '') {
+      return true;
+    }
+    return false;
+  }
+
   addArticlesToArray() {
     for (var i = 0; i < this.quantity; i++) {
-      this.addedArticles.push(this.articleForAdding);
+      this.addedArticles.push({ ...this.articleForAdding, description: '' });
     }
     this.displayQuantityDialog = false;
   }
@@ -134,24 +177,16 @@ export class ViewOrderWaiterComponent implements OnInit {
     this.displayFinishOrderDialog = true;
   }
 
-  getArticleNamesAndDescriptions() {
-    for (let article of this.articles) {
-      this.viewOrderService
-        .getArticle(article.articleId)
-        .subscribe((result) => {
-          article.articleName = result.name;
-          article.articleDescription = result.description;
-          article.price = result.sellingPrice;
-          article.image = result.image;
-          article.type = result.type;
-        });
-    }
-  }
-
   deleteArticleFromOrder(id: number) {
     this.orderService.deleteArticleFromOrder(id).subscribe(() => {
       this.getOrder(this.orderId);
       this.getArticlesForOrder(this.orderId);
+      this.messageService.add({
+        key: 'tc',
+        severity: 'success',
+        summary: 'Success!',
+        detail: `Successfully deleted article with id: ${id} to order!`,
+      });
     });
   }
 
@@ -168,7 +203,6 @@ export class ViewOrderWaiterComponent implements OnInit {
   getArticlesForOrder(id: number) {
     this.viewOrderService.getArticlesForOrder(id).subscribe((data) => {
       this.articles = data;
-      this.getArticleNamesAndDescriptions();
     });
   }
 

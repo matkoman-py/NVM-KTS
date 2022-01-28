@@ -319,7 +319,7 @@ class OrderControllerTest {
 	@Test
 	public void testDeleteArticleForOrder_ValidId() throws Exception {
 		OrderedArticleDTO article = new OrderedArticleDTO(1, ArticleStatus.NOT_TAKEN, 8, "");
-		OrderedArticleDTO createdArticle = orderService.createArticleForOrder(article.getArticleId(), 8);
+		OrderedArticleDTO createdArticle = orderService.createArticleForOrder(article, 8);
 		int size = orderService.getArticlesForOrder(8).size();
 		//removeArticle/{id}
 		ResponseEntity<OrderedArticleDTO> responseEntity = restTemplate.exchange(

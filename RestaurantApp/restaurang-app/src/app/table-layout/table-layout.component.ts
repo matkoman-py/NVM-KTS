@@ -7,26 +7,28 @@ import { ArticlesService } from '../articles/services/articles.service';
 import { EmployeesService } from '../employees/services/employees.service';
 import { Article } from '../modules/shared/models/article';
 import { Order } from '../modules/shared/models/order';
-import { ArticleStatus, OrderedArticle } from '../modules/shared/models/orderedArticle';
+import {
+  ArticleStatus,
+  OrderedArticle,
+} from '../modules/shared/models/orderedArticle';
 import { OrdersService } from '../orders/services/orders.service';
 import { ViewOrderService } from '../view-order/services/view-order.service';
 import { TableLayoutService } from './services/table-layout.service';
-import { OrderCreation } from '../modules/shared/models/order_creation'
+import { OrderCreation } from '../modules/shared/models/order_creation';
 
 @Component({
   selector: 'app-table-layout',
   templateUrl: './table-layout.component.html',
-  styleUrls: ['./table-layout.component.css']
+  styleUrls: ['./table-layout.component.css'],
 })
 export class TableLayoutComponent implements OnInit {
-
   private canvas = new fabric.Canvas('demoCanvas');
-  private json = "";
+  private json = '';
 
   selectedTableId: number = 0;
 
   order: Order = {};
-  employeePin? : number;
+  employeePin?: number;
   articles: OrderedArticle[] = [];
   allArticles: Article[] = [];
   addedArticles: Article[] = [];
@@ -65,7 +67,7 @@ export class TableLayoutComponent implements OnInit {
     private articlesService: ArticlesService,
     private viewOrderService: ViewOrderService,
     private employeeService: EmployeesService
-    ) { }
+  ) {}
 
   addArticles() {
     // var articlesAndOrderDto = {
@@ -84,68 +86,87 @@ export class TableLayoutComponent implements OnInit {
   }
 
   checkPin() {
-
     // var date: string = new Date().toLocaleString('en-US', datetimeOptions);
     var date: string = this.parseDate(new Date());
 
-    this.employeeService.getEmployeeIdByPincode(this.employeePin).subscribe(() =>
-    {
-      var order: OrderCreation = {
-        articles: this.addedArticles.map((article) => 
-          article.id ? article.id : 0
+    this.employeeService
+      .getEmployeeIdByPincode(this.employeePin)
+      .subscribe(() => {
+        var order: OrderCreation = {
+          articles: this.addedArticles.map((article) =>
+            article.id ? article.id : 0
           ),
-        orderDate: date,
-        deleted: false,
-        tableNumber: this.selectedTableId,
-        description: "mnogo dobro",
-        employeePin: this.employeePin
-      }
+          orderDate: date,
+          deleted: false,
+          tableNumber: this.selectedTableId,
+          description: 'mnogo dobro',
+          employeePin: this.employeePin,
+        };
 
+        this.orderService.createOrder(order).subscribe((res) => {
+          this.canvas.forEachObject((o: any) => {
+            var table = o.getObjects('rect')[0];
+            console.log(this.selectedTableId);
+            if (
+              o.id === this.selectedTableId &&
+              this.selectedTableId !== undefined
+            ) {
+              o.order_id = res.id;
+              table.set('fill', 'green');
 
-      this.orderService.createOrder(order).subscribe(res => {
-        this.canvas.forEachObject((o : any) => {
+              o.toObject = ((toObject) => {
+                return (propertiesToInclude: any) => {
+                  return fabric.util.object.extend(
+                    toObject.call(o, propertiesToInclude),
+                    {
+                      id: o.id,
+                      order_id: res.id,
+                    }
+                  );
+                };
+              })(o.toObject);
+            } else {
+              o.toObject = ((toObject) => {
+                return (propertiesToInclude: any) => {
+                  return fabric.util.object.extend(
+                    toObject.call(o, propertiesToInclude),
+                    {
+                      id: o.id,
+                      order_id: o.order_id,
+                    }
+                  );
+                };
+              })(o.toObject);
+            }
+            this.canvas.renderAll();
+          });
+          console.log(JSON.stringify(this.canvas));
+          this.tableLayoutService
+            .postTableLayout(JSON.stringify(this.canvas))
+            .subscribe();
+        });
 
-          var table = o.getObjects('rect')[0];
-          console.log(this.selectedTableId)
-          if(o.id === this.selectedTableId && this.selectedTableId !== undefined) {
-            o.order_id = res.id;
-            table.set('fill', 'green');
-
-            o.toObject = ((toObject) => {
-              return (propertiesToInclude: any) => {
-                return fabric.util.object.extend(toObject.call(o, propertiesToInclude), {
-                  id: o.id,
-                  order_id: res.id
-                });
-              };
-            })(o.toObject);
-          }
-          else {
-            o.toObject = ((toObject) => {
-              return (propertiesToInclude: any) => {
-                return fabric.util.object.extend(toObject.call(o, propertiesToInclude), {
-                  id: o.id,
-                  order_id: o.order_id
-                });
-              };
-            })(o.toObject);
-          }
-          this.canvas.renderAll();
-          
-        })
-        console.log(JSON.stringify(this.canvas))
-        this.tableLayoutService.postTableLayout(JSON.stringify(this.canvas)).subscribe()
+        this.displayArticleAddingDialog = false;
+        this.addedArticles = [];
+        this.displayConfirmDialog = false;
       });
-  
-      this.displayArticleAddingDialog = false;
-      this.addedArticles = [];
-      this.displayConfirmDialog = false;
-    })
   }
 
   parseDate(date: Date) {
-    var dateString: string = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + (date.getDate())).slice(-2) + 'T' + 
-    ("0" + (date.getHours() + 1)).slice(-2) + ":" + ("0" + (date.getMinutes() + 1)).slice(-2) + ":" + ("0" + (date.getSeconds() + 1)).slice(-2) + '.' + date.getMilliseconds();
+    var dateString: string =
+      date.getFullYear() +
+      '-' +
+      ('0' + (date.getMonth() + 1)).slice(-2) +
+      '-' +
+      ('0' + date.getDate()).slice(-2) +
+      'T' +
+      ('0' + (date.getHours() + 1)).slice(-2) +
+      ':' +
+      ('0' + (date.getMinutes() + 1)).slice(-2) +
+      ':' +
+      ('0' + (date.getSeconds() + 1)).slice(-2) +
+      '.' +
+      date.getMilliseconds();
     return dateString;
   }
 
@@ -217,46 +238,40 @@ export class TableLayoutComponent implements OnInit {
   }
 
   deserialize() {
-    this.tableLayoutService.getTableLayout()
-        .subscribe((data: any) => {
-          console.log(data);    
+    this.tableLayoutService.getTableLayout().subscribe((data: any) => {
+      console.log(data);
 
-          this.canvas.loadFromJSON(data, () => {
-            this.canvas.renderAll();
-            this.setTableEvents();
-          })
-  });
+      this.canvas.loadFromJSON(data, () => {
+        this.canvas.renderAll();
+        this.setTableEvents();
+      });
+    });
   }
 
   setTableEvents() {
-    this.canvas.forEachObject((o : any) => {
+    this.canvas.forEachObject((o: any) => {
       var table = o.getObjects('rect')[0];
 
       o.selectable = false;
-      if(o.order_id !== "")
-        table.set('fill', 'green');
-      
-      o.on('mousedown', (e : any) => {
-        if(o.order_id !== "") {
-          this.router.navigate(['view-order-waiter/' + o.order_id])
-        }
-        else {
+      if (o.order_id !== '') table.set('fill', 'green');
+
+      o.on('mousedown', (e: any) => {
+        if (o.order_id !== '') {
+          this.router.navigate(['view-order-waiter/' + o.order_id]);
+        } else {
           this.selectedTableId = o.id;
           this.openModalForAddingArticles();
         }
-      })
-    })
+      });
+    });
     this.canvas.renderAll();
   }
 
   checkIfTablesHaveOrders() {
-    this.canvas.forEachObject((o : any) => {
+    this.canvas.forEachObject((o: any) => {
       var table = o.getObjects('rect')[0];
 
-      if(o.order_id !== undefined)
-        table.set('fill', 'green');
-    })
+      if (o.order_id !== undefined) table.set('fill', 'green');
+    });
   }
-
-
 }

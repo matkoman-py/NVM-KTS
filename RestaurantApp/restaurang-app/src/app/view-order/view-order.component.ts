@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ViewOrderService } from './services/view-order.service';
 import { MessageService, PrimeNGConfig } from 'primeng/api';
-import {ActivatedRoute, Router} from "@angular/router"
+import { ActivatedRoute, Router } from '@angular/router';
 import { Order, OrderStatus } from '../modules/shared/models/order';
-import { ArticleStatus, OrderedArticle } from '../modules/shared/models/orderedArticle';
+import {
+  ArticleStatus,
+  OrderedArticle,
+} from '../modules/shared/models/orderedArticle';
 import { OrdersService } from '../orders/services/orders.service';
 
 @Component({
@@ -16,16 +19,16 @@ export class ViewOrderComponent implements OnInit {
   order: Order = {};
   employeePin?: number;
   updateArticleStatusId?: number;
-  articles: OrderedArticle[] = []
+  articles: OrderedArticle[] = [];
   orderId: number;
   first = 0;
   rows = 5;
   display: boolean = false;
 
   statusDict = new Map<string, string>([
-    ["NOT_TAKEN", "Take article"],
-    ["TAKEN", "Start preparing"],
-    ["PREPARING", "Finish preparing"]
+    ['NOT_TAKEN', 'Take article'],
+    ['TAKEN', 'Start preparing'],
+    ['PREPARING', 'Finish preparing'],
   ]);
 
   articleStatuses: ArticleStatus[] = [
@@ -33,8 +36,8 @@ export class ViewOrderComponent implements OnInit {
     { name: 'Taken', value: 'TAKEN' },
     { name: 'Preparing', value: 'PREPARING' },
     { name: 'Finished', value: 'FINISHED' },
-  ];    
-  
+  ];
+
   selectedArticleStatus: ArticleStatus = { name: '', value: '' };
 
   constructor(
@@ -47,65 +50,58 @@ export class ViewOrderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.activatedRoute.params.subscribe(paramsId => {
-        this.primengConfig.ripple = true;
-        this.orderId = parseInt(paramsId['id']);
-        this.getOrder(this.orderId);
-        this.getArticlesForOrder(this.orderId);
+    this.activatedRoute.params.subscribe((paramsId) => {
+      this.primengConfig.ripple = true;
+      this.orderId = parseInt(paramsId['id']);
+      this.getOrder(this.orderId);
+      this.getArticlesForOrder(this.orderId);
     });
   }
 
-  handleClose(){
+  handleClose() {
     this.display = false;
     this.employeePin = undefined;
     this.updateArticleStatusId = undefined;
   }
 
-  openConfirmDialog(articleId?: number){
+  openConfirmDialog(articleId?: number) {
     this.display = true;
     this.updateArticleStatusId = articleId;
   }
 
-  search(){
+  search() {
     this.viewOrderService
       .search(this.selectedArticleStatus, this.orderId)
       .subscribe((data) => {
         this.articles = data;
-
-      this.getArticleNamesAndDescriptions();
       });
   }
 
-  getArticleNamesAndDescriptions() {
-    for(let article of this.articles){
-        this.viewOrderService.getArticle(article.articleId).subscribe((result) => {
-            article.articleName = result.name;
-            article.articleDescription = result.description;
-            article.image = result.image;
-        });
-    }
-  }
-  
-  updateStatus(){
-    this.viewOrderService.changeStatus(this.updateArticleStatusId, this.employeePin).subscribe((data) => {
-        this.getArticlesForOrder(this.orderId);
-        this.messageService.add({
+  updateStatus() {
+    this.viewOrderService
+      .changeStatus(this.updateArticleStatusId, this.employeePin)
+      .subscribe(
+        (data) => {
+          this.getArticlesForOrder(this.orderId);
+          this.messageService.add({
             key: 'tc',
             severity: 'success',
             summary: 'Success!',
-            detail: "Status of article successfully updated",
-            });
-        this.handleClose();
-    }, err => {
-        this.messageService.add({
+            detail: 'Status of article successfully updated',
+          });
+          this.handleClose();
+        },
+        (err) => {
+          this.messageService.add({
             key: 'tc',
             severity: 'warn',
             summary: 'Fail',
             detail: err.error,
-            });
-        console.log(err.error);
-        this.handleClose();
-      });
+          });
+          console.log(err.error);
+          this.handleClose();
+        }
+      );
   }
 
   getOrder(id: number) {
@@ -117,8 +113,6 @@ export class ViewOrderComponent implements OnInit {
   getArticlesForOrder(id: number) {
     this.viewOrderService.getArticlesForOrder(id).subscribe((data) => {
       this.articles = data;
-    
-    this.getArticleNamesAndDescriptions();
     });
   }
 
@@ -135,9 +129,9 @@ export class ViewOrderComponent implements OnInit {
   }
 
   isLastPage(): boolean {
-    return this.articles ?
-      this.first === this.articles.length - this.rows :
-      true;
+    return this.articles
+      ? this.first === this.articles.length - this.rows
+      : true;
   }
 
   isFirstPage(): boolean {
