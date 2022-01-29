@@ -1,12 +1,7 @@
 package com.rest.RestaurantApp.services;
 
-import com.rest.RestaurantApp.domain.Article;
 import com.rest.RestaurantApp.domain.Ingredient;
-import com.rest.RestaurantApp.domain.Order;
-import com.rest.RestaurantApp.dto.ArticleCreationDTO;
-import com.rest.RestaurantApp.dto.ArticleDTO;
 import com.rest.RestaurantApp.dto.IngredientDTO;
-import com.rest.RestaurantApp.dto.OrderDTO;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.repositories.IngredientRepository;
 import org.springframework.beans.factory.annotation.Autowired;

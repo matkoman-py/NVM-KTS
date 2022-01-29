@@ -24,6 +24,7 @@ import com.rest.RestaurantApp.dto.ArticleCreationDTO;
 import com.rest.RestaurantApp.dto.ArticleDTO;
 import com.rest.RestaurantApp.dto.DeleteMessageDTO;
 import com.rest.RestaurantApp.dto.OrderDTO;
+import com.rest.RestaurantApp.exceptions.ArticlePreparingException;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.services.ArticleService;
 
@@ -41,38 +42,44 @@ public class ArticleController {
 	@ExceptionHandler(value = NotFoundException.class)
 	public ResponseEntity handleNullArticlesException(NotFoundException notFoundException) {
         return new ResponseEntity(notFoundException.getMessage(), HttpStatus.NOT_FOUND);
-    }
+  }
 	
+	@ExceptionHandler(value = ArticlePreparingException.class)
+	public ResponseEntity handleArticlePreparingException(ArticlePreparingException articlePreparingException) {
+        return new ResponseEntity(articlePreparingException.getMessage(), HttpStatus.CONFLICT);
+  }
+  
+	@PreAuthorize("hasRole('MANAGER') or hasAuthority('ROLE_WAITER')")
 	@GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<ArticleDTO>> search(@RequestParam(value = "type", required = false, defaultValue = "") String type,
 			@RequestParam(value = "name", required = false, defaultValue = "") String name) {
 		return ResponseEntity.ok(articleService.search(type,name));	
 	}
-	
+	@PreAuthorize("hasRole('MANAGER') or hasAuthority('ROLE_WAITER')")
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<ArticleDTO>> getAll() {
 		return ResponseEntity.ok(articleService.getAll());
 	}
-	
+
+	@PreAuthorize("hasRole('MANAGER') or hasAuthority('ROLE_WAITER')")
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ArticleDTO> getOne(@PathVariable("id") int id) {
 		ArticleDTO article = articleService.getOne(id);
 		return new ResponseEntity<ArticleDTO>(article, HttpStatus.OK);	
 	}
-
-
+	@PreAuthorize("hasRole('MANAGER')")
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<DeleteMessageDTO> delete(@PathVariable("id") int id) {
 		articleService.delete(id);
 		return new ResponseEntity<DeleteMessageDTO>(new DeleteMessageDTO("Article with id " + id + " successfully deleted"), HttpStatus.OK);	
 	}
-
+	@PreAuthorize("hasRole('MANAGER')")
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ArticleDTO> create(@RequestBody ArticleCreationDTO article) {
 		ArticleDTO createdArticle = articleService.create(article);
 		return new ResponseEntity<ArticleDTO>(createdArticle, HttpStatus.CREATED);
 	}
-	
+	@PreAuthorize("hasRole('MANAGER')")
 	@PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ArticleDTO> update(@PathVariable("id") int id, @RequestBody ArticleDTO article) {
 		ArticleDTO updateArticle = articleService.update(id, article);

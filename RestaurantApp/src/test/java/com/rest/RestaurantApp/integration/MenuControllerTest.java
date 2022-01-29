@@ -42,7 +42,7 @@ public class MenuControllerTest {
 	
 	@Test
 	public void testGetMenu() throws Exception {
-		ResponseEntity<MenuDTO> responseEntity = restTemplate.getForEntity(
+		ResponseEntity<MenuDTO> responseEntity = restTemplate.withBasicAuth("manager_test", "test").getForEntity(
 				"/api/menu", MenuDTO.class);
 
 		MenuDTO menu = responseEntity.getBody();
@@ -55,7 +55,7 @@ public class MenuControllerTest {
 		ArticleCreationDTO article = new ArticleCreationDTO(new ArrayList<>(), "novi", 500, 600, "hladna", ArticleType.DRINK);
 		ArticleDTO newArticle = articleService.create(article);
 		
-		ResponseEntity<MenuDTO> responseEntity = restTemplate.exchange(
+		ResponseEntity<MenuDTO> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/menu/add-article/"+newArticle.getId(), HttpMethod.PUT, new HttpEntity<Object>(null), MenuDTO.class);
 		MenuDTO menu = responseEntity.getBody();
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -66,7 +66,7 @@ public class MenuControllerTest {
 	
 	@Test
 	public void testAddArticle_InvalidId() { 
-		ResponseEntity<String> responseEntity = restTemplate.exchange(
+		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/menu/add-article/55", HttpMethod.PUT, new HttpEntity<Object>(null), String.class);
 		
 		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
@@ -75,7 +75,7 @@ public class MenuControllerTest {
 	
 	@Test
 	public void testDeleteArticle() { 
-		ResponseEntity<MenuDTO> responseEntity = restTemplate.exchange(
+		ResponseEntity<MenuDTO> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/menu/delete-article/1", HttpMethod.PUT, new HttpEntity<Object>(null), MenuDTO.class);
 		MenuDTO menu = responseEntity.getBody();
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());

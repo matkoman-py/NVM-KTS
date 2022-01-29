@@ -42,6 +42,9 @@ public class Article extends BaseEntity{
 		@Column(nullable = false)
 		private String name;
 		
+		@Column(columnDefinition = "boolean default false")
+		private boolean isRemoved;
+		
 		@Column(nullable = false)
 		private String description;
 		
@@ -59,7 +62,7 @@ public class Article extends BaseEntity{
 		@JoinColumn(name = "menu_id", nullable = true)
 		private Menu menu;
 		
-		@OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+		@OneToMany(mappedBy = "article", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
 		private Set<OrderedArticle> orderedArticles;
 
 		public Article(String name, String description, ArticleType type, String image) {
@@ -96,7 +99,16 @@ public class Article extends BaseEntity{
 			this.image = image;
 		}
 
+		
 
+
+		public boolean isRemoved() {
+			return isRemoved;
+		}
+
+		public void setRemoved(boolean isRemoved) {
+			this.isRemoved = isRemoved;
+		}
 
 		public Article() {
 			super();

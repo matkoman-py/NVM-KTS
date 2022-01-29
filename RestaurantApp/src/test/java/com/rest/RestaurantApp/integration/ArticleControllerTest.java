@@ -43,7 +43,7 @@ public class ArticleControllerTest {
 	
 	@Test
 	public void testGetAll() throws Exception {
-		ResponseEntity<ArticleDTO[]> responseEntity = restTemplate.getForEntity(
+		ResponseEntity<ArticleDTO[]> responseEntity = restTemplate.withBasicAuth("manager_test", "test").getForEntity(
 				"/api/article", ArticleDTO[].class);
 
 		ArticleDTO[] categories = responseEntity.getBody();
@@ -55,7 +55,7 @@ public class ArticleControllerTest {
 	@Test
 	public void testSearch_nameParam() throws Exception {
 		
-		ResponseEntity<ArticleDTO[]> responseEntity = restTemplate.getForEntity(
+		ResponseEntity<ArticleDTO[]> responseEntity = restTemplate.withBasicAuth("employee", "waiter123").getForEntity(
 				"/api/article/search/?type=&name=es", ArticleDTO[].class);
         
 		ArticleDTO[] categories = responseEntity.getBody();
@@ -67,7 +67,7 @@ public class ArticleControllerTest {
 	@Test
 	void testSearch_noParams() {
 		
-		ResponseEntity<ArticleDTO[]> responseEntity = restTemplate.getForEntity(
+		ResponseEntity<ArticleDTO[]> responseEntity = restTemplate.withBasicAuth("manager_test", "test").getForEntity(
 				"/api/article/search/?type=&name=", ArticleDTO[].class);
         
 		ArticleDTO[] categories = responseEntity.getBody();
@@ -79,7 +79,7 @@ public class ArticleControllerTest {
 	@Test
 	void testSearch_typeParam() {
 		
-		ResponseEntity<ArticleDTO[]> responseEntity = restTemplate.getForEntity(
+		ResponseEntity<ArticleDTO[]> responseEntity = restTemplate.withBasicAuth("manager_test", "test").getForEntity(
 				"/api/article/search/?type=DESSERT&name=", ArticleDTO[].class);
         
 		ArticleDTO[] categories = responseEntity.getBody();
@@ -90,7 +90,7 @@ public class ArticleControllerTest {
 	@Test
 	void testSearch_typeAndNameParam_ExpectOne() {
 		
-		ResponseEntity<ArticleDTO[]> responseEntity = restTemplate.getForEntity(
+		ResponseEntity<ArticleDTO[]> responseEntity = restTemplate.withBasicAuth("manager_test", "test").getForEntity(
 				"/api/article/search/?type=DESSERT&name=ES", ArticleDTO[].class);
         
 		ArticleDTO[] categories = responseEntity.getBody();
@@ -101,7 +101,7 @@ public class ArticleControllerTest {
 	@Test
 	void testSearch_typeAndNameParam_ExpectNone() {
 		
-		ResponseEntity<ArticleDTO[]> responseEntity = restTemplate.getForEntity(
+		ResponseEntity<ArticleDTO[]> responseEntity = restTemplate.withBasicAuth("manager_test", "test").getForEntity(
 				"/api/article/search/?type=DESSERT&name=ESsdasd", ArticleDTO[].class);
         
 		ArticleDTO[] categories = responseEntity.getBody();
@@ -111,7 +111,7 @@ public class ArticleControllerTest {
 	
 	@Test
 	public void testGetOne_ValidId() throws Exception {
-		ResponseEntity<ArticleDTO> responseEntity = restTemplate.getForEntity(
+		ResponseEntity<ArticleDTO> responseEntity = restTemplate.withBasicAuth("manager_test", "test").getForEntity(
 				"/api/article/1", ArticleDTO.class);
 
 		ArticleDTO article = responseEntity.getBody();
@@ -122,7 +122,7 @@ public class ArticleControllerTest {
 	
 	@Test
 	public void testGetOne_InvalidId() throws Exception {
-		ResponseEntity<String> responseEntity = restTemplate.getForEntity(
+		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test").getForEntity(
 				"/api/article/15", String.class);
 
 		
@@ -136,7 +136,7 @@ public class ArticleControllerTest {
 		int sizeBefore = articleService.getAll().size();
 		ArticleCreationDTO article = new ArticleCreationDTO(new ArrayList<>(),"novi",500,600,"hladna",ArticleType.DRINK);
 		
-		ResponseEntity<ArticleDTO> responseEntity = restTemplate.postForEntity("/api/article", article, ArticleDTO.class);
+		ResponseEntity<ArticleDTO> responseEntity = restTemplate.withBasicAuth("manager_test", "test").postForEntity("/api/article", article, ArticleDTO.class);
 		
 		ArticleDTO newArticle = responseEntity.getBody();
 		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
@@ -158,7 +158,7 @@ public class ArticleControllerTest {
 		newArticle.setIngredients(new ArrayList<>());
 		newArticle.setType(ArticleType.APPETIZER);
 		
-		ResponseEntity<ArticleDTO> responseEntity = restTemplate.exchange(
+		ResponseEntity<ArticleDTO> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/article/2", HttpMethod.PUT, new HttpEntity<ArticleDTO>(newArticle), ArticleDTO.class);
 		
 		ArticleDTO updatedArticle = responseEntity.getBody();
@@ -181,7 +181,7 @@ public class ArticleControllerTest {
 		newArticle.setIngredients(new ArrayList<>());
 		newArticle.setType(ArticleType.APPETIZER);
 		
-		ResponseEntity<String> responseEntity = restTemplate.exchange(
+		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/article/25", HttpMethod.PUT, new HttpEntity<ArticleDTO>(newArticle), String.class);
 
 		
@@ -191,7 +191,7 @@ public class ArticleControllerTest {
 	
 	@Test
 	public void testDelete_InvalidId() throws Exception {
-		ResponseEntity<String> responseEntity = restTemplate.exchange(
+		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/article/25", HttpMethod.DELETE,  new HttpEntity<Object>(null), String.class);
 
 		
@@ -200,16 +200,26 @@ public class ArticleControllerTest {
 	}
 	
 	@Test
+	public void testDelete_InvalidArticle_ArticleBeingPrepared() throws Exception {
+		ResponseEntity<String> responseEntity = restTemplate.exchange(
+				"/api/article/1", HttpMethod.DELETE,  new HttpEntity<Object>(null), String.class);
+
+		
+		assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
+		assertEquals("Article with id 1 is currently being prepared", responseEntity.getBody());
+	}
+	
+	@Test
 	public void testDelete_ValidId() throws Exception {
 		
 		ArticleCreationDTO article = new ArticleCreationDTO(new ArrayList<>(),"novi",500,600,"hladna",ArticleType.DRINK);
 		
-		ResponseEntity<ArticleDTO> responseEntity = restTemplate.postForEntity("/api/article", article, ArticleDTO.class);
+		ResponseEntity<ArticleDTO> responseEntity = restTemplate.withBasicAuth("manager_test", "test").postForEntity("/api/article", article, ArticleDTO.class);
 		
 		ArticleDTO newArticle = responseEntity.getBody();
 		
 		int sizeBefore = articleService.getAll().size();
-		ResponseEntity<String> responseEntityDelete = restTemplate.exchange(
+		ResponseEntity<String> responseEntityDelete = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/article/"+newArticle.getId(), HttpMethod.DELETE,  new HttpEntity<Object>(null), String.class);
 
 		

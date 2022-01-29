@@ -13,10 +13,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
 import com.rest.RestaurantApp.domain.enums.ArticleType;
 import com.rest.RestaurantApp.dto.ArticleCreationDTO;
 import com.rest.RestaurantApp.dto.ArticleDTO;
+import com.rest.RestaurantApp.exceptions.ArticlePreparingException;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.services.ArticleService;
 
@@ -108,6 +108,13 @@ public class ArticleServiceTest {
 	void testDelete_InvalidId() {
 		assertThrows(NotFoundException.class, ()->{
 			articleService.delete(54);
+            });
+	}
+	
+	@Test
+	void testDelete_InvalidArticle_ArticleBeingPrepared() {
+		assertThrows(ArticlePreparingException.class, ()->{
+			articleService.delete(1);
             });
 	}
 	

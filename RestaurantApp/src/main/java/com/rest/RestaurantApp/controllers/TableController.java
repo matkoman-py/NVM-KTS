@@ -2,6 +2,7 @@ package com.rest.RestaurantApp.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
@@ -12,7 +13,8 @@ import java.nio.file.Paths;
 @RestController
 @RequestMapping("/api/table")
 public class TableController {
-
+	
+	@PreAuthorize("hasRole('MANAGER') or hasAuthority('ROLE_WAITER')")
     @GetMapping
     public ResponseEntity<Object> getTableLayout() {
         try {
@@ -23,7 +25,8 @@ public class TableController {
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
-
+	
+	@PreAuthorize("hasRole('MANAGER')")
     @PostMapping
     public ResponseEntity<Object> saveTableLayout(@RequestBody String table) {
         try {

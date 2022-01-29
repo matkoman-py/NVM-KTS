@@ -14,14 +14,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
-
-import com.rest.RestaurantApp.domain.enums.EmployeeType;
 import com.rest.RestaurantApp.domain.enums.PrivilegedUserType;
 import com.rest.RestaurantApp.domain.enums.UserType;
 import com.rest.RestaurantApp.dto.PrivilegedUserDTO;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
-import com.rest.RestaurantApp.repositories.PriviligedUserRepository;
 import com.rest.RestaurantApp.services.PrivilegedUserService;
 
 @ExtendWith(SpringExtension.class)
@@ -32,9 +28,6 @@ public class PrivilegedUserServiceTest {
 	
 	@Autowired
 	private PrivilegedUserService privilegedUserService;
-
-	@Autowired
-	private PriviligedUserRepository privilegedUserRepository;
 
 	@Test
 	void testGetOne_ValidId() {

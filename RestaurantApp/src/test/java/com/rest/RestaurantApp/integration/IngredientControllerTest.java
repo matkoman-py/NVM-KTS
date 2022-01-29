@@ -44,7 +44,7 @@ public class IngredientControllerTest {
     
     @Test
     void testSearch() {
-        ResponseEntity<IngredientDTO[]> response = restTemplate.getForEntity("/api/ingredient/search?name=a", IngredientDTO[].class);
+        ResponseEntity<IngredientDTO[]> response = restTemplate.withBasicAuth("manager_test", "test").getForEntity("/api/ingredient/search?name=a", IngredientDTO[].class);
 
         IngredientDTO[] ingredients = response.getBody();
 
@@ -55,7 +55,7 @@ public class IngredientControllerTest {
 
     @Test
     void testGetOne_ValidId() {
-        ResponseEntity<IngredientDTO> response = restTemplate.getForEntity("/api/ingredient/1", IngredientDTO.class);
+        ResponseEntity<IngredientDTO> response = restTemplate.withBasicAuth("manager_test", "test").getForEntity("/api/ingredient/1", IngredientDTO.class);
 
         IngredientDTO ingredient = response.getBody();
 
@@ -67,7 +67,7 @@ public class IngredientControllerTest {
 
     @Test
     void testGetOne_InvalidId() {
-        ResponseEntity<String> responseEntity = restTemplate
+        ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test")
                 .getForEntity("/api/ingredient/55", String.class);
 
 
@@ -80,7 +80,7 @@ public class IngredientControllerTest {
         int size = ingredientService.getAll().size();
         IngredientDTO ingredient = new IngredientDTO("Sastojak 1", false);
 
-        ResponseEntity<IngredientDTO> response = restTemplate.postForEntity("/api/ingredient", ingredient, IngredientDTO.class);
+        ResponseEntity<IngredientDTO> response = restTemplate.withBasicAuth("manager_test", "test").postForEntity("/api/ingredient", ingredient, IngredientDTO.class);
 
         IngredientDTO createdIngredient = response.getBody();
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
@@ -101,7 +101,7 @@ public class IngredientControllerTest {
         int size = ingredientService.getAll().size();
         IngredientDTO ingredient = new IngredientDTO("Sastojak 2", true);
 
-        ResponseEntity<IngredientDTO> response = restTemplate.exchange("/api/ingredient/3", HttpMethod.PUT,
+        ResponseEntity<IngredientDTO> response = restTemplate.withBasicAuth("manager_test", "test").exchange("/api/ingredient/3", HttpMethod.PUT,
                 new HttpEntity<>(ingredient), IngredientDTO.class);
 
         IngredientDTO updatedIngredient = response.getBody();
@@ -118,7 +118,7 @@ public class IngredientControllerTest {
     public void testDelete_ValidId() {
         IngredientDTO ingredient = ingredientService.create(new IngredientDTO("Sastojak 3", false));
         int size = ingredientService.getAll().size();
-        ResponseEntity<String> responseEntity = restTemplate.exchange(
+        ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
                 "/api/ingredient/" + ingredient.getId(), HttpMethod.DELETE, new HttpEntity<>(null),
                 String.class);
 
@@ -130,7 +130,7 @@ public class IngredientControllerTest {
     public void testDelete_InvalidId() {
         int size = ingredientService.getAll().size();
 
-        ResponseEntity<String> response = restTemplate.exchange("/api/ingredient/55", HttpMethod.DELETE,
+        ResponseEntity<String> response = restTemplate.withBasicAuth("manager_test", "test").exchange("/api/ingredient/55", HttpMethod.DELETE,
                 new HttpEntity<>(null), String.class);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());

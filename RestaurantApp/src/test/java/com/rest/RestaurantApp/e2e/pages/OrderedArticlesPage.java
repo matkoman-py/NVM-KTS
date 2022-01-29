@@ -2,6 +2,7 @@ package com.rest.RestaurantApp.e2e.pages;
 
 import java.util.List;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -31,7 +32,14 @@ public class OrderedArticlesPage {
 	}
 	
 	public void clickTakeOrderBtn() {
-		Utilities.visibilityWait(driver, takeArticleBtns, 5).click();
+		
+		try {
+			Utilities.clickableWait(driver, takeArticleBtns, 10).click();
+		}
+		catch(org.openqa.selenium.StaleElementReferenceException ex)
+		{
+			Utilities.clickableWait(driver, takeArticleBtns, 10).click();
+		}
 	}
 	
 	public void closeModal() {
@@ -45,6 +53,14 @@ public class OrderedArticlesPage {
 	}
 	
 	public String checkToastMessage() {
-		return Utilities.visibilityWait(driver, toastMessage, 5).getText();
+		try {
+			return Utilities.visibilityWait(driver, toastMessage, 5).getText();
+			
+		}
+		catch(org.openqa.selenium.StaleElementReferenceException ex)
+		{
+			return Utilities.visibilityWait(driver, toastMessage, 5).getText();
+		}
+
 	}
 }

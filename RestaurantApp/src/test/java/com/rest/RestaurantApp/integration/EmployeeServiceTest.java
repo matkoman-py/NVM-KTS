@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -20,8 +21,8 @@ import com.rest.RestaurantApp.domain.enums.EmployeeType;
 import com.rest.RestaurantApp.domain.enums.UserType;
 import com.rest.RestaurantApp.dto.EmployeeAuthDTO;
 import com.rest.RestaurantApp.dto.EmployeeDTO;
+import com.rest.RestaurantApp.exceptions.EmployeeCurrentlyWorkingException;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
-import com.rest.RestaurantApp.repositories.EmployeeRepository;
 import com.rest.RestaurantApp.services.EmployeeService;
 
 @ExtendWith(SpringExtension.class)
@@ -32,9 +33,6 @@ public class EmployeeServiceTest {
 	
 	@Autowired
 	private EmployeeService employeeService;
-	
-	@Autowired
-	private EmployeeRepository employeeRepository;
 	
 	@Test
 	void testGetOne_ValidId() {
@@ -63,11 +61,13 @@ public class EmployeeServiceTest {
 	@Test
 	void testDelete_ValidId() {
 		
-		EmployeeDTO employee = new EmployeeDTO(7,10000,"aca@gmail.com","Aleksa","Kekezovic",new Date(),UserType.EMPLOYEE, 9876, EmployeeType.COOK);
-		employeeService.create(employee);
+		EmployeeDTO employee = new EmployeeDTO(9,10000,"aca@gmail.com","Aleksa","Kekezovic",new Date(),UserType.EMPLOYEE, 9876, EmployeeType.COOK);
+		employee = employeeService.create(employee);
 		List<EmployeeDTO> result1 = employeeService.getAll();
-		employeeService.delete(7);
+		System.out.println(result1.size()+ " DASDSAD");
+		employeeService.delete(employee.getId());
 		List<EmployeeDTO> result2 = employeeService.getAll();
+		System.out.println(result2.size());
 		
 		assertNotEquals(result1.size(),result2.size());
 	}
@@ -77,6 +77,22 @@ public class EmployeeServiceTest {
 		
 		assertThrows(NotFoundException.class,()->{
 			employeeService.delete(15);
+		});
+	}
+	
+	@Test
+	void testDelete_InvalidEmployee_WaiterPreparingOrder() {
+		
+		assertThrows(EmployeeCurrentlyWorkingException.class,()->{
+			employeeService.delete(3);
+		});
+	}
+	
+	@Test
+	void testDelete_InvalidEmployee_CookOrBarmanPreparingArticle() {
+		
+		assertThrows(EmployeeCurrentlyWorkingException.class,()->{
+			employeeService.delete(6);
 		});
 	}
 	
@@ -143,32 +159,32 @@ public class EmployeeServiceTest {
 		int beforeCreate = employeeService.getAll().size();
 		
 		EmployeeDTO employee = new EmployeeDTO(10,10000,"aca2@gmail.com","Aleksa","Kekezovic",new Date(),UserType.EMPLOYEE, 1661, EmployeeType.COOK);
-		employeeService.create(employee);
+		employee = employeeService.create(employee);
 		
 		int afterCreate = employeeService.getAll().size();
 		assertEquals(beforeCreate, afterCreate - 1);
 
-		employeeService.delete(10);
+		employeeService.delete(employee.getId());
 	}
 	
-//	@Test
-//	void testSearch_ExpectedNone() {
-//		List<EmployeeDTO> employees = employeeService.search("x", "y", "z", "w");
-//		
-//		assertEquals(0, employees.size());
-//	}
-//	
-//	@Test
-//	void testSearch_ExpectedAll() {
-//		List<EmployeeDTO> employees = employeeService.search("", "", "", "");
-//		
-//		assertEquals(5, employees.size());
-//	}
-//
-//	@Test
-//	void testSearch_ExpectedOne() {
-//		List<EmployeeDTO> employees = employeeService.search("Mateja", "Cosovic", "99@yahoo.com", "1234");
-//		
-//		assertEquals(1, employees.size());
-//	}
+	@Test
+	void testSearch_ExpectedNone() throws ParseException {
+		List<EmployeeDTO> employees = employeeService.search("x", "y", "z", "", "");
+		
+		assertEquals(0, employees.size());
+	}
+	
+	@Test
+	void testSearch_ExpectedAll() throws ParseException {
+		List<EmployeeDTO> employees = employeeService.search("", "", "", "", "");
+		
+		assertEquals(5, employees.size());
+	}
+
+	@Test
+	void testSearch_ExpectedOne() throws ParseException {
+		List<EmployeeDTO> employees = employeeService.search("Mateja", "Cosovic", "99@yahoo.com", "1888-8-1", "2021-10-3");
+		
+		assertEquals(1, employees.size());
+	}
 }

@@ -34,33 +34,38 @@ public class IngredientController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    //@PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<List<IngredientDTO>> getAll() {
         return ResponseEntity.ok(ingredientService.getAll()); }
-
+    
+    @PreAuthorize("hasRole('MANAGER')")
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<IngredientDTO> getOne(@PathVariable("id") int id) {
         IngredientDTO ingredient = ingredientService.getOne(id);
         return new ResponseEntity<>(ingredient, HttpStatus.OK);
     }
     
+    @PreAuthorize("hasRole('MANAGER')")
     @GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<IngredientDTO>> search(@RequestParam(value = "type", required = false, defaultValue = "") String type,
 			@RequestParam(value = "name", required = false, defaultValue = "") String name) {
         return new ResponseEntity<>(ingredientService.search(name, type), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('MANAGER')")
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<IngredientDTO> create(@RequestBody IngredientDTO ingredientDTO) {
         return new ResponseEntity<>(ingredientService.create(ingredientDTO), HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('MANAGER')")
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<IngredientDTO> update(@PathVariable("id") int id, @RequestBody IngredientDTO ingredientDTO) {
         IngredientDTO updateIngredient = ingredientService.update(id, ingredientDTO);
         return new ResponseEntity<>(updateIngredient, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('MANAGER')")
     @DeleteMapping(value = "/{id}", produces="text/plain")
     public ResponseEntity<String> delete(@PathVariable("id") int id) {
         IngredientDTO ingredientDTO = ingredientService.delete(id);

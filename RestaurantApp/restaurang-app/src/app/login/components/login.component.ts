@@ -32,6 +32,7 @@ export class LoginComponent implements OnInit {
         if (role != undefined) {
           localStorage.setItem('role', role);
           localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('token', response.body.accessToken);
         }
         this.loginService.emitLogin();
         this.router.navigate(['reports']);
@@ -58,6 +59,7 @@ export class LoginComponent implements OnInit {
         if (role != undefined) {
           localStorage.setItem('role', role);
           localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('token', response.body.accessToken);
         }
         this.loginService.emitLogin();
         if (role === 'WAITER') {

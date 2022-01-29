@@ -1,10 +1,8 @@
 package com.rest.RestaurantApp.integration;
 
-import com.rest.RestaurantApp.dto.ArticleDTO;
 import com.rest.RestaurantApp.dto.IngredientDTO;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.services.IngredientService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
