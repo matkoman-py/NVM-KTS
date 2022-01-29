@@ -39,7 +39,7 @@ public class ReportsTest {
 		loginPage.setPasswordInput("petar123");
 		loginPage.loginButtonClickPrivileged();
 		
-		loginPage.waitForUrlToBe("http://localhost:4200/home");
+		loginPage.waitForUrlToBe("http://localhost:4200/reports");
 		browser.navigate().to("http://localhost:4200/reports");
 		
 		reportsPage.clickYearlyReportTab();

@@ -105,7 +105,7 @@ public class LoginPage {
 		password.sendKeys("petar123");
 		
 		loginButtonClickPrivileged();
-		waitForUrlToBe("http://localhost:4200/home");
+		waitForUrlToBe("http://localhost:4200/reports");
 	}
 	
 	public void loginAsCook() {
@@ -116,7 +116,7 @@ public class LoginPage {
 		pincode.sendKeys("cook123");
 		
 		loginButtonClickEmployee();
-		waitForUrlToBe("http://localhost:4200/home");
+		waitForUrlToBe("http://localhost:4200/active-orders");
 	}
 	
 	public void loginAsWaiter() {
@@ -127,7 +127,7 @@ public class LoginPage {
 		pincode.sendKeys("waiter123");
 		
 		loginButtonClickEmployee();
-		waitForUrlToBe("http://localhost:4200/home");
+		waitForUrlToBe("http://localhost:4200/table-layout");
 	}
 	
 	public void loginAsBarman() {
@@ -138,6 +138,6 @@ public class LoginPage {
 		pincode.sendKeys("barman123");
 		
 		loginButtonClickEmployee();
-		waitForUrlToBe("http://localhost:4200/home");
+		waitForUrlToBe("http://localhost:4200/active-orders");
 	}
 }

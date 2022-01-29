@@ -36,7 +36,7 @@ public class IngredientTest {
 	}
 	
 	@Test
-	public void loginTestPrivilegedUser() throws InterruptedException {
+	public void ingredientsFlowTest() throws InterruptedException {
 		assertEquals("http://localhost:4200/login",
 				browser.getCurrentUrl());
 
@@ -45,9 +45,9 @@ public class IngredientTest {
 		loginPage.setPasswordInput("petar123");
 		loginPage.loginButtonClickPrivileged();
 		
-		loginPage.waitForUrlToBe("http://localhost:4200/home");
+		loginPage.waitForUrlToBe("http://localhost:4200/reports");
 		
-		assertEquals("http://localhost:4200/home", browser.getCurrentUrl());
+		assertEquals("http://localhost:4200/reports", browser.getCurrentUrl());
 		browser.navigate().to("http://localhost:4200/ingredients");
 		
 		int count = ingredientsPage.getIngredientCount();
@@ -55,7 +55,7 @@ public class IngredientTest {
 		ingredientsPage.clickDeleteBtn();
 		
 		//sacekaj da se ocita promena
-		Thread.sleep(600);
+		Thread.sleep(1500);
 		int countAfterDelete = ingredientsPage.getIngredientCount();
 		assertEquals(count-1, countAfterDelete);
 		
@@ -66,7 +66,7 @@ public class IngredientTest {
 		ingredientsPage.clickCreateBtn();
 		
 		//sacekaj da se ocita promena
-		Thread.sleep(600);
+		Thread.sleep(1500);
 		int countAfterCreate = ingredientsPage.getIngredientCount();
 		
 		assertEquals(count+1, countAfterCreate);
@@ -77,7 +77,7 @@ public class IngredientTest {
 		ingredientsPage.setCreateUpdateName("Updatiran sastojak");
 		ingredientsPage.clickUpdateBtn();
 		
-		Thread.sleep(600);
+		Thread.sleep(1500);
 		int countAfterUpdate = ingredientsPage.getIngredientCount();
 		assertEquals(count, countAfterUpdate);
 		
@@ -88,7 +88,7 @@ public class IngredientTest {
 		ingredientsPage.clickOption(1);
 		ingredientsPage.clickSearchBtn();
 		
-		Thread.sleep(600);
+		Thread.sleep(1500);
 		int countAfterSearch = ingredientsPage.getIngredientCount();
 		
 		assertTrue(countAfterSearch <= count);

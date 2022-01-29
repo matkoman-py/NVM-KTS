@@ -108,6 +108,19 @@ public class ArticlesTablePage {
 		
 	}
 	
+	public void selectLastArticle() {
+		try {
+			WebElement firstArticle = Utilities.visibilityWait(driver, By.id("10"), 10).get(0);
+			firstArticle.click();
+		}
+		catch(org.openqa.selenium.StaleElementReferenceException ex)
+		{
+			WebElement firstArticle = Utilities.visibilityWait(driver, By.id("10"), 10).get(0);
+			firstArticle.click();
+		}
+		
+	}
+	
 	public void waitForUrlToBe(String url) {
 		Utilities.urlWait(driver, url, 10);
 	}

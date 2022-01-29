@@ -32,7 +32,7 @@ public class IngredientsPage {
 	@FindBy(id="search-button")
 	private WebElement searchBtn;
 	
-	@FindBy(xpath = "//*[@id=\"pr_id_4\"]/p-paginator/div/span[1]")
+	@FindBy(xpath = "//*[@id=\"pr_id_3\"]/p-paginator/div/span[1]")
 	private WebElement ingredientCount;
 	
 	@FindBy(tagName = "p-dropdown")
