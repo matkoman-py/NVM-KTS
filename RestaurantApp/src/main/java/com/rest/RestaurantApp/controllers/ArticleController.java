@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,13 +59,14 @@ public class ArticleController {
 		ArticleDTO article = articleService.getOne(id);
 		return new ResponseEntity<ArticleDTO>(article, HttpStatus.OK);	
 	}
-	
+
+
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<DeleteMessageDTO> delete(@PathVariable("id") int id) {
 		articleService.delete(id);
 		return new ResponseEntity<DeleteMessageDTO>(new DeleteMessageDTO("Article with id " + id + " successfully deleted"), HttpStatus.OK);	
 	}
-	
+
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ArticleDTO> create(@RequestBody ArticleCreationDTO article) {
 		ArticleDTO createdArticle = articleService.create(article);

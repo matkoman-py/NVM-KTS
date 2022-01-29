@@ -40,13 +40,14 @@ public class EditTableTest {
         assertTrue(tableLayoutPage.displayedMessage("Table successfully added!"));
 
         Thread.sleep(500);
-        tableLayoutPage.removeTable();
+        tableLayoutPage.removeTable(20, 20);
 
         assertTrue(tableLayoutPage.displayedMessage("Table deleted!"));
 
         Thread.sleep(500);
         tableLayoutPage.addTable();
         tableLayoutPage.moveObjectOnCanvasByCoordinates(20, 20, 150, 150);
+        tableLayoutPage.removeTable(150, 150);
         tableLayoutPage.saveLayout();
 
         assertTrue(tableLayoutPage.displayedMessage("Table layout saved!"));
