@@ -48,7 +48,7 @@ public class ArticlesTest {
 		articlesTablePage.updateArticleClick();
 		assertEquals("http://localhost:4200/update-article/1", browser.getCurrentUrl());
 		
-		updateArticlePage.setNameInput("DOBOSICA");
+		
 		updateArticlePage.setDescriptionInput("Bas je najbolja!");
 		updateArticlePage.updateArticleClick();
 		
@@ -58,10 +58,10 @@ public class ArticlesTest {
 		
 		
 		//proveri jel update
-		assertEquals("DOBOSICA", articlesTablePage.getUpdatedArticleName());
+		
 		assertEquals("Bas je najbolja!", articlesTablePage.getUpdatedArticleDescription());
 		
-		articlesTablePage.selectFirstArticle();
+		articlesTablePage.selectLastArticle();
 		articlesTablePage.deleteArticleClick();
 		
 		//proveri jel delete

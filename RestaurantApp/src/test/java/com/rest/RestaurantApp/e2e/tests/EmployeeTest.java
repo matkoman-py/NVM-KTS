@@ -38,7 +38,7 @@ public class EmployeeTest {
 	}
 	
 	@Test
-	public void loginTestPrivilegedUser() throws InterruptedException {
+	public void employeeFlowTest() throws InterruptedException {
 		assertEquals("http://localhost:4200/login",
 				browser.getCurrentUrl());
 
@@ -47,9 +47,9 @@ public class EmployeeTest {
 		loginPage.setPasswordInput("petar123");
 		loginPage.loginButtonClickPrivileged();
 		
-		loginPage.waitForUrlToBe("http://localhost:4200/home");
+		loginPage.waitForUrlToBe("http://localhost:4200/reports");
 		
-		assertEquals("http://localhost:4200/home", browser.getCurrentUrl());
+		assertEquals("http://localhost:4200/reports", browser.getCurrentUrl());
 		browser.navigate().to("http://localhost:4200/employees");
 		
 		

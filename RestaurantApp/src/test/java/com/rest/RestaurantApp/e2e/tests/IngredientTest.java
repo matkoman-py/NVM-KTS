@@ -36,7 +36,7 @@ public class IngredientTest {
 	}
 	
 	@Test
-	public void loginTestPrivilegedUser() throws InterruptedException {
+	public void ingredientsFlowTest() throws InterruptedException {
 		assertEquals("http://localhost:4200/login",
 				browser.getCurrentUrl());
 
@@ -45,9 +45,9 @@ public class IngredientTest {
 		loginPage.setPasswordInput("petar123");
 		loginPage.loginButtonClickPrivileged();
 		
-		loginPage.waitForUrlToBe("http://localhost:4200/home");
+		loginPage.waitForUrlToBe("http://localhost:4200/reports");
 		
-		assertEquals("http://localhost:4200/home", browser.getCurrentUrl());
+		assertEquals("http://localhost:4200/reports", browser.getCurrentUrl());
 		browser.navigate().to("http://localhost:4200/ingredients");
 		
 		int count = ingredientsPage.getIngredientCount();
