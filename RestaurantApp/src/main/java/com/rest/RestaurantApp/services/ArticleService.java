@@ -18,6 +18,7 @@ import com.rest.RestaurantApp.domain.enums.ArticleStatus;
 import com.rest.RestaurantApp.domain.enums.ArticleType;
 import com.rest.RestaurantApp.dto.ArticleCreationDTO;
 import com.rest.RestaurantApp.dto.ArticleDTO;
+import com.rest.RestaurantApp.exceptions.ArticlePreparingException;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.repositories.ArticleRepository;
 import com.rest.RestaurantApp.repositories.IngredientRepository;
@@ -83,7 +84,7 @@ public class ArticleService implements IArticleService {
 		Article article = articleData.get();
 		List<OrderedArticle> orderedArticles = orderedArticleRepository.findByArticleIdAndStatusNot(id, ArticleStatus.FINISHED);
 		if(orderedArticles.size() != 0) {
-			throw new NotFoundException("Article with id " + id + " is currently being prepared");
+			throw new ArticlePreparingException("Article with id " + id + " is currently being prepared");
 		}
 		article.setRemoved(true);
 		//article.setDeleted(true);

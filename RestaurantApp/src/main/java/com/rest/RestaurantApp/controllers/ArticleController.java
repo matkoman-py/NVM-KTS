@@ -23,6 +23,7 @@ import com.rest.RestaurantApp.dto.ArticleCreationDTO;
 import com.rest.RestaurantApp.dto.ArticleDTO;
 import com.rest.RestaurantApp.dto.DeleteMessageDTO;
 import com.rest.RestaurantApp.dto.OrderDTO;
+import com.rest.RestaurantApp.exceptions.ArticlePreparingException;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.services.ArticleService;
 
@@ -40,6 +41,11 @@ public class ArticleController {
 	@ExceptionHandler(value = NotFoundException.class)
 	public ResponseEntity handleNullArticlesException(NotFoundException notFoundException) {
         return new ResponseEntity(notFoundException.getMessage(), HttpStatus.NOT_FOUND);
+    }
+	
+	@ExceptionHandler(value = ArticlePreparingException.class)
+	public ResponseEntity handleArticlePreparingException(ArticlePreparingException articlePreparingException) {
+        return new ResponseEntity(articlePreparingException.getMessage(), HttpStatus.CONFLICT);
     }
 	
 	@GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)

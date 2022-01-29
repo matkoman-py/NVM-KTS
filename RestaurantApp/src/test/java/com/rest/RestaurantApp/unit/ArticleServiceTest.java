@@ -13,13 +13,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import com.rest.RestaurantApp.domain.Article;
+import com.rest.RestaurantApp.domain.OrderedArticle;
 import com.rest.RestaurantApp.domain.PriceInfo;
+import com.rest.RestaurantApp.domain.enums.ArticleStatus;
 import com.rest.RestaurantApp.domain.enums.ArticleType;
 import com.rest.RestaurantApp.dto.ArticleCreationDTO;
 import com.rest.RestaurantApp.dto.ArticleDTO;
+import com.rest.RestaurantApp.exceptions.ArticlePreparingException;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.repositories.ArticleRepository;
 import com.rest.RestaurantApp.repositories.IngredientRepository;
+import com.rest.RestaurantApp.repositories.OrderedArticleRepository;
 import com.rest.RestaurantApp.repositories.PriceInfoRepository;
 import com.rest.RestaurantApp.services.ArticleService;
 
@@ -30,6 +34,8 @@ public class ArticleServiceTest {
 	private ArticleRepository articleRepository;
 	@MockBean
 	private IngredientRepository ingredientRepository;
+	@MockBean
+	private OrderedArticleRepository orderedArticleRepository;
 	@MockBean
 	private PriceInfoRepository priceInfoRepository;
 	@MockBean
@@ -59,6 +65,9 @@ public class ArticleServiceTest {
 		articles.add(article2);
 		articles.add(article3);
 		
+		Article articleInvalid = new Article("kapricioza", "vruca", ArticleType.MAIN_COURSE);
+		OrderedArticle orderedArticle = new OrderedArticle(ArticleStatus.PREPARING, articleInvalid);
+		
 		given(articleRepository.findAll()).willReturn(articles);
 		given(articleRepository.findByType(ArticleType.DRINK)).willReturn(new ArrayList<>(List.of(article1)));
 		given(articleRepository.findByNameContainingIgnoreCase("ic")).willReturn(new ArrayList<>(List.of(article2)));
@@ -68,6 +77,8 @@ public class ArticleServiceTest {
 		given(articleRepository.findById(2)).willReturn(java.util.Optional.of(article2));
 		given(articleRepository.findById(3)).willReturn(java.util.Optional.of(article3));
 		given(articleRepository.findById(4)).willReturn(Optional.empty());
+		given(articleRepository.findById(6)).willReturn(Optional.of(articleInvalid));
+		given(orderedArticleRepository.findByArticleIdAndStatusNot(6, ArticleStatus.FINISHED)).willThrow(ArticlePreparingException.class);
 		given(articleRepository.save(article1)).willReturn(article1);
 		
 		
@@ -140,6 +151,13 @@ public class ArticleServiceTest {
 	void testDelete_InvalidId() {
 		assertThrows(NotFoundException.class, ()->{
 			articleService.delete(4);
+            });
+	}
+	
+	@Test
+	void testDelete_InvalidArticletestDelete_InvalidArticle_ArticleBeingPrepared() {
+		assertThrows(ArticlePreparingException.class, ()->{
+			articleService.delete(6);
             });
 	}
 	

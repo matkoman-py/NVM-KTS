@@ -101,6 +101,13 @@ export class ArticlesComponent implements OnInit {
       });
       this.selectedArticle = {};
       this.getArticles();
+    }, err => {
+      this.messageService.add({
+        key: 'tc',
+        severity: 'error',
+        summary: 'Error',
+        detail: err.error,
+      });
     });
   }
 

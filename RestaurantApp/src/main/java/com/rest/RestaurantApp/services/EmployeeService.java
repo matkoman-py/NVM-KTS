@@ -12,6 +12,7 @@ import com.rest.RestaurantApp.domain.enums.ArticleStatus;
 import com.rest.RestaurantApp.domain.enums.EmployeeType;
 import com.rest.RestaurantApp.domain.enums.OrderStatus;
 import com.rest.RestaurantApp.dto.EmployeeAuthDTO;
+import com.rest.RestaurantApp.exceptions.EmployeeCurrentlyWorkingException;
 import com.rest.RestaurantApp.exceptions.EmployeeWithEmailAlreadyExists;
 import com.rest.RestaurantApp.exceptions.EmployeeWithPinAlreadyExists;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
@@ -75,12 +76,12 @@ public class EmployeeService implements IEmployeeService{
 	
 		List<OrderedArticle> orderedArticles = orderedArticleRepository.findByTakenByEmployeeIdAndStatusNot(id, ArticleStatus.FINISHED);
 		if(orderedArticles.size() != 0) {
-			throw new NotFoundException("Employee with id " + id + " is currently working on an article");
+			throw new EmployeeCurrentlyWorkingException("Employee with id " + id + " is currently working on an article");
 		}
 		
 		List<Order> orders = orderRepository.findByEmployeeIdAndOrderStatus(id, OrderStatus.ACTIVE);
 		if(orders.size() != 0) {
-			throw new NotFoundException("Employee with id " + id + " is currently working on an order");
+			throw new EmployeeCurrentlyWorkingException("Employee with id " + id + " is currently working on an order");
 		}
 		
 		

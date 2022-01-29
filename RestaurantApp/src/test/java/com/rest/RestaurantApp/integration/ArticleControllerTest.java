@@ -200,6 +200,16 @@ public class ArticleControllerTest {
 	}
 	
 	@Test
+	public void testDelete_InvalidArticle_ArticleBeingPrepared() throws Exception {
+		ResponseEntity<String> responseEntity = restTemplate.exchange(
+				"/api/article/1", HttpMethod.DELETE,  new HttpEntity<Object>(null), String.class);
+
+		
+		assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
+		assertEquals("Article with id 1 is currently being prepared", responseEntity.getBody());
+	}
+	
+	@Test
 	public void testDelete_ValidId() throws Exception {
 		
 		ArticleCreationDTO article = new ArticleCreationDTO(new ArrayList<>(),"novi",500,600,"hladna",ArticleType.DRINK);

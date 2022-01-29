@@ -20,6 +20,7 @@ import com.rest.RestaurantApp.domain.enums.EmployeeType;
 import com.rest.RestaurantApp.domain.enums.UserType;
 import com.rest.RestaurantApp.dto.EmployeeAuthDTO;
 import com.rest.RestaurantApp.dto.EmployeeDTO;
+import com.rest.RestaurantApp.exceptions.EmployeeCurrentlyWorkingException;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.repositories.EmployeeRepository;
 import com.rest.RestaurantApp.services.EmployeeService;
@@ -79,6 +80,22 @@ public class EmployeeServiceTest {
 		
 		assertThrows(NotFoundException.class,()->{
 			employeeService.delete(15);
+		});
+	}
+	
+	@Test
+	void testDelete_InvalidEmployee_WaiterPreparingOrder() {
+		
+		assertThrows(EmployeeCurrentlyWorkingException.class,()->{
+			employeeService.delete(3);
+		});
+	}
+	
+	@Test
+	void testDelete_InvalidEmployee_CookOrBarmanPreparingArticle() {
+		
+		assertThrows(EmployeeCurrentlyWorkingException.class,()->{
+			employeeService.delete(6);
 		});
 	}
 	
