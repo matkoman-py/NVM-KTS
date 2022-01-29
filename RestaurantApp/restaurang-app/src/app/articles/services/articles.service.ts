@@ -12,11 +12,14 @@ import { catchError, retry } from 'rxjs/operators';
   providedIn: 'any',
 })
 export class ArticlesService {
-  private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+  private header = new HttpHeaders({
+    'Content-Type': 'application/json',
+    Authorization: 'Bearer ' + localStorage.getItem('token'),
+  });
   constructor(private http: HttpClient) {}
 
   getArticles(): Observable<Article[]> {
-    return this.http.get<Article[]>('/api/article');
+    return this.http.get<Article[]>('/api/article', { headers: this.header });
   }
 
   search(
@@ -26,10 +29,15 @@ export class ArticlesService {
     let params = new HttpParams()
       .set('type', articleType.value)
       .set('name', articleNameParam);
-    return this.http.get<Article[]>(`/api/article/search`, { params: params });
+    return this.http.get<Article[]>(`/api/article/search`, {
+      params: params,
+      headers: this.header,
+    });
   }
 
   delete(_id?: number): Observable<DeleteMessageDTO> {
-    return this.http.delete<DeleteMessageDTO>(`/api/article/${_id}`);
+    return this.http.delete<DeleteMessageDTO>(`/api/article/${_id}`, {
+      headers: this.header,
+    });
   }
 }

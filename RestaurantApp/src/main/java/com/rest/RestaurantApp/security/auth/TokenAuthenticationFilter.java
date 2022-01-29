@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -42,8 +43,13 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         if(authToken != null) {
             identity = tokenUtils.getIdentityFromToken(authToken);
             if(identity != null) {
-                UserDetails userDetails = userDetailsService.loadUserByUsername(identity);
-                System.out.println("ne puca");
+                UserDetails userDetails;
+                userDetails = userDetailsService.loadUserByUsername(identity);
+                if(userDetails == null) {
+                    identity = tokenUtils.getRoleFromToken(authToken);
+                    userDetails = userDetailsService.loadUserByRole(identity);
+                }
+
                 if(tokenUtils.validateToken(authToken, userDetails)) {
                     TokenBasedAuthentication authentication = new TokenBasedAuthentication(userDetails);
                     authentication.setToken(authToken);

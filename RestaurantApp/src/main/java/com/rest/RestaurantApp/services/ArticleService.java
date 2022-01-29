@@ -36,8 +36,7 @@ public class ArticleService implements IArticleService {
 	private PriceInfoRepository priceInfoRepository;
 	
 	private OrderedArticleRepository orderedArticleRepository;
-	
-	
+
 	@Autowired
 	public ArticleService(ArticleRepository articleRepository, IngredientRepository ingredientRepository, PriceInfoRepository priceInfoRepository, OrderedArticleRepository orderedArticleRepository) {
 		this.articleRepository = articleRepository;
@@ -82,6 +81,7 @@ public class ArticleService implements IArticleService {
 			throw new NotFoundException("There is no article with the given id: " + id);
 		}
 		Article article = articleData.get();
+
 		List<OrderedArticle> orderedArticles = orderedArticleRepository.findByArticleIdAndStatusNot(id, ArticleStatus.FINISHED);
 		if(orderedArticles.size() != 0) {
 			throw new ArticlePreparingException("Article with id " + id + " is currently being prepared");
