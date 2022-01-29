@@ -140,6 +140,6 @@ public class TableWaiterPage {
     }
 
     public List<WebElement> getAddedArticles() {
-        return Utilities.visibilityWait(driver, By.xpath("//*[@id='added-articles']/*[@id='pr_id_6']/div/table/tbody/tr"), 10);
+        return Utilities.visibilityWait(driver, By.xpath("//*[@id='added-articles']/div/div/table/tbody/tr"), 10);
     }
 }
