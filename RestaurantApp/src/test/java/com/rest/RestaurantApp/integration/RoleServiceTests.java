@@ -53,7 +53,7 @@ public class RoleServiceTests {
 	@Test
 	void testfindById_InvalidId() {
 		
-		assertThrows(ObjectRetrievalFailureException.class, ()->{
+		assertThrows(NotFoundException.class, ()->{
 			roleService.findById(100);
             });
 	}
