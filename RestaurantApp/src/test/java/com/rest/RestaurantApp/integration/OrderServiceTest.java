@@ -2,6 +2,9 @@ package com.rest.RestaurantApp.integration;
 
 import com.rest.RestaurantApp.domain.enums.ArticleStatus;
 import com.rest.RestaurantApp.domain.enums.OrderStatus;
+import com.rest.RestaurantApp.dto.ArticleDTO;
+import com.rest.RestaurantApp.dto.ArticlesAndOrderDTO;
+import com.rest.RestaurantApp.dto.IngredientDTO;
 import com.rest.RestaurantApp.dto.OrderDTO;
 import com.rest.RestaurantApp.dto.OrderedArticleDTO;
 import com.rest.RestaurantApp.dto.OrderedArticleWithDescDTO;
@@ -170,7 +173,6 @@ class OrderServiceTest {
 		OrderedArticleDTO order = orderService.changeStatusOfArticle(4269, 14);
 		assertEquals(order.getArticleId(), 1);
 		assertEquals(order.getDescription(), null);
-		assertEquals(order.getId(), 14);
 		assertEquals(order.getOrderId(), 7);
 		assertEquals(order.getStatus(), ArticleStatus.TAKEN);
 	}
@@ -200,11 +202,31 @@ class OrderServiceTest {
 		OrderedArticleDTO addedArticle = orderService.createArticleForOrder(orderedArticle, 1);
 		int newSize = orderService.getArticlesForOrder(1).size();
 		orderService.deleteArticleForOrder(addedArticle.getId());
-		assertEquals(addedArticle.getId(), 18);
 		assertEquals(addedArticle.getDescription(), "One plate");
 		assertEquals(addedArticle.getOrderId(), 1);
 		assertEquals(addedArticle.getStatus(), ArticleStatus.NOT_TAKEN);
 		assertEquals(size+1, newSize);
+	}
+	
+	@Test
+	void testCreateArticlesMultipleForOrder_ValidArticles() {
+		int size =  orderService.getArticlesForOrder(1).size();
+		ArticlesAndOrderDTO dto = new ArticlesAndOrderDTO(Arrays.asList(new OrderedArticleWithDescDTO(1,"dobar"), new OrderedArticleWithDescDTO(2,"dobar")), 1);
+		orderService.addArticlesToOrder(dto);
+		int newSize =  orderService.getArticlesForOrder(1).size();
+		assertEquals(size+2, newSize);	
+	}
+	
+	@Test
+	void testCreateArticlesMultipleForOrder_InvalidArticle_ArticleNotFound() {
+		ArticlesAndOrderDTO dto = new ArticlesAndOrderDTO(Arrays.asList(new OrderedArticleWithDescDTO(66,"dobar"), new OrderedArticleWithDescDTO(2,"dobar")), 1);
+		assertThrows(NotFoundException.class, () -> {orderService.addArticlesToOrder(dto);});
+	}
+	
+	@Test
+	void testCreateArticlesMultipleForOrder_InvalidArticle_OrderNotFound() {
+		ArticlesAndOrderDTO dto = new ArticlesAndOrderDTO(Arrays.asList(new OrderedArticleWithDescDTO(1,"dobar"), new OrderedArticleWithDescDTO(2,"dobar")), 141);
+		assertThrows(NotFoundException.class, () -> {orderService.addArticlesToOrder(dto);});
 	}
 	
 	@Test

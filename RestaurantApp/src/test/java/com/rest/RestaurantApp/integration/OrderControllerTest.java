@@ -23,6 +23,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.rest.RestaurantApp.domain.enums.ArticleStatus;
 import com.rest.RestaurantApp.domain.enums.OrderStatus;
+import com.rest.RestaurantApp.dto.ArticlesAndOrderDTO;
 import com.rest.RestaurantApp.dto.OrderDTO;
 import com.rest.RestaurantApp.dto.OrderedArticleDTO;
 import com.rest.RestaurantApp.dto.OrderedArticleWithDescDTO;
@@ -349,6 +350,36 @@ class OrderControllerTest {
 		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
 		assertEquals(responseEntity.getBody(), "Ordered article with id 59 was not found");
 		assertEquals(size, articles.size());
+	}
+	
+	@Test
+	void testCreateArticlesMultipleForOrder_InvalidArticle_ArticleNotFound() {
+		ArticlesAndOrderDTO dto = new ArticlesAndOrderDTO(Arrays.asList(new OrderedArticleWithDescDTO(66,"dobar"), new OrderedArticleWithDescDTO(2,"dobar")), 1);
+		ResponseEntity<String> responseEntity = restTemplate.exchange(
+				"/api/order/add-articles-to-order", HttpMethod.PUT, new HttpEntity<ArticlesAndOrderDTO>(dto), String.class);
+		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+		assertEquals(responseEntity.getBody(), "Article with id 66 was not found");
+	}
+	
+	@Test
+	void testCreateArticlesMultipleForOrder_InvalidArticle_OrderNotFound() {
+		ArticlesAndOrderDTO dto = new ArticlesAndOrderDTO(Arrays.asList(new OrderedArticleWithDescDTO(1,"dobar"), new OrderedArticleWithDescDTO(2,"dobar")), 141);
+		ResponseEntity<String> responseEntity = restTemplate.exchange(
+				"/api/order/add-articles-to-order", HttpMethod.PUT, new HttpEntity<ArticlesAndOrderDTO>(dto), String.class);
+		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+		assertEquals(responseEntity.getBody(), "Order with id 141 was not found");
+	}
+	
+	@Test
+	void testCreateArticlesMultipleForOrder_ValidArticles() {
+		int size =  orderService.getArticlesForOrder(1).size();
+		ArticlesAndOrderDTO dto = new ArticlesAndOrderDTO(Arrays.asList(new OrderedArticleWithDescDTO(1,"dobar"), new OrderedArticleWithDescDTO(2,"dobar")), 1);
+		ResponseEntity<OrderDTO> responseEntity = restTemplate.exchange(
+				"/api/order/add-articles-to-order", HttpMethod.PUT, new HttpEntity<ArticlesAndOrderDTO>(dto), OrderDTO.class);
+		int newSize =  orderService.getArticlesForOrder(1).size();
+		assertEquals(size+2, newSize);
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		
 	}
 
 }

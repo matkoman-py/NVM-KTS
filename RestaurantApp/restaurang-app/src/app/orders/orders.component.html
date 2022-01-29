@@ -12,24 +12,41 @@
   <button pButton type="button" label="Submit" (click)="search()"></button>
 </div> -->
 <div class="card">
-  <h3 *ngIf="orders.length == 0" style="text-align: center;"> No orders found</h3>
-  <p-table *ngIf="orders.length != 0" selectionMode="single" [value]="orders" [(selection)]="selectedOrder" [paginator]="true" [rows]="5">
+  <h3 *ngIf="orders.length == 0" style="text-align: center">No orders found</h3>
+  <p-table
+    *ngIf="orders.length != 0"
+    selectionMode="single"
+    [value]="orders"
+    [(selection)]="selectedOrder"
+    [paginator]="true"
+    [rows]="5"
+  >
     <ng-template pTemplate="header">
       <tr>
-        <th pSortableColumn="id">Order number <p-sortIcon field="id"></p-sortIcon></th>
-        <th>Description</th>
-        <th pSortableColumn="articles.length">No of articles <p-sortIcon field="articles.length"></p-sortIcon></th>
+        <th pSortableColumn="id">
+          Order number <p-sortIcon field="id"></p-sortIcon>
+        </th>
+        <th pSortableColumn="articles.length">
+          No of articles <p-sortIcon field="articles.length"></p-sortIcon>
+        </th>
         <th>Status</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-order>
       <tr [pSelectableRow]="order">
         <td>{{ order.id }}</td>
-        <td>{{ order.description }}</td>
         <td>{{ order.articles.length }}</td>
         <td>{{ statusDict.get(order.orderStatus) }}</td>
       </tr>
-    </ng-template>    
+    </ng-template>
   </p-table>
-  <button id="see-order-btn" *ngIf="orders.length != 0" pButton type="button" label="See order" class="p-button-info" (click)="seeOrder()"></button>
+  <button
+    id="see-order-btn"
+    *ngIf="orders.length != 0"
+    pButton
+    type="button"
+    label="See order"
+    class="p-button-info"
+    (click)="seeOrder()"
+  ></button>
 </div>
