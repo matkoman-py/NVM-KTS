@@ -13,6 +13,6 @@ import java.util.Optional;
 @Repository
 public interface EmployeeLoginInfoRepository extends JpaRepository<EmployeeLoginInfo, Integer> {
 
-    @Query("select eli from EmployeeLoginInfo eli where eli.employeeType = :type")
+    @Query("select eli from EmployeeLoginInfo eli where eli.type = :type")
     EmployeeLoginInfo findByType(String type);
 }

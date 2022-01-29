@@ -71,21 +71,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .withUser("employee")
                 .password(encoder.encode("cook123"))
                 .roles("COOK")
-                .authorities("ROLE_COOK");
+                .authorities("COOK");
 
         auth.inMemoryAuthentication()
                 .passwordEncoder(encoder)
                 .withUser("employee")
                 .password(encoder.encode("barman123"))
                 .roles("BARMAN")
-                .authorities("ROLE_BARMAN");
+                .authorities("BARMAN");
 
         auth.inMemoryAuthentication()
                 .passwordEncoder(encoder)
                 .withUser("employee")
                 .password(encoder.encode("waiter123"))
                 .roles("WAITER")
-                .authorities("ROLE_WAITER");
+                .authorities("WAITER");
 
         auth.userDetailsService(userAuthService).passwordEncoder(passwordEncoder());
     }
