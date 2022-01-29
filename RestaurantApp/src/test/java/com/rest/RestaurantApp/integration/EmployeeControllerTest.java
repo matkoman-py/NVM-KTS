@@ -88,7 +88,7 @@ public class EmployeeControllerTest {
 	
 	@Test
 	public void testDelete_InvalidEmployee_WaiterPreparingOrder() { 
-		ResponseEntity<String> responseEntity = restTemplate.exchange(
+		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/employee/3", HttpMethod.DELETE, new HttpEntity<Object>(null), String.class);
 
 		assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
@@ -98,7 +98,7 @@ public class EmployeeControllerTest {
 	
 	@Test
 	public void testDelete_InvalidEmployee_CookOrBarmanPreparingArticle() { 
-		ResponseEntity<String> responseEntity = restTemplate.exchange(
+		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/employee/7", HttpMethod.DELETE, new HttpEntity<Object>(null), String.class);
 
 		assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());

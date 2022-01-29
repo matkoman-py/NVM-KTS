@@ -25,7 +25,7 @@ public class ReportControllerTest {
 
 	@Test
 	public void testArticleProfitDay() {
-		ResponseEntity<ArticleReportDTO> responseEntity = restTemplate.getForEntity(
+		ResponseEntity<ArticleReportDTO> responseEntity = restTemplate.withBasicAuth("manager_test", "test").getForEntity(
 				"/api/report/articleProfitDay/2021/1/3", ArticleReportDTO.class);
 
 		ArticleReportDTO result = responseEntity.getBody();
@@ -35,7 +35,7 @@ public class ReportControllerTest {
 	
 	@Test
 	public void testArticleProfitMonth() {
-		ResponseEntity<ArticleReportDTO> responseEntity = restTemplate.getForEntity(
+		ResponseEntity<ArticleReportDTO> responseEntity = restTemplate.withBasicAuth("manager_test", "test").getForEntity(
 				"/api/report/articleProfitMonth/2021/1", ArticleReportDTO.class);
 
 		ArticleReportDTO result = responseEntity.getBody();
@@ -45,7 +45,7 @@ public class ReportControllerTest {
 	
 	@Test
 	public void testArticleProfitYear() {
-		ResponseEntity<ArticleReportDTO> responseEntity = restTemplate.getForEntity(
+		ResponseEntity<ArticleReportDTO> responseEntity = restTemplate.withBasicAuth("manager_test", "test").getForEntity(
 				"/api/report/articleProfitYear/2021", ArticleReportDTO.class);
 
 		ArticleReportDTO result = responseEntity.getBody();
@@ -55,7 +55,7 @@ public class ReportControllerTest {
 	
 	@Test
 	public void testArticleProfitQuarter() {
-		ResponseEntity<ArticleReportDTO> responseEntity = restTemplate.getForEntity(
+		ResponseEntity<ArticleReportDTO> responseEntity = restTemplate.withBasicAuth("manager_test", "test").getForEntity(
 				"/api/report/articleProfitQuarter/2021/1", ArticleReportDTO.class);
 
 		ArticleReportDTO result = responseEntity.getBody();
@@ -65,7 +65,7 @@ public class ReportControllerTest {
 	
 	@Test
 	public void testArticleProfitBetweenDates() {
-		ResponseEntity<ArticleReportDTO> responseEntity = restTemplate.getForEntity(
+		ResponseEntity<ArticleReportDTO> responseEntity = restTemplate.withBasicAuth("manager_test", "test").getForEntity(
 				"/api/report/articleProfitBetweenDates/Fri, 01 Jan 2021 01:00:00 GMT/Thu, 30 Dec 2021 01:00:00 GMT", ArticleReportDTO.class);
 
 		ArticleReportDTO result = responseEntity.getBody();

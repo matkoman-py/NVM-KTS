@@ -72,9 +72,9 @@ public class TableWaiterTest {
         assertTrue(viewOrderPage.waitForUrlToBe("http://localhost:4200/table-layout"));
     }
 
-//    @After
-//    public void closeSelenium() {
-//        // Shutdown the browser
-//        browser.quit();
-//    }
+    @After
+    public void closeSelenium() {
+        // Shutdown the browser
+        browser.quit();
+    }
 }

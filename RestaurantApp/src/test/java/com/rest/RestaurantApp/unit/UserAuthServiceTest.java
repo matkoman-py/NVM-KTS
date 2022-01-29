@@ -49,8 +49,6 @@ public class UserAuthServiceTest {
 
     @Test
     public void loadUserByUsername_InvalidUsername() {
-        assertThrows(UsernameNotFoundException.class, () -> {
-            UserDetails userDetails = userAuthService.loadUserByUsername("invalidUsername");
-        });
+    	assertEquals(null, userAuthService.loadUserByUsername("invalidUsername"));
     }
 }

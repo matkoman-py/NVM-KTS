@@ -26,7 +26,7 @@ public class TableController {
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 	
-	@PreAuthorize("hasRole('MANAGER')")
+	@PreAuthorize("hasRole('MANAGER') or hasAuthority('ROLE_WAITER')")
     @PostMapping
     public ResponseEntity<Object> saveTableLayout(@RequestBody String table) {
         try {

@@ -46,7 +46,7 @@ class OrderControllerTest {
 	
 	@Test
 	void testGetAll() {
-		ResponseEntity<OrderDTO[]> responseEntity = restTemplate.withBasicAuth("employee", "cook123")
+		ResponseEntity<OrderDTO[]> responseEntity = restTemplate.withBasicAuth("manager_test", "test")
 				.getForEntity("/api/order", OrderDTO[].class);
 
 		OrderDTO[] orders = responseEntity.getBody();
@@ -57,7 +57,7 @@ class OrderControllerTest {
 	
 	@Test
 	void testGetOne_ValidId() {
-		ResponseEntity<OrderDTO> responseEntity = restTemplate.withBasicAuth("employee", "waiter123")
+		ResponseEntity<OrderDTO> responseEntity = restTemplate.withBasicAuth("manager_test", "test")
 				.getForEntity("/api/order/1", OrderDTO.class);
 
 		OrderDTO order = responseEntity.getBody();
@@ -72,7 +72,7 @@ class OrderControllerTest {
 	
 	@Test
 	void testGetOne_InvalidId() {
-		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("employee", "barman123")
+		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test")
 				.getForEntity("/api/order/55", String.class);
 
 
@@ -86,7 +86,7 @@ class OrderControllerTest {
 		List<OrderedArticleWithDescDTO> list = Arrays.asList(new OrderedArticleWithDescDTO(1,"dobar"), new OrderedArticleWithDescDTO(2,"dobar"));
 		OrderDTO order = new OrderDTO(false, "No honey", LocalDateTime.of(2021, 1, 3, 12, 43, 33), Arrays.asList(1,2), 3, 1234, OrderStatus.ACTIVE, 0);
 		order.setArticlesWithDescription(list);
-		ResponseEntity<OrderDTO> responseEntity = restTemplate.withBasicAuth("employee", "waiter123").postForEntity("/api/order", order, OrderDTO.class);
+		ResponseEntity<OrderDTO> responseEntity = restTemplate.withBasicAuth("manager_test", "test").postForEntity("/api/order", order, OrderDTO.class);
 		
 		OrderDTO createdOrder = responseEntity.getBody();
 		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
@@ -112,7 +112,7 @@ class OrderControllerTest {
 		int size = orderService.getAll().size(); 
 		OrderDTO order = new OrderDTO(false, "No honey", LocalDateTime.of(2021, 1, 3, 12, 43, 33), new ArrayList<Integer>(), 3, 1234, OrderStatus.ACTIVE, 0);
 		
-		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("employee", "waiter123").postForEntity("/api/order", order, String.class);
+		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test").postForEntity("/api/order", order, String.class);
 		
 		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
 		assertEquals(responseEntity.getBody(), "Order must have at least 1 article");
@@ -126,7 +126,7 @@ class OrderControllerTest {
 		int size = orderService.getAll().size(); 
 		OrderDTO order = new OrderDTO(false, "No honey", LocalDateTime.of(2021, 2, 3, 12, 43, 33), Arrays.asList(1, 2), 4, 4322, OrderStatus.ACTIVE, 0);
 		
-		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("employee", "waiter123").postForEntity("/api/order", order, String.class);
+		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test").postForEntity("/api/order", order, String.class);
 		
 		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
 		assertEquals(responseEntity.getBody(), "An employee of type BARMAN can't create a new order");
@@ -140,7 +140,7 @@ class OrderControllerTest {
 		int size = orderService.getAll().size(); 
 		OrderDTO order = new OrderDTO(false, "No honey", LocalDateTime.of(2021, 1, 3, 12, 43, 33), Arrays.asList(1,2), 3, 1234, OrderStatus.ACTIVE, 0);
 		
-		ResponseEntity<OrderDTO> responseEntity = restTemplate.withBasicAuth("employee", "waiter123").exchange(
+		ResponseEntity<OrderDTO> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/order/2", HttpMethod.PUT, new HttpEntity<OrderDTO>(order), OrderDTO.class);
 		
 		OrderDTO updatedOrder = responseEntity.getBody();
@@ -162,7 +162,7 @@ class OrderControllerTest {
 		int size = orderService.getAll().size(); 
 		OrderDTO order = new OrderDTO(false, "No honey", LocalDateTime.of(2021, 1, 3, 12, 43, 33), new ArrayList<Integer>(), 3, 3, OrderStatus.ACTIVE, 0);
 		
-		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("employee", "waiter123").exchange(
+		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/order/2", HttpMethod.PUT, new HttpEntity<OrderDTO>(order), String.class);
 		
 		assertEquals(responseEntity.getStatusCode(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -181,7 +181,7 @@ class OrderControllerTest {
 		OrderDTO order = orderService.create(orderDTO);
 		
 		int size = orderService.getAll().size();
-		ResponseEntity<Void> responseEntity = restTemplate.withBasicAuth("employee", "waiter123").exchange(
+		ResponseEntity<Void> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/order/" + order.getId(), HttpMethod.DELETE, new HttpEntity<Object>(null),
 				Void.class);
 
@@ -194,7 +194,7 @@ class OrderControllerTest {
 	public void testDelete_InvalidId() throws Exception {
 		
 		int size = orderService.getAll().size();
-		ResponseEntity<Void> responseEntity = restTemplate.withBasicAuth("employee", "waiter123").exchange(
+		ResponseEntity<Void> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/order/55", HttpMethod.DELETE, new HttpEntity<Object>(null),
 				Void.class);
 
@@ -207,7 +207,7 @@ class OrderControllerTest {
 	
 	@Test
 	void testArticlesForOrder_ValidOrder() {
-		ResponseEntity<OrderedArticleDTO[]> responseEntity = restTemplate.withBasicAuth("employee", "waiter123")
+		ResponseEntity<OrderedArticleDTO[]> responseEntity = restTemplate.withBasicAuth("manager_test", "test")
 				.getForEntity("/api/order/articles/1", OrderedArticleDTO[].class);
 
 		OrderedArticleDTO[] articles = responseEntity.getBody();
@@ -219,7 +219,7 @@ class OrderControllerTest {
 	
 	@Test
 	void testArticlesForOrder_InvalidOrder() {
-		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("employee", "waiter123")
+		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test")
 				.getForEntity("/api/order/articles/33", String.class);
 
 
@@ -230,7 +230,7 @@ class OrderControllerTest {
 	@Test
 	void testChangeArticleStatus_ValidArticle() {
 		
-		ResponseEntity<OrderedArticleDTO> responseEntity = restTemplate.withBasicAuth("employee", "waiter123").exchange(
+		ResponseEntity<OrderedArticleDTO> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/order/article/13/4269", HttpMethod.PUT, null, OrderedArticleDTO.class);
 		
 		OrderedArticleDTO updatedOrder = responseEntity.getBody();
@@ -244,7 +244,7 @@ class OrderControllerTest {
 	@Test
 	void testChangeArticleStatus_InvalidArticle_IncompatibleEmployee() {
 		
-		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("employee", "waiter123").exchange(
+		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/order/article/13/4322", HttpMethod.PUT, null, String.class);
 		
 		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
@@ -255,7 +255,7 @@ class OrderControllerTest {
 	@Test
 	void testChangeArticleStatus_InvalidArticle_ArticleAlreadyTaken() {
 
-		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("employee", "waiter123").exchange(
+		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/order/article/7/2910", HttpMethod.PUT, null, String.class);
 		
 		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
@@ -266,7 +266,7 @@ class OrderControllerTest {
 	@Test
 	void testChangeArticleStatus_InvalidArticle_ArticleFinished() {
 
-		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("employee", "waiter123").exchange(
+		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/order/article/3/4269", HttpMethod.PUT, null, String.class);
 		
 		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
@@ -280,7 +280,7 @@ class OrderControllerTest {
 		int size = orderService.getArticlesForOrder(8).size();
 		//OrderDTO order = new OrderDTO(false, "No honey", LocalDateTime.of(2021, 1, 3, 12, 43, 33), Arrays.asList(1,2), 3, 3);
 		OrderedArticleDTO article = new OrderedArticleDTO(1, ArticleStatus.NOT_TAKEN, 8, "");
-		ResponseEntity<OrderedArticleDTO> responseEntity = restTemplate.withBasicAuth("employee", "waiter123").postForEntity("/api/order/addArticle/8", article, OrderedArticleDTO.class);
+		ResponseEntity<OrderedArticleDTO> responseEntity = restTemplate.withBasicAuth("manager_test", "test").postForEntity("/api/order/addArticle/8", article, OrderedArticleDTO.class);
 		
 		OrderedArticleDTO orderedArticle = responseEntity.getBody();
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -298,7 +298,7 @@ class OrderControllerTest {
 		int size = orderService.getArticlesForOrder(8).size();
 		//OrderDTO order = new OrderDTO(false, "No honey", LocalDateTime.of(2021, 1, 3, 12, 43, 33), Arrays.asList(1,2), 3, 3);
 		OrderedArticleDTO article = new OrderedArticleDTO(53, ArticleStatus.NOT_TAKEN, 8, "");
-		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("employee", "waiter123").postForEntity("/api/order/addArticle/8", article, String.class);
+		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test").postForEntity("/api/order/addArticle/8", article, String.class);
 		
 		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
 		assertEquals(responseEntity.getBody(), "Article with id 53 was not found");
@@ -314,7 +314,7 @@ class OrderControllerTest {
 		int size = orderService.getArticlesForOrder(8).size();
 		//OrderDTO order = new OrderDTO(false, "No honey", LocalDateTime.of(2021, 1, 3, 12, 43, 33), Arrays.asList(1,2), 3, 3);
 		OrderedArticleDTO article = new OrderedArticleDTO(1, ArticleStatus.NOT_TAKEN, 54, "");
-		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("employee", "waiter123").postForEntity("/api/order/addArticle/54", article, String.class);
+		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test").postForEntity("/api/order/addArticle/54", article, String.class);
 		
 		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
 		assertEquals(responseEntity.getBody(), "Order with id 54 was not found");
@@ -329,7 +329,7 @@ class OrderControllerTest {
 		OrderedArticleDTO createdArticle = orderService.createArticleForOrder(article, 8);
 		int size = orderService.getArticlesForOrder(8).size();
 		//removeArticle/{id}
-		ResponseEntity<OrderedArticleDTO> responseEntity = restTemplate.withBasicAuth("employee", "waiter123").exchange(
+		ResponseEntity<OrderedArticleDTO> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/order/removeArticle/" + createdArticle.getId(), HttpMethod.DELETE, null,
 				OrderedArticleDTO.class);
 		
@@ -342,7 +342,7 @@ class OrderControllerTest {
 	public void testDeleteArticleForOrder_InvalidId_ArticleNotFound() throws Exception {
 		//removeArticle/{id}
 		int size = orderService.getArticlesForOrder(8).size();
-		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("employee", "waiter123").exchange(
+		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/order/removeArticle/59", HttpMethod.DELETE, null,
 				String.class);
 		
@@ -355,7 +355,7 @@ class OrderControllerTest {
 	@Test
 	void testCreateArticlesMultipleForOrder_InvalidArticle_ArticleNotFound() {
 		ArticlesAndOrderDTO dto = new ArticlesAndOrderDTO(Arrays.asList(new OrderedArticleWithDescDTO(66,"dobar"), new OrderedArticleWithDescDTO(2,"dobar")), 1);
-		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("employee", "waiter123").exchange(
+		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/order/add-articles-to-order", HttpMethod.PUT, new HttpEntity<ArticlesAndOrderDTO>(dto), String.class);
 		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
 		assertEquals(responseEntity.getBody(), "Article with id 66 was not found");
@@ -364,7 +364,7 @@ class OrderControllerTest {
 	@Test
 	void testCreateArticlesMultipleForOrder_InvalidArticle_OrderNotFound() {
 		ArticlesAndOrderDTO dto = new ArticlesAndOrderDTO(Arrays.asList(new OrderedArticleWithDescDTO(1,"dobar"), new OrderedArticleWithDescDTO(2,"dobar")), 141);
-		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("employee", "waiter123").exchange(
+		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/order/add-articles-to-order", HttpMethod.PUT, new HttpEntity<ArticlesAndOrderDTO>(dto), String.class);
 		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
 		assertEquals(responseEntity.getBody(), "Order with id 141 was not found");
@@ -374,7 +374,7 @@ class OrderControllerTest {
 	void testCreateArticlesMultipleForOrder_ValidArticles() {
 		int size =  orderService.getArticlesForOrder(1).size();
 		ArticlesAndOrderDTO dto = new ArticlesAndOrderDTO(Arrays.asList(new OrderedArticleWithDescDTO(1,"dobar"), new OrderedArticleWithDescDTO(2,"dobar")), 1);
-		ResponseEntity<OrderDTO> responseEntity = restTemplate.withBasicAuth("employee", "waiter123").exchange(
+		ResponseEntity<OrderDTO> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/order/add-articles-to-order", HttpMethod.PUT, new HttpEntity<ArticlesAndOrderDTO>(dto), OrderDTO.class);
 		int newSize =  orderService.getArticlesForOrder(1).size();
 		assertEquals(size+2, newSize);

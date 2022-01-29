@@ -55,7 +55,7 @@ public class ArticleControllerTest {
 	@Test
 	public void testSearch_nameParam() throws Exception {
 		
-		ResponseEntity<ArticleDTO[]> responseEntity = restTemplate.withBasicAuth("employee", "waiter123").getForEntity(
+		ResponseEntity<ArticleDTO[]> responseEntity = restTemplate.withBasicAuth("manager_test", "test").getForEntity(
 				"/api/article/search/?type=&name=es", ArticleDTO[].class);
         
 		ArticleDTO[] categories = responseEntity.getBody();
@@ -201,7 +201,7 @@ public class ArticleControllerTest {
 	
 	@Test
 	public void testDelete_InvalidArticle_ArticleBeingPrepared() throws Exception {
-		ResponseEntity<String> responseEntity = restTemplate.exchange(
+		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/article/1", HttpMethod.DELETE,  new HttpEntity<Object>(null), String.class);
 
 		

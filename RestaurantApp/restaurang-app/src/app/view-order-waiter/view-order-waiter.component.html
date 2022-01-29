@@ -68,6 +68,7 @@
           label="Remove"
           class="p-button-danger"
           (click)="deleteArticleFromOrder(article.id)"
+          id="remove-button"
         ></button>
       </td>
     </tr>
@@ -90,7 +91,7 @@
   [resizable]="false"
 >
   <div class="p-field">
-    <input type="number" pInputText [(ngModel)]="employeePin" />
+    <input type="number" pInputText [(ngModel)]="employeePin" id="input-pin" />
   </div>
   <ng-template pTemplate="footer">
     <p-button
@@ -103,6 +104,7 @@
       (click)="finishOrder()"
       label="Confirm"
       styleClass="p-button-text"
+      id="confirm-pin-button"
     ></p-button>
   </ng-template>
 </p-dialog>
@@ -125,6 +127,7 @@
       (click)="openConfirmDialog()"
       label="Click to proceed"
       class="p-button-success"
+      id="proceed-button"
     ></button>
   </ng-template>
 </p-dialog>
@@ -186,6 +189,7 @@
                 type="button"
                 label="Add"
                 class="p-button-success"
+                id="add-button"
                 (click)="openQuantityDialog(article)"
               ></button>
             </td>
@@ -227,6 +231,7 @@
                 label="Remove"
                 class="p-button-danger"
                 (click)="removeFromArray(article.id)"
+                id="remove-button"
               ></button>
             </td>
           </tr>
@@ -245,6 +250,7 @@
       class="p-button-info"
       label="Add articles"
       [disabled]="addedArticles.length < 1"
+      id="add-all-articles"
     ></button>
   </ng-template>
 </p-dialog>
@@ -266,6 +272,7 @@
       (click)="addArticlesToArray()"
       label="Confirm"
       styleClass="p-button-text"
+      id="quantity-confirm-btn"
     ></p-button>
   </ng-template>
 </p-dialog>

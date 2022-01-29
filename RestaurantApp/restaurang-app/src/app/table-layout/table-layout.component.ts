@@ -21,7 +21,7 @@ import { OrderCreation } from '../modules/shared/models/order_creation';
   selector: 'app-table-layout',
   templateUrl: './table-layout.component.html',
   styleUrls: ['./table-layout.component.css'],
-  providers: [MessageService]
+  providers: [MessageService],
 })
 export class TableLayoutComponent implements OnInit {
   private canvas = new fabric.Canvas('demoCanvas');
@@ -72,8 +72,7 @@ export class TableLayoutComponent implements OnInit {
     private viewOrderService: ViewOrderService,
     private employeeService: EmployeesService,
     private messageService: MessageService
-    ) { }
-
+  ) {}
 
   addArticles() {
     // var articlesAndOrderDto = {
@@ -122,73 +121,110 @@ export class TableLayoutComponent implements OnInit {
     // var date: string = new Date().toLocaleString('en-US', datetimeOptions);
     var date: string = this.parseDate(new Date());
 
-    this.employeeService
-      .getEmployeeIdByPincode(this.employeePin)
-      .subscribe(() => {
+    this.employeeService.getEmployeeIdByPincode(this.employeePin).subscribe(
+      () => {
         var order: OrderCreation = {
           articlesWithDescription: this.addedArticles.map((article) =>
             this.convertToDto(article)
           ),
-        orderDate: date,
-        deleted: false,
-        tableNumber: this.selectedTableId,
-        description: "mnogo dobro",
-        employeePin: this.employeePin
+          orderDate: date,
+          deleted: false,
+          tableNumber: this.selectedTableId,
+          description: 'mnogo dobro',
+          employeePin: this.employeePin,
+        };
+        this.orderService.createOrder(order).subscribe(
+          (res) => {
+            this.createOrder(res);
+          },
+          (error) => {
+            this.messageService.add({
+              key: 'tc',
+              severity: 'error',
+              summary: 'Order has no articles',
+              detail: 'Error',
+            });
+          }
+        );
+      },
+      (error) => {
+        console.log(error.error);
+        this.messageService.add({
+          key: 'tc',
+          severity: 'error',
+          summary: 'Pincode is invalid',
+          detail: 'Error',
+        });
       }
-      this.orderService.createOrder(order).subscribe(res => {
-        this.createOrder(res);
-      }, error => {
-        this.messageService.add({key: 'tc', severity:'error', summary: 'Order has no articles', detail: 'Error'});
-      });
-    }, error => {
-      this.messageService.add({key: 'tc', severity:'error', summary: 'Pincode is invalid', detail: 'Error'});
-    })
+    );
   }
 
   createOrder(res: any) {
-    this.canvas.forEachObject((o : any) => {
-
+    this.canvas.forEachObject((o: any) => {
       var table = o.getObjects('rect')[0];
-      console.log(this.selectedTableId)
-      if(o.id === this.selectedTableId && this.selectedTableId !== undefined) {
+      console.log(this.selectedTableId);
+      if (o.id === this.selectedTableId && this.selectedTableId !== undefined) {
         console.log(res.id);
         o.order_id = res.id;
         table.set('fill', 'green');
 
         o.toObject = ((toObject) => {
           return (propertiesToInclude: any) => {
-            return fabric.util.object.extend(toObject.call(o, propertiesToInclude), {
-              id: o.id,
-              order_id: res.id
-            });
+            return fabric.util.object.extend(
+              toObject.call(o, propertiesToInclude),
+              {
+                id: o.id,
+                order_id: res.id,
+              }
+            );
           };
         })(o.toObject);
-      }
-      else {
+      } else {
         o.toObject = ((toObject) => {
           return (propertiesToInclude: any) => {
-            return fabric.util.object.extend(toObject.call(o, propertiesToInclude), {
-              id: o.id,
-              order_id: o.order_id
-            });
+            return fabric.util.object.extend(
+              toObject.call(o, propertiesToInclude),
+              {
+                id: o.id,
+                order_id: o.order_id,
+              }
+            );
           };
         })(o.toObject);
       }
       this.canvas.renderAll();
-      
-    })
-    console.log(JSON.stringify(this.canvas))
-    this.tableLayoutService.postTableLayout(JSON.stringify(this.canvas)).subscribe(() => {
-      this.displayArticleAddingDialog = false;
-      this.addedArticles = [];
-      this.displayConfirmDialog = false;
-      this.messageService.add({key: 'tc', severity:'success', summary: 'New order successfully created', detail: 'Created order'});
-    })
+    });
+    console.log(JSON.stringify(this.canvas));
+    this.tableLayoutService
+      .postTableLayout(JSON.stringify(this.canvas))
+      .subscribe(() => {
+        this.displayArticleAddingDialog = false;
+        this.addedArticles = [];
+        this.displayConfirmDialog = false;
+        this.messageService.add({
+          key: 'tc',
+          severity: 'success',
+          summary: 'New order successfully created',
+          detail: 'Created order',
+        });
+      });
   }
 
   parseDate(date: Date) {
-    var dateString: string = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + (date.getDate())).slice(-2) + 'T' + 
-    ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2) + ":" + ("0" + date.getSeconds()).slice(-2) + '.' + date.getMilliseconds();
+    var dateString: string =
+      date.getFullYear() +
+      '-' +
+      ('0' + (date.getMonth() + 1)).slice(-2) +
+      '-' +
+      ('0' + date.getDate()).slice(-2) +
+      'T' +
+      ('0' + date.getHours()).slice(-2) +
+      ':' +
+      ('0' + date.getMinutes()).slice(-2) +
+      ':' +
+      ('0' + date.getSeconds()).slice(-2) +
+      '.' +
+      date.getMilliseconds();
     return dateString;
   }
 

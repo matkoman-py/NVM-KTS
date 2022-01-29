@@ -86,7 +86,7 @@ public class EmployeeController {
 		if(valid) return new ResponseEntity<>(true, HttpStatus.OK);
 		return new ResponseEntity<>(false, HttpStatus.FORBIDDEN);
 	}
-	@PreAuthorize("hasRole('MANAGER')")
+	
 	@GetMapping("/getByPincode/{pin}")
 	public ResponseEntity<Boolean> getByPincode(@PathVariable("pin") int pin) {
 		boolean valid = employeeService.checkPin(pin, EmployeeType.WAITER);
