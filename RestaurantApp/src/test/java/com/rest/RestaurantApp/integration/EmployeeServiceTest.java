@@ -57,13 +57,13 @@ public class EmployeeServiceTest {
 		
 		List<EmployeeDTO> result = employeeService.getAll();
 		
-		assertEquals(6, result.size());
+		assertEquals(5, result.size());
 	}
 	
 	@Test
 	void testDelete_ValidId() {
 		
-		EmployeeDTO employee = new EmployeeDTO(7,10000,"aca@gmail.com","Aleksa","Kekezovic",new Date(),UserType.EMPLOYEE, 1111, EmployeeType.COOK);
+		EmployeeDTO employee = new EmployeeDTO(7,10000,"aca@gmail.com","Aleksa","Kekezovic",new Date(),UserType.EMPLOYEE, 9876, EmployeeType.COOK);
 		employeeService.create(employee);
 		List<EmployeeDTO> result1 = employeeService.getAll();
 		employeeService.delete(7);
@@ -116,17 +116,17 @@ public class EmployeeServiceTest {
 		EmployeeDTO employee = new EmployeeDTO(8,10000,"aca1@gmail.com","Aleksa","Kekezovic",new Date(),UserType.EMPLOYEE, 1111, EmployeeType.COOK);
 		employeeService.create(employee);
 		
-		EmployeeDTO updateEmployee = new EmployeeDTO(17,20000,"Uaca@gmail.com","UAleksa","UKekezovic",new Date(),UserType.EMPLOYEE, 1389, EmployeeType.WAITER);
+		EmployeeDTO updateEmployee = new EmployeeDTO(8,20000,"Uaca@gmail.com","UAleksa","UKekezovic",new Date(),UserType.EMPLOYEE, 1111, EmployeeType.WAITER);
 		EmployeeDTO updatedEmployee = employeeService.update(8, updateEmployee);
 
 		assertEquals(20000,updatedEmployee.getSalary());
 		assertEquals("Uaca@gmail.com",updatedEmployee.getEmail());
 		assertEquals("UAleksa",updatedEmployee.getName());
 		assertEquals("UKekezovic",updatedEmployee.getSurname());
-		assertEquals(1389,updatedEmployee.getPincode());
+		assertEquals(1111,updatedEmployee.getPincode());
 		assertEquals(EmployeeType.WAITER,updatedEmployee.getEmployeeType());
 		
-		employeeService.delete(employeeRepository.findByPincode(1389).get().getId());
+		employeeService.delete(8);
 	}
 	
 	@Test
@@ -147,6 +147,8 @@ public class EmployeeServiceTest {
 		
 		int afterCreate = employeeService.getAll().size();
 		assertEquals(beforeCreate, afterCreate - 1);
+
+		employeeService.delete(10);
 	}
 	
 //	@Test

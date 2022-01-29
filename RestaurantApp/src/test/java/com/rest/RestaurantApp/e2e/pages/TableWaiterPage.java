@@ -39,7 +39,7 @@ public class TableWaiterPage {
     @FindBy(id = "message")
     private WebElement messageBox;
 
-    @FindBy(xpath = "//*[@id='added-articles']/*[@id='pr_id_6']/div/table/tbody/tr")
+    @FindBy(xpath = "//*[@id='added-articles']/div/div/table/tbody/tr")
     private List<WebElement> addedArticles;
 
     public TableWaiterPage(WebDriver driver) {
@@ -140,6 +140,6 @@ public class TableWaiterPage {
     }
 
     public List<WebElement> getAddedArticles() {
-        return Utilities.visibilityWait(driver, By.xpath("//*[@id='added-articles']/*[@id='pr_id_6']/div/table/tbody/tr"), 10);
+        return Utilities.visibilityWait(driver, By.xpath("//*[@id='added-articles']/div/div/table/tbody/tr"), 10);
     }
 }
