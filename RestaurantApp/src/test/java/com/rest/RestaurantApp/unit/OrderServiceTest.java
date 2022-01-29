@@ -178,8 +178,6 @@ class OrderServiceTest {
 		given(orderedArticleRepository.findById(4)).willReturn(Optional.of(createdOrderedArticle));
 		given(orderedArticleRepository.save(orderedArticle)).willReturn(changedOrderedArticle);
 		given(orderedArticleRepository.save(newOrderedArticle)).willReturn(createdOrderedArticle);
-
-
 		
 	}
 	
@@ -320,6 +318,18 @@ class OrderServiceTest {
 	}
 	
 	@Test
+	void testCreateArticlesMultipleForOrder_InvalidArticle_ArticleNotFound() {
+		ArticlesAndOrderDTO dto = new ArticlesAndOrderDTO(Arrays.asList(new OrderedArticleWithDescDTO(66,"dobar"), new OrderedArticleWithDescDTO(2,"dobar")), 1);
+		assertThrows(NotFoundException.class, () -> {orderService.addArticlesToOrder(dto);});
+	}
+	
+	@Test
+	void testCreateArticlesMultipleForOrder_InvalidArticle_OrderNotFound() {
+		ArticlesAndOrderDTO dto = new ArticlesAndOrderDTO(Arrays.asList(new OrderedArticleWithDescDTO(1,"dobar"), new OrderedArticleWithDescDTO(2,"dobar")), 141);
+		assertThrows(NotFoundException.class, () -> {orderService.addArticlesToOrder(dto);});
+	}
+	
+	@Test
 	void testCreateArticleForOrder_ValidArticle() {
 		OrderedArticleDTO orderedArticle = new OrderedArticleDTO();
 		orderedArticle.setDescription("One plate");
@@ -353,21 +363,14 @@ class OrderServiceTest {
 	
 	@Test
 	void testDeleteArticleForOrder_ValidArticle() {
-		
-		
 		OrderedArticleDTO deletedArticle = orderService.deleteArticleForOrder(1);
 		assertEquals(deletedArticle.getArticleName(), "Cheeseburger");
 		assertEquals(deletedArticle.getDescription(), null);
-
-		//assertEquals(addedArticle.getStatus(), ArticleStatus.NOT_TAKEN);
 	}
 	
 	@Test
 	void testDeleteArticleForOrder_InvalidArticle_ArticleAlreadyTaken() {
-		
-		
 		assertThrows(OrderAlreadyTakenException.class, () -> {		OrderedArticleDTO deletedArticle = orderService.deleteArticleForOrder(3);});
-		//assertEquals(addedArticle.getStatus(), ArticleStatus.NOT_TAKEN);
 	}
 
 	
