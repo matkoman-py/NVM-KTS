@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +22,6 @@ import com.rest.RestaurantApp.domain.enums.UserType;
 import com.rest.RestaurantApp.dto.EmployeeAuthDTO;
 import com.rest.RestaurantApp.dto.EmployeeDTO;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
-import com.rest.RestaurantApp.repositories.EmployeeRepository;
 import com.rest.RestaurantApp.services.EmployeeService;
 
 @ExtendWith(SpringExtension.class)
@@ -32,9 +32,6 @@ public class EmployeeServiceTest {
 	
 	@Autowired
 	private EmployeeService employeeService;
-	
-	@Autowired
-	private EmployeeRepository employeeRepository;
 	
 	@Test
 	void testGetOne_ValidId() {
@@ -151,24 +148,24 @@ public class EmployeeServiceTest {
 		employeeService.delete(10);
 	}
 	
-//	@Test
-//	void testSearch_ExpectedNone() {
-//		List<EmployeeDTO> employees = employeeService.search("x", "y", "z", "w");
-//		
-//		assertEquals(0, employees.size());
-//	}
-//	
-//	@Test
-//	void testSearch_ExpectedAll() {
-//		List<EmployeeDTO> employees = employeeService.search("", "", "", "");
-//		
-//		assertEquals(5, employees.size());
-//	}
-//
-//	@Test
-//	void testSearch_ExpectedOne() {
-//		List<EmployeeDTO> employees = employeeService.search("Mateja", "Cosovic", "99@yahoo.com", "1234");
-//		
-//		assertEquals(1, employees.size());
-//	}
+	@Test
+	void testSearch_ExpectedNone() throws ParseException {
+		List<EmployeeDTO> employees = employeeService.search("x", "y", "z", "", "");
+		
+		assertEquals(0, employees.size());
+	}
+	
+	@Test
+	void testSearch_ExpectedAll() throws ParseException {
+		List<EmployeeDTO> employees = employeeService.search("", "", "", "", "");
+		
+		assertEquals(5, employees.size());
+	}
+
+	@Test
+	void testSearch_ExpectedOne() throws ParseException {
+		List<EmployeeDTO> employees = employeeService.search("Mateja", "Cosovic", "99@yahoo.com", "1888-8-1", "2021-10-3");
+		
+		assertEquals(1, employees.size());
+	}
 }

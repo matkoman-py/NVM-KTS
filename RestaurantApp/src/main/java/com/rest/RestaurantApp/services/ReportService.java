@@ -21,12 +21,9 @@ import java.util.stream.Collectors;
 @Transactional
 public class ReportService implements IReportService {
 
-    private ArticleRepository articleRepository;
-
     private OrderedArticleRepository orderedArticleRepository;
 
     public ReportService(ArticleRepository articleRepository, OrderedArticleRepository orderedArticleRepository) {
-        this.articleRepository = articleRepository;
         this.orderedArticleRepository = orderedArticleRepository;
     }
 
