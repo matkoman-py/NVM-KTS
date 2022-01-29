@@ -1,6 +1,7 @@
 package com.rest.RestaurantApp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.rest.RestaurantApp.domain.enums.EmployeeProfileType;
 import com.rest.RestaurantApp.domain.enums.EmployeeType;
 import org.hibernate.annotations.Where;
 import org.springframework.security.core.GrantedAuthority;

@@ -186,8 +186,7 @@ public class EmployeeService implements IEmployeeService{
 		employees.removeAll(employeesToCut);
 		System.out.println(dateBefore + " ODD");
 		System.out.println(dateAfter + " DOO");
-		System.out.println("DASDSADSA");
-		
+
 		return employees;
 	}
 }
