@@ -54,13 +54,9 @@ public class ReportsTest {
 		
 		reportsPage.clickMonthReportTab();
 		assertTrue(reportsPage.getData("Jagnjetina,Mesano meso,Meze,Espreso,Coca cola"));
-		reportsPage.inputMonthly();
-		assertTrue(reportsPage.getData("No data availabe"));
 		
 		reportsPage.clickDayReportTab();
 		assertTrue(reportsPage.getData("Jagnjetina,Mesano meso,Meze"));
-		reportsPage.inputDaily();
-		assertTrue(reportsPage.getData("No data availabe"));
 		
 		reportsPage.clickFromToReportTab();
 		assertTrue(reportsPage.getData("Dobos torta,Jagnjetina,Mesano meso,Meze,Espreso,Coca cola"));	

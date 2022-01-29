@@ -7,15 +7,23 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import com.rest.RestaurantApp.domain.enums.ArticleStatus;
 import com.rest.RestaurantApp.domain.enums.EmployeeType;
+import com.rest.RestaurantApp.domain.enums.OrderStatus;
 import com.rest.RestaurantApp.dto.EmployeeAuthDTO;
+import com.rest.RestaurantApp.exceptions.EmployeeCurrentlyWorkingException;
 import com.rest.RestaurantApp.exceptions.EmployeeWithEmailAlreadyExists;
 import com.rest.RestaurantApp.exceptions.EmployeeWithPinAlreadyExists;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
+import com.rest.RestaurantApp.exceptions.OrderAlreadyTakenException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.rest.RestaurantApp.domain.Employee;
+import com.rest.RestaurantApp.domain.Order;
+import com.rest.RestaurantApp.domain.OrderedArticle;
 import com.rest.RestaurantApp.domain.SalaryInfo;
 import com.rest.RestaurantApp.dto.EmployeeDTO;
 import com.rest.RestaurantApp.repositories.EmployeeRepository;
@@ -30,6 +38,10 @@ public class EmployeeService implements IEmployeeService{
 	private EmployeeRepository employeeRepository;
 	
 	private SalaryInfoRepository salaryInfoRepository;
+	
+	private OrderedArticleRepository orderedArticleRepository;
+	
+	private OrderRepository orderRepository;
 
 
 	@Autowired
@@ -37,6 +49,8 @@ public class EmployeeService implements IEmployeeService{
 			OrderedArticleRepository orderedArticleRepository) {
 		this.employeeRepository = employeeRepository;
 		this.salaryInfoRepository = salaryInfoRepository;
+		this.orderedArticleRepository = orderedArticleRepository;
+		this.orderRepository = orderRepository;
 	}
 	
 	@Override//
@@ -59,8 +73,21 @@ public class EmployeeService implements IEmployeeService{
 		if(employeeData.isEmpty()) {
 			throw new NotFoundException("Employee with id " + id + " was not found");
 		}
+	
+		List<OrderedArticle> orderedArticles = orderedArticleRepository.findByTakenByEmployeeIdAndStatusNot(id, ArticleStatus.FINISHED);
+		if(orderedArticles.size() != 0) {
+			throw new EmployeeCurrentlyWorkingException("Employee with id " + id + " is currently working on an article");
+		}
+		
+		List<Order> orders = orderRepository.findByEmployeeIdAndOrderStatus(id, OrderStatus.ACTIVE);
+		if(orders.size() != 0) {
+			throw new EmployeeCurrentlyWorkingException("Employee with id " + id + " is currently working on an order");
+		}
+		
+		
 		Employee employee = employeeData.get();
-		employee.setDeleted(true);
+		//employee.setDeleted(true);
+		employee.setFired(true);
 		employeeRepository.save(employee);
 		return new EmployeeDTO(employee);
 	}
@@ -73,7 +100,7 @@ public class EmployeeService implements IEmployeeService{
 			throw new EmployeeWithPinAlreadyExists("Employee with pincode " + employee.getPincode() + " already exists");
 		}
 		
-		Optional<Employee> hasEmail = employeeRepository.findByEmail(employee.getEmail());
+		Optional<Employee> hasEmail = employeeRepository.findByEmailAndIsFiredFalse(employee.getEmail());
 		if(!hasEmail.isEmpty()) {
 			throw new EmployeeWithEmailAlreadyExists("Employee with email " + employee.getEmail() + " already exists");
 		}

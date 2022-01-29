@@ -42,6 +42,9 @@ public class Article extends BaseEntity{
 		@Column(nullable = false)
 		private String name;
 		
+		@Column(columnDefinition = "boolean default false")
+		private boolean isRemoved;
+		
 		@Column(nullable = false)
 		private String description;
 		
@@ -96,7 +99,16 @@ public class Article extends BaseEntity{
 			this.image = image;
 		}
 
+		
 
+
+		public boolean isRemoved() {
+			return isRemoved;
+		}
+
+		public void setRemoved(boolean isRemoved) {
+			this.isRemoved = isRemoved;
+		}
 
 		public Article() {
 			super();

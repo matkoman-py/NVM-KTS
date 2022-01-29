@@ -60,13 +60,20 @@ public class EmployeeControllerTest {
 		EmployeeDTO[] employees = responseEntity.getBody();
 		
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-		assertEquals(4, employees.length);
+		assertEquals(5, employees.length);
 	}
 	
 	@Test
 	public void testDelete_ValidId() { 
+
+		EmployeeDTO employee = new EmployeeDTO(7,10000,"acafaca123@gmail.com","Aleksa","Kekezovic"
+				,new Date(),UserType.EMPLOYEE, 56542, EmployeeType.COOK);
+
+		ResponseEntity<EmployeeDTO> resEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
+				"/api/employee", HttpMethod.POST, new HttpEntity<EmployeeDTO>(employee), EmployeeDTO.class);
+		
 		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
-				"/api/employee/6", HttpMethod.DELETE, new HttpEntity<Object>(null), String.class);
+				"/api/employee/8", HttpMethod.DELETE, new HttpEntity<Object>(null), String.class);
 
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 	}
@@ -78,6 +85,26 @@ public class EmployeeControllerTest {
 
 		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
 	}
+	
+	@Test
+	public void testDelete_InvalidEmployee_WaiterPreparingOrder() { 
+		ResponseEntity<String> responseEntity = restTemplate.exchange(
+				"/api/employee/3", HttpMethod.DELETE, new HttpEntity<Object>(null), String.class);
+
+		assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
+		assertEquals("Employee with id 3 is currently working on an order", responseEntity.getBody());
+	}
+	
+	
+	@Test
+	public void testDelete_InvalidEmployee_CookOrBarmanPreparingArticle() { 
+		ResponseEntity<String> responseEntity = restTemplate.exchange(
+				"/api/employee/7", HttpMethod.DELETE, new HttpEntity<Object>(null), String.class);
+
+		assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
+		assertEquals("Employee with id 7 is currently working on an article", responseEntity.getBody());
+	}
+	
 	
 	@Test
 	public void testcheckIfWaiterPin_ValidPinAndValidEmployeeType() {

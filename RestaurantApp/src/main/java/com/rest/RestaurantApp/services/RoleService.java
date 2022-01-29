@@ -1,11 +1,13 @@
 package com.rest.RestaurantApp.services;
 
 import com.rest.RestaurantApp.domain.Role;
+import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RoleService implements IRoleService {
@@ -15,8 +17,12 @@ public class RoleService implements IRoleService {
 
     @Override
     public Role findById(int id) {
-        Role role = this.roleRepository.getOne(id);
-        return role;
+        Optional<Role> role = this.roleRepository.findById(id);
+        
+        if(role.isEmpty()) {
+        	throw new NotFoundException("Role with id: " + id + " not found");
+        }
+        return role.get();
     }
 
     @Override

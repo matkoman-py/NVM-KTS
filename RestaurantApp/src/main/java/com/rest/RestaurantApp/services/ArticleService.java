@@ -12,10 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.rest.RestaurantApp.domain.Article;
 import com.rest.RestaurantApp.domain.Ingredient;
+import com.rest.RestaurantApp.domain.OrderedArticle;
 import com.rest.RestaurantApp.domain.PriceInfo;
+import com.rest.RestaurantApp.domain.enums.ArticleStatus;
 import com.rest.RestaurantApp.domain.enums.ArticleType;
 import com.rest.RestaurantApp.dto.ArticleCreationDTO;
 import com.rest.RestaurantApp.dto.ArticleDTO;
+import com.rest.RestaurantApp.exceptions.ArticlePreparingException;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.repositories.ArticleRepository;
 import com.rest.RestaurantApp.repositories.IngredientRepository;
@@ -33,10 +36,9 @@ public class ArticleService implements IArticleService {
 	private PriceInfoRepository priceInfoRepository;
 	
 	private OrderedArticleRepository orderedArticleRepository;
-	
+
 	@Autowired
-	public ArticleService(ArticleRepository articleRepository, IngredientRepository ingredientRepository, PriceInfoRepository priceInfoRepository
-			, OrderedArticleRepository orderedArticleRepository) {
+	public ArticleService(ArticleRepository articleRepository, IngredientRepository ingredientRepository, PriceInfoRepository priceInfoRepository, OrderedArticleRepository orderedArticleRepository) {
 		this.articleRepository = articleRepository;
 		this.ingredientRepository = ingredientRepository;
 		this.priceInfoRepository = priceInfoRepository;
@@ -79,11 +81,13 @@ public class ArticleService implements IArticleService {
 			throw new NotFoundException("There is no article with the given id: " + id);
 		}
 		Article article = articleData.get();
-		orderedArticleRepository.findByArticleId(article.getId()).stream().forEach(orderedArticle -> {
-			orderedArticle.setDeleted(true);
-			orderedArticleRepository.save(orderedArticle);
-		});
-		article.setDeleted(true);
+
+		List<OrderedArticle> orderedArticles = orderedArticleRepository.findByArticleIdAndStatusNot(id, ArticleStatus.FINISHED);
+		if(orderedArticles.size() != 0) {
+			throw new ArticlePreparingException("Article with id " + id + " is currently being prepared");
+		}
+		article.setRemoved(true);
+		//article.setDeleted(true);
 		articleRepository.save(article);
 		return new ArticleDTO(article);
 	}

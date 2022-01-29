@@ -19,14 +19,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import com.rest.RestaurantApp.domain.Employee;
 import com.rest.RestaurantApp.domain.SalaryInfo;
+import com.rest.RestaurantApp.domain.enums.ArticleStatus;
 import com.rest.RestaurantApp.domain.enums.EmployeeType;
 import com.rest.RestaurantApp.domain.enums.UserType;
 import com.rest.RestaurantApp.dto.EmployeeAuthDTO;
 import com.rest.RestaurantApp.dto.EmployeeDTO;
+import com.rest.RestaurantApp.exceptions.EmployeeCurrentlyWorkingException;
 import com.rest.RestaurantApp.exceptions.EmployeeWithEmailAlreadyExists;
 import com.rest.RestaurantApp.exceptions.EmployeeWithPinAlreadyExists;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.repositories.EmployeeRepository;
+import com.rest.RestaurantApp.repositories.OrderedArticleRepository;
 import com.rest.RestaurantApp.repositories.SalaryInfoRepository;
 import com.rest.RestaurantApp.services.EmployeeService;
 
@@ -38,6 +41,9 @@ public class EmployeeServiceTest {
 	
 	@MockBean
 	private SalaryInfoRepository salaryInfoRepository;
+	
+	@MockBean
+	private OrderedArticleRepository orderedArticleRepository;
 	
 	@MockBean
 	private Employee employee;
@@ -73,18 +79,33 @@ public class EmployeeServiceTest {
 		salary1.add(salaryInfo);
 		employee4.setSalaries(salary1);
 		
+		Employee employeeInvalid = new Employee("cepic1@yahoo.com", "Pera", "Markovic", new GregorianCalendar(1999, 10, 29).getTime(), UserType.EMPLOYEE, 5432, EmployeeType.WAITER);
+		employeeInvalid.setId(10);	
+		salary1.add(salaryInfo);
+		employeeInvalid.setSalaries(salary1);
+		
+		Employee employeeInvalid2 = new Employee("cepic21@yahoo.com", "Mirko", "Markovic", new GregorianCalendar(1999, 10, 29).getTime(), UserType.EMPLOYEE, 4328, EmployeeType.COOK);
+		employeeInvalid.setId(11);	
+		salary1.add(salaryInfo);
+		employeeInvalid.setSalaries(salary1);
+		
 		employees.add(employee);
 		employees.add(employee1);
 		employees.add(employee2);
 		
 		when(employeeRepository.findAll()).thenReturn(employees);
-		when(employeeRepository.findByEmail("cepic@yahoo.com")).thenReturn(Optional.of(employee4));
+		when(employeeRepository.findByEmailAndIsFiredFalse("cepic@yahoo.com")).thenReturn(Optional.of(employee4));
 		given(employeeRepository.findById(4)).willReturn(Optional.empty());
 		given(employeeRepository.findById(1)).willReturn(java.util.Optional.of(employee));
-		given(employeeRepository.save(employee)).willReturn(employee);
-		
-		given(employeeRepository.findByPincode(1234)).willReturn(Optional.of(employee));
+		given(employeeRepository.findById(10)).willReturn(java.util.Optional.of(employeeInvalid));
+		given(employeeRepository.findById(11)).willReturn(java.util.Optional.of(employeeInvalid2));
 
+		given(employeeRepository.save(employee)).willReturn(employee);
+		given(employeeRepository.save(employee)).willReturn(employee);
+		given(orderedArticleRepository.findByTakenByEmployeeIdAndStatusNot(10, ArticleStatus.FINISHED)).willThrow(EmployeeCurrentlyWorkingException.class);
+		given(orderedArticleRepository.findByTakenByEmployeeIdAndStatusNot(11, ArticleStatus.FINISHED)).willThrow(EmployeeCurrentlyWorkingException.class);
+
+		given(employeeRepository.findByPincode(1234)).willReturn(Optional.of(employee));
 	}
 	
 	@Test
@@ -160,6 +181,22 @@ public class EmployeeServiceTest {
 		
 		assertThrows(NotFoundException.class, ()->{
 			employeeService.delete(4);
+            });
+	}
+	
+	@Test
+	void testDelete_InvalidEmployee_WaiterPreparingOrder() {
+		
+		assertThrows(EmployeeCurrentlyWorkingException.class, ()->{
+			employeeService.delete(10);
+            });
+	}
+	
+	@Test
+	void testDelete_InvalidEmployee_CookOrBarmanPreparingArticle() {
+		
+		assertThrows(EmployeeCurrentlyWorkingException.class, ()->{
+			employeeService.delete(11);
             });
 	}
 	

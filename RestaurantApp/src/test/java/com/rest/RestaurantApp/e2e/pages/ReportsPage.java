@@ -75,11 +75,26 @@ public class ReportsPage {
 	}
 	
 	public void clickDayReportTab() {
-		Utilities.visibilityWait(driver, dayReportTab, 5).click();
+		try {
+			Utilities.clickableWait(driver, dayReportTab, 10).click();
+			
+		}
+		catch(org.openqa.selenium.StaleElementReferenceException ex)
+		{
+			Utilities.clickableWait(driver, dayReportTab, 10).click();
+		}
 	}
 	
 	public void clickFromToReportTab() {
-		Utilities.visibilityWait(driver, fromToReportTab, 5).click();
+		try {
+			Utilities.clickableWait(driver, fromToReportTab, 10).click();
+			
+		}
+		catch(org.openqa.selenium.StaleElementReferenceException ex)
+		{
+			Utilities.clickableWait(driver, fromToReportTab, 10).click();
+		}
+		
 	}
 	
 	public void inputYearly() {

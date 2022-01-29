@@ -27,6 +27,9 @@ public class Employee extends User {
 	@Column(unique = true)
 	private int pincode;
 	
+	@Column(columnDefinition = "boolean default false")
+	private boolean isFired;
+	
 	@Enumerated(EnumType.STRING)
 	//@Column(nullable = false)
 	private EmployeeType employeeType;
@@ -91,6 +94,16 @@ public class Employee extends User {
 		this.takenArticles = takenArticles;
 	}
 	
+	
+	
+	public boolean isFired() {
+		return isFired;
+	}
+
+	public void setFired(boolean isFired) {
+		this.isFired = isFired;
+	}
+
 	@Override
     public boolean equals(Object o) {
         if (this == o) {
