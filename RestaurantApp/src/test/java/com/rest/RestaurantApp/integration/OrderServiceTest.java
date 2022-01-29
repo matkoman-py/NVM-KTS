@@ -2,8 +2,6 @@ package com.rest.RestaurantApp.integration;
 
 import com.rest.RestaurantApp.domain.enums.ArticleStatus;
 import com.rest.RestaurantApp.domain.enums.OrderStatus;
-import com.rest.RestaurantApp.dto.ArticleDTO;
-import com.rest.RestaurantApp.dto.IngredientDTO;
 import com.rest.RestaurantApp.dto.OrderDTO;
 import com.rest.RestaurantApp.dto.OrderedArticleDTO;
 import com.rest.RestaurantApp.dto.OrderedArticleWithDescDTO;
@@ -13,10 +11,7 @@ import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.exceptions.NullArticlesException;
 import com.rest.RestaurantApp.exceptions.OrderAlreadyTakenException;
 import com.rest.RestaurantApp.exceptions.OrderTakenByWrongEmployeeTypeException;
-import com.rest.RestaurantApp.services.IngredientService;
 import com.rest.RestaurantApp.services.OrderService;
-
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +23,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -51,13 +45,18 @@ class OrderServiceTest {
     }
 	
 	@Test
+    public void testGetAllActive() {
+        List<OrderDTO> orders = orderService.getAllActive();
+
+        assertEquals(13, orders.size());
+    }
+	
+	@Test
     public void testFindOne_ValidId() {
         OrderDTO order = orderService.getOne(1);
 
         assertEquals((int) order.getId(), 1);
         assertEquals(order.getDescription(), "No mustard");
-        //2021-1-3 12:43:33
-        //  ('No mustard', '2021-1-3 12:43:33', 1, 3),
         assertEquals(order.getOrderDate(), LocalDateTime.of(2021, 1, 3, 12, 43,33));
         assertEquals(order.getTableNumber(), 1);
         assertEquals(order.getEmployeePin(), 1234);
@@ -66,7 +65,7 @@ class OrderServiceTest {
 	@Test
     public void testFindOne_InvalidId() {
         assertThrows(NotFoundException.class, () -> {
-            OrderDTO result = orderService.getOne(26);
+            orderService.getOne(26);
         });
     }
 	
@@ -91,7 +90,7 @@ class OrderServiceTest {
 	@Test
     public void testDelete_InvalidId() {
         assertThrows(NotFoundException.class, () -> {
-            OrderDTO result = orderService.delete(27);
+            orderService.delete(27);
         });
     }
 	
@@ -109,25 +108,22 @@ class OrderServiceTest {
         orderService.delete(created.getId());
 
         assertEquals((int) created.getId(), 14);
-        //2021-1-3 12:43:33
-        //  ('No mustard', '2021-1-3 12:43:33', 1, 3),
         assertEquals(created.getOrderDate(), LocalDateTime.of(2021, 1, 1, 1, 1,1));
         assertEquals(created.getTableNumber(), 3);
         assertEquals(created.getEmployeePin(), 1234);
         assertEquals(oldSize + 1, newSize);
-
     }
 	
 	@Test
 	void testCreate_InvalidOrder_NoArticles() {
 		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), null, 3, 1234, OrderStatus.ACTIVE, 5000);
-		assertThrows(NullArticlesException.class, () -> {OrderDTO createdOrder = orderService.create(orderToCreate);});
+		assertThrows(NullArticlesException.class, () -> {orderService.create(orderToCreate);});
 	}
 	
 	@Test
 	void testCreate_InvalidOrder_OrderTakenByCookOrBarman() {
 		OrderDTO orderToCreate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), Arrays.asList(1), 5, 4322, OrderStatus.ACTIVE, 5000);
-		assertThrows(OrderTakenByWrongEmployeeTypeException.class, () -> {OrderDTO createdOrder = orderService.create(orderToCreate);});
+		assertThrows(OrderTakenByWrongEmployeeTypeException.class, () -> {orderService.create(orderToCreate);});
 	}
 	
 	@Test
@@ -149,27 +145,24 @@ class OrderServiceTest {
 	@Test
 	void testUpdate_InvalidOrder_NoArticles() {
 		OrderDTO orderToUpdate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), new ArrayList<Integer>(), 3, 3, OrderStatus.ACTIVE, 10002);
-		assertThrows(NullArticlesException.class, () -> {OrderDTO updatedOrder = orderService.update(7, orderToUpdate);});
-
+		assertThrows(NullArticlesException.class, () -> {orderService.update(7, orderToUpdate);});
 	}
 	
 	@Test
 	void testUpdate_InvalidOrder_OrderNotFound() {
 		OrderDTO orderToUpdate = new OrderDTO(false, "Appetizers first", LocalDateTime.of(2021, 2, 3, 17, 0, 2), new ArrayList<Integer>(), 3, 3, OrderStatus.ACTIVE, 10001);
-		assertThrows(NotFoundException.class, () -> {OrderDTO updatedOrder = orderService.update(55, orderToUpdate);});
-
+		assertThrows(NotFoundException.class, () -> {orderService.update(55, orderToUpdate);});
 	}
 	
 	@Test
 	void testArticlesForOrder_ValidOrder() {
 		List<OrderedArticleDTO> orderedArticles = orderService.getArticlesForOrder(1);
 		assertEquals(orderedArticles.size(), 4);
-
 	}
 	
 	@Test
 	void testArticlesForOrder_InvalidOrder() {
-		assertThrows(NotFoundException.class, () -> {List<OrderedArticleDTO> orderedArticles = orderService.getArticlesForOrder(53);});
+		assertThrows(NotFoundException.class, () -> {orderService.getArticlesForOrder(53);});
 	}
 	
 	@Test
@@ -184,20 +177,18 @@ class OrderServiceTest {
 	
 	@Test
 	void testChangeArticleStatus_InvalidArticle_IncompatibleEmployee() {
-		assertThrows(IncompatibleEmployeeTypeException.class, () -> {OrderedArticleDTO order = orderService.changeStatusOfArticle(1234, 14);});
-
+		assertThrows(IncompatibleEmployeeTypeException.class, () -> {orderService.changeStatusOfArticle(1234, 14);});
 	}
 	
 	@Test
 	void testChangeArticleStatus_InvalidArticle_ArticleAlreadyTaken() {
-		assertThrows(OrderAlreadyTakenException.class, () -> {OrderedArticleDTO order = orderService.changeStatusOfArticle(2910, 7);});
+		assertThrows(OrderAlreadyTakenException.class, () -> {orderService.changeStatusOfArticle(2910, 7);});
 
 	}
 	
 	@Test
 	void testChangeArticleStatus_InvalidArticle_ArticleStatusIsFinished() {
-		assertThrows(ChangeFinishedStateException.class, () -> {OrderedArticleDTO order = orderService.changeStatusOfArticle(4269, 3);});
-
+		assertThrows(ChangeFinishedStateException.class, () -> {orderService.changeStatusOfArticle(4269, 3);});
 	}
 	
 	@Test
@@ -214,7 +205,6 @@ class OrderServiceTest {
 		assertEquals(addedArticle.getOrderId(), 1);
 		assertEquals(addedArticle.getStatus(), ArticleStatus.NOT_TAKEN);
 		assertEquals(size+1, newSize);
-
 	}
 	
 	@Test
@@ -278,14 +268,12 @@ class OrderServiceTest {
 	
 	@Test
 	void testDeleteArticleForOrder_InvalidArticle_OrderedArticleNotFound() {
-		
 		assertThrows(NotFoundException.class, () -> {orderService.deleteArticleForOrder(42);});
 	}
 	
 	
 	@Test
 	void testDeleteArticleForOrder_InvalidArticle_OrderAlreadyTaken() {
-		
 		assertThrows(OrderAlreadyTakenException.class, () -> {orderService.deleteArticleForOrder(1);});
 	}
 	
