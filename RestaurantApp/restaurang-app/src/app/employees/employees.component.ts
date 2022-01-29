@@ -108,6 +108,13 @@ export class EmployeesComponent implements OnInit {
       });
       this.getEmployees();
       this.selectedEmployee = null;
+    }, err =>{
+      this.messageService.add({
+        key: 'tc',
+        severity: 'error',
+        summary: 'Error',
+        detail: err.error,
+      });
     });
   }
 
