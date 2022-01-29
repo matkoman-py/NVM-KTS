@@ -55,13 +55,13 @@ public class EditTablePage {
         addButton.click();
     }
 
-    public void removeTable() {
+    public void removeTable(int x, int y) {
         WebElement canvas = getCanvas();
         WebElement removeButton = getRemoveButton();
 
         Actions action = new Actions(driver);
 
-        action.moveToElement(canvas, 20, 20).click().perform();
+        action.moveToElement(canvas, x, y).click().perform();
 
         removeButton.click();
     }
