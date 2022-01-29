@@ -78,7 +78,7 @@ public class EmployeeServiceTest {
 		employees.add(employee2);
 		
 		when(employeeRepository.findAll()).thenReturn(employees);
-		when(employeeRepository.findByEmail("cepic@yahoo.com")).thenReturn(Optional.of(employee4));
+		when(employeeRepository.findByEmailAndIsFiredFalse("cepic@yahoo.com")).thenReturn(Optional.of(employee4));
 		given(employeeRepository.findById(4)).willReturn(Optional.empty());
 		given(employeeRepository.findById(1)).willReturn(java.util.Optional.of(employee));
 		given(employeeRepository.save(employee)).willReturn(employee);

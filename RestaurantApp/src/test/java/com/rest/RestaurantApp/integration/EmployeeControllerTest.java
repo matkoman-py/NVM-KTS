@@ -60,13 +60,19 @@ public class EmployeeControllerTest {
 		EmployeeDTO[] employees = responseEntity.getBody();
 		
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-		assertEquals(4, employees.length);
+		assertEquals(5, employees.length);
 	}
 	
 	@Test
 	public void testDelete_ValidId() { 
+		EmployeeDTO employee = new EmployeeDTO(7,10000,"acafaca123@gmail.com","Aleksa","Kekezovic"
+				,new Date(),UserType.EMPLOYEE, 56542, EmployeeType.COOK);
+
+		ResponseEntity<EmployeeDTO> resEntity = restTemplate.exchange(
+				"/api/employee", HttpMethod.POST, new HttpEntity<EmployeeDTO>(employee), EmployeeDTO.class);
+		
 		ResponseEntity<String> responseEntity = restTemplate.exchange(
-				"/api/employee/6", HttpMethod.DELETE, new HttpEntity<Object>(null), String.class);
+				"/api/employee/8", HttpMethod.DELETE, new HttpEntity<Object>(null), String.class);
 
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 	}

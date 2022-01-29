@@ -63,11 +63,13 @@ public class EmployeeServiceTest {
 	@Test
 	void testDelete_ValidId() {
 		
-		EmployeeDTO employee = new EmployeeDTO(7,10000,"aca@gmail.com","Aleksa","Kekezovic",new Date(),UserType.EMPLOYEE, 9876, EmployeeType.COOK);
-		employeeService.create(employee);
+		EmployeeDTO employee = new EmployeeDTO(9,10000,"aca@gmail.com","Aleksa","Kekezovic",new Date(),UserType.EMPLOYEE, 9876, EmployeeType.COOK);
+		employee = employeeService.create(employee);
 		List<EmployeeDTO> result1 = employeeService.getAll();
-		employeeService.delete(7);
+		System.out.println(result1.size()+ " DASDSAD");
+		employeeService.delete(employee.getId());
 		List<EmployeeDTO> result2 = employeeService.getAll();
+		System.out.println(result2.size());
 		
 		assertNotEquals(result1.size(),result2.size());
 	}
@@ -143,12 +145,12 @@ public class EmployeeServiceTest {
 		int beforeCreate = employeeService.getAll().size();
 		
 		EmployeeDTO employee = new EmployeeDTO(10,10000,"aca2@gmail.com","Aleksa","Kekezovic",new Date(),UserType.EMPLOYEE, 1661, EmployeeType.COOK);
-		employeeService.create(employee);
+		employee = employeeService.create(employee);
 		
 		int afterCreate = employeeService.getAll().size();
 		assertEquals(beforeCreate, afterCreate - 1);
 
-		employeeService.delete(10);
+		employeeService.delete(employee.getId());
 	}
 	
 //	@Test

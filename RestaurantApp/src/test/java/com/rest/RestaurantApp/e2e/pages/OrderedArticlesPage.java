@@ -53,6 +53,14 @@ public class OrderedArticlesPage {
 	}
 	
 	public String checkToastMessage() {
-		return Utilities.visibilityWait(driver, toastMessage, 5).getText();
+		try {
+			return Utilities.visibilityWait(driver, toastMessage, 5).getText();
+			
+		}
+		catch(org.openqa.selenium.StaleElementReferenceException ex)
+		{
+			return Utilities.visibilityWait(driver, toastMessage, 5).getText();
+		}
+
 	}
 }
