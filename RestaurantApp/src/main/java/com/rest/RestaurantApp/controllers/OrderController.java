@@ -42,18 +42,19 @@ public class OrderController {
 		this.orderService = orderService;
 	}
 	
-	@PreAuthorize("hasAuthority('WAITER') or hasAuthority('BARMAN') or hasAuthority('COOK')")
+	@PreAuthorize("hasAuthority('ROLE_WAITER') or hasAuthority('ROLE_BARMAN') or hasAuthority('ROLE_COOK')")
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<OrderDTO>> getAll() {
 		return ResponseEntity.ok(orderService.getAll());
 	}
 	
-	@PreAuthorize("hasAuthority('WAITER') or hasAuthority('BARMAN') or hasAuthority('COOK')")
+	@PreAuthorize("hasAuthority('ROLE_WAITER') or hasAuthority('ROLE_BARMAN') or hasAuthority('ROLE_COOK')")
 	@GetMapping(value = "/active",produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<OrderDTO>> getAllActive() {
 		return ResponseEntity.ok(orderService.getAllActive());
 	}
-	@PreAuthorize("hasAuthority('WAITER') or hasAuthority('BARMAN') or hasAuthority('COOK')")
+
+	@PreAuthorize("hasAuthority('ROLE_WAITER') or hasAuthority('ROLE_BARMAN') or hasAuthority('ROLE_COOK')")
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<OrderDTO> getOne(@PathVariable("id") int id) {
 		OrderDTO order = orderService.getOne(id);
@@ -62,7 +63,7 @@ public class OrderController {
 		}
 		return new ResponseEntity<OrderDTO>(order, HttpStatus.OK);
 	}
-	@PreAuthorize("hasAuthority('WAITER') or hasAuthority('BARMAN') or hasAuthority('COOK')")
+	@PreAuthorize("hasAuthority('ROLE_WAITER') or hasAuthority('ROLE_BARMAN') or hasAuthority('ROLE_COOK')")
 	@GetMapping(value = "articles/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<OrderedArticleDTO>> getArticlesForOrder(@PathVariable("id") int id) {
 		List<OrderedArticleDTO> orderedArticles = orderService.getArticlesForOrder(id);
@@ -99,67 +100,67 @@ public class OrderController {
         return new ResponseEntity(changeFinishedStateException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 	
-	@PreAuthorize("hasAuthority('WAITER') or hasAuthority('BARMAN') or hasAuthority('COOK')")
+	@PreAuthorize("hasAuthority('ROLE_WAITER') or hasAuthority('ROLE_BARMAN') or hasAuthority('ROLE_COOK')")
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity delete(@PathVariable("id") int id) {
 		OrderDTO order = orderService.delete(id);
 		return new ResponseEntity<>("order with id " + id + " deleted successfully", HttpStatus.OK);
 
 	}
-	@PreAuthorize("hasAuthority('WAITER')")
+	@PreAuthorize("hasAuthority('ROLE_WAITER')")
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<OrderDTO> create(@RequestBody OrderDTO order) {
 		OrderDTO createdOrder = orderService.create(order);
 		return new ResponseEntity<OrderDTO>(createdOrder, HttpStatus.CREATED);
 	}
-	@PreAuthorize("hasAuthority('WAITER') or hasAuthority('BARMAN') or hasAuthority('COOK')")
+	@PreAuthorize("hasAuthority('ROLE_WAITER') or hasAuthority('ROLE_BARMAN') or hasAuthority('ROLE_COOK')")
 	@PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<OrderDTO> update(@PathVariable("id") int id, @RequestBody OrderDTO order) {
 		OrderDTO updateOrder = orderService.update(id, order);
 		return new ResponseEntity<OrderDTO>(updateOrder, HttpStatus.OK);
 	}
-	@PreAuthorize("hasAuthority('WAITER') or hasAuthority('BARMAN') or hasAuthority('COOK')")
+	@PreAuthorize("hasAuthority('ROLE_WAITER') or hasAuthority('ROLE_BARMAN') or hasAuthority('ROLE_COOK')")
 	@PutMapping(value = "article/{id}/{pin}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<OrderedArticleDTO> changeArticleStatus(@PathVariable("id") int id, @PathVariable("pin") int pin) {
 		OrderedArticleDTO article = orderService.changeStatusOfArticle(pin, id);
 		return new ResponseEntity<OrderedArticleDTO>(article, HttpStatus.OK);
 	}
-	@PreAuthorize("hasAuthority('WAITER') or hasAuthority('BARMAN') or hasAuthority('COOK')")
+	@PreAuthorize("hasAuthority('ROLE_WAITER') or hasAuthority('ROLE_BARMAN') or hasAuthority('ROLE_COOK')")
 	@PutMapping(value = "/add-articles-to-order", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<OrderDTO> addArticlesToDTO(@RequestBody ArticlesAndOrderDTO dto) {
 		OrderDTO article = orderService.addArticlesToOrder(dto);
 		return new ResponseEntity<OrderDTO>(article, HttpStatus.OK);
 	}
-	@PreAuthorize("hasAuthority('WAITER') or hasAuthority('BARMAN') or hasAuthority('COOK')")
+	@PreAuthorize("hasAuthority('ROLE_WAITER') or hasAuthority('ROLE_BARMAN') or hasAuthority('ROLE_COOK')")
 	@PostMapping(value = "addArticle/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<OrderedArticleDTO> addArticle(@RequestBody OrderedArticleDTO article, @PathVariable("id") int orderId) {
 		OrderedArticleDTO orderedArticle = orderService.createArticleForOrder(article, orderId);
 		return new ResponseEntity<OrderedArticleDTO>(orderedArticle, HttpStatus.OK);
 	}
-	@PreAuthorize("hasAuthority('WAITER') or hasAuthority('BARMAN') or hasAuthority('COOK')")
+	@PreAuthorize("hasAuthority('ROLE_WAITER') or hasAuthority('ROLE_BARMAN') or hasAuthority('ROLE_COOK')")
 	@DeleteMapping(value = "removeArticle/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<OrderedArticleDTO> removeArticle(@PathVariable("id") int articleId) {
 		OrderedArticleDTO orderedArticle = orderService.deleteArticleForOrder(articleId);
 		return new ResponseEntity<OrderedArticleDTO>(orderedArticle, HttpStatus.OK);
 	}
-	@PreAuthorize("hasAuthority('WAITER') or hasAuthority('BARMAN') or hasAuthority('COOK')")
+	@PreAuthorize("hasAuthority('ROLE_WAITER') or hasAuthority('ROLE_BARMAN') or hasAuthority('ROLE_COOK')")
 	@PutMapping(value = "updateArticle/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<OrderedArticleDTO> updateArticle(@RequestBody OrderedArticleDTO article, @PathVariable("id") int orderId) {
 		OrderedArticleDTO orderedArticle = orderService.updateArticleForOrder(orderId, article);
 		return new ResponseEntity<OrderedArticleDTO>(orderedArticle, HttpStatus.OK);
 	}
-	@PreAuthorize("hasAuthority('WAITER') or hasAuthority('BARMAN') or hasAuthority('COOK')")
+	@PreAuthorize("hasAuthority('ROLE_WAITER') or hasAuthority('ROLE_BARMAN') or hasAuthority('ROLE_COOK')")
 	@GetMapping(value = "updateOrderStatus/{id}/{orderStatus}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<OrderDTO> updateOrderStatus(@PathVariable("id") int id, @PathVariable("orderStatus") String orderStatus){
 		OrderDTO order = orderService.updateOrderStatus(id, OrderStatus.valueOf(orderStatus));
 		return new ResponseEntity<OrderDTO>(order, HttpStatus.OK);
 	}
-	@PreAuthorize("hasAuthority('WAITER') or hasAuthority('BARMAN') or hasAuthority('COOK')")
+	@PreAuthorize("hasAuthority('ROLE_WAITER') or hasAuthority('ROLE_BARMAN') or hasAuthority('ROLE_COOK')")
 	@GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<OrderDTO>> search(@RequestParam(value = "orderStatus", required = false, defaultValue = "") String orderStatus) {
 		return ResponseEntity.ok(orderService.search(OrderStatus.valueOf(orderStatus)));	
 	}
-	@PreAuthorize("hasAuthority('WAITER') or hasAuthority('BARMAN') or hasAuthority('COOK')")
+	@PreAuthorize("hasAuthority('ROLE_WAITER') or hasAuthority('ROLE_BARMAN') or hasAuthority('ROLE_COOK')")
 	@GetMapping(value = "articles/search/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<OrderedArticleDTO>> searchArticles(@PathVariable("id") int id, 
 			@RequestParam(value = "articleStatus", required = false, defaultValue = "") String articleStatus) {

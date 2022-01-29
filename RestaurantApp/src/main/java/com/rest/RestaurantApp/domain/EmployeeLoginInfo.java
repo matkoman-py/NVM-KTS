@@ -6,19 +6,20 @@ import org.hibernate.annotations.Where;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Where(clause = "deleted = false")
-public class EmployeeLoginInfo extends BaseEntity {
+public class EmployeeLoginInfo extends BaseEntity implements Serializable {
 
     @Column(nullable = false)
     private String type;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private EmployeeType employeeType;
+//    @Enumerated(EnumType.STRING)
+//    @Column(nullable = false)
+    private String employeeType;
 
     @Column(nullable = false)
     private String pincode;
@@ -34,7 +35,7 @@ public class EmployeeLoginInfo extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles;
 
-    public EmployeeLoginInfo(EmployeeType employeeType, String pincode) {
+    public EmployeeLoginInfo(String employeeType, String pincode) {
         super();
         this.employeeType = employeeType;
         this.pincode = pincode;
@@ -42,11 +43,11 @@ public class EmployeeLoginInfo extends BaseEntity {
 
     public EmployeeLoginInfo() { super(); }
 
-    public EmployeeType getEmployeeType() {
+    public String getEmployeeType() {
         return employeeType;
     }
 
-    public void setEmployeeType(EmployeeType employeeType) {
+    public void setEmployeeType(String employeeType) {
         this.employeeType = employeeType;
     }
 

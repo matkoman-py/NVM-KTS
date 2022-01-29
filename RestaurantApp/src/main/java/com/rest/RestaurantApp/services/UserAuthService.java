@@ -38,14 +38,12 @@ public class UserAuthService implements UserDetailsService {
         Optional<PrivilegedUser> user;
 
         user = privilegedUserRepository.findByUsername(username);
-        if(user.isPresent()) {
-            return new User(username, user.get().getPassword(), user.get().getAuthorities());
-        }
+        return user.map(privilegedUser -> new User(username, privilegedUser.getPassword(), privilegedUser.getAuthorities())).orElse(null);
+    }
 
+    public UserDetails loadUserByRole(String identity) {
         EmployeeLoginInfo employee;
-        System.out.println("hehehe");
-        employee = employeeLoginInfoRepository.findByType(username);
-
+        employee = employeeLoginInfoRepository.findByType(identity);
         if(employee != null) {
             return new User(employee.getType(), employee.getPincode(), employee.getAuthorities());
         }

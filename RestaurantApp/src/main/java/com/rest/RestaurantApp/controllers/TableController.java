@@ -14,7 +14,7 @@ import java.nio.file.Paths;
 @RequestMapping("/api/table")
 public class TableController {
 	
-	@PreAuthorize("hasRole('MANAGER') or hasRole('WAITER')")
+	@PreAuthorize("hasRole('MANAGER') or hasAuthority('ROLE_WAITER')")
     @GetMapping
     public ResponseEntity<Object> getTableLayout() {
         try {

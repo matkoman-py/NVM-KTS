@@ -43,18 +43,19 @@ public class ArticleController {
         return new ResponseEntity(notFoundException.getMessage(), HttpStatus.NOT_FOUND);
     }
 	
-	@PreAuthorize("hasRole('MANAGER') or hasAuthority('WAITER')")
+	@PreAuthorize("hasRole('MANAGER') or hasAuthority('ROLE_WAITER')")
 	@GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<ArticleDTO>> search(@RequestParam(value = "type", required = false, defaultValue = "") String type,
 			@RequestParam(value = "name", required = false, defaultValue = "") String name) {
 		return ResponseEntity.ok(articleService.search(type,name));	
 	}
-	@PreAuthorize("hasRole('MANAGER') or hasAuthority('WAITER')")
+	@PreAuthorize("hasRole('MANAGER') or hasAuthority('ROLE_WAITER')")
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<ArticleDTO>> getAll() {
 		return ResponseEntity.ok(articleService.getAll());
 	}
-	@PreAuthorize("hasRole('MANAGER') or hasAuthority('WAITER')")
+
+	@PreAuthorize("hasRole('MANAGER') or hasAuthority('ROLE_WAITER')")
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ArticleDTO> getOne(@PathVariable("id") int id) {
 		ArticleDTO article = articleService.getOne(id);
