@@ -44,13 +44,12 @@ public class IngredientControllerTest {
     
     @Test
     void testSearch() {
-        ResponseEntity<IngredientDTO[]> response = restTemplate.withBasicAuth("manager_test", "test")
-                .getForEntity("/api/ingredient/search?name=ba&type=allergen", IngredientDTO[].class);
+        ResponseEntity<IngredientDTO[]> response = restTemplate.getForEntity("/api/ingredient/search?name=a", IngredientDTO[].class);
 
         IngredientDTO[] ingredients = response.getBody();
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(ingredients.length, 1);
+        assertEquals(ingredients.length, 5);
 
     }
 

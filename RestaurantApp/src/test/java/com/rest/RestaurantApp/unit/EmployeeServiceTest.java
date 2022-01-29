@@ -23,6 +23,8 @@ import com.rest.RestaurantApp.domain.enums.EmployeeType;
 import com.rest.RestaurantApp.domain.enums.UserType;
 import com.rest.RestaurantApp.dto.EmployeeAuthDTO;
 import com.rest.RestaurantApp.dto.EmployeeDTO;
+import com.rest.RestaurantApp.exceptions.EmployeeWithEmailAlreadyExists;
+import com.rest.RestaurantApp.exceptions.EmployeeWithPinAlreadyExists;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.repositories.EmployeeRepository;
 import com.rest.RestaurantApp.repositories.SalaryInfoRepository;
@@ -66,12 +68,17 @@ public class EmployeeServiceTest {
 		salary3.add(new SalaryInfo(new Date(), 100000, employee2));
 		employee2.setSalaries(salary3);
 		
+		Employee employee4 = new Employee("cepic@yahoo.com", "Petar", "Markovic", new GregorianCalendar(1999, 10, 29).getTime(), UserType.EMPLOYEE, 1234, EmployeeType.WAITER);
+		employee4.setId(1);	
+		salary1.add(salaryInfo);
+		employee4.setSalaries(salary1);
 		
 		employees.add(employee);
 		employees.add(employee1);
 		employees.add(employee2);
 		
 		when(employeeRepository.findAll()).thenReturn(employees);
+		when(employeeRepository.findByEmail("cepic@yahoo.com")).thenReturn(Optional.of(employee4));
 		given(employeeRepository.findById(4)).willReturn(Optional.empty());
 		given(employeeRepository.findById(1)).willReturn(java.util.Optional.of(employee));
 		given(employeeRepository.save(employee)).willReturn(employee);
@@ -81,13 +88,41 @@ public class EmployeeServiceTest {
 	}
 	
 	@Test
+	void testCreate_PincodeInUse() {
+		List<SalaryInfo> salary1 = new ArrayList<>();
+		SalaryInfo salaryInfo = new SalaryInfo(new Date(), 100000, employee);
+		salary1.add(salaryInfo);
+		employee.setSalaries(salary1);
+		
+		EmployeeDTO employee = new EmployeeDTO(null, 0, "acacepic@gmail.com", "Petar", "Markovic", new GregorianCalendar(1999, 10, 29).getTime(), UserType.EMPLOYEE, 1234, EmployeeType.WAITER);
+
+		assertThrows(EmployeeWithPinAlreadyExists.class, ()->{
+			employeeService.create(employee);
+	        });
+	}
+	
+	@Test
+	void testCreate_EmailInUse() {
+		List<SalaryInfo> salary1 = new ArrayList<>();
+		SalaryInfo salaryInfo = new SalaryInfo(new Date(), 100000, employee);
+		salary1.add(salaryInfo);
+		employee.setSalaries(salary1);
+		
+		EmployeeDTO employee = new EmployeeDTO(null, 0, "cepic@yahoo.com", "Petar", "Markovic", new GregorianCalendar(1999, 10, 29).getTime(), UserType.EMPLOYEE, 1994, EmployeeType.WAITER);
+
+		assertThrows(EmployeeWithEmailAlreadyExists.class, ()->{
+			employeeService.create(employee);
+	        });
+	}
+	
+	@Test
 	void testCreate() {
 		List<SalaryInfo> salary1 = new ArrayList<>();
 		SalaryInfo salaryInfo = new SalaryInfo(new Date(), 100000, employee);
 		salary1.add(salaryInfo);
 		employee.setSalaries(salary1);
 		
-		EmployeeDTO employee = new EmployeeDTO(null, 0, "petarns99@gmail.com", "Petar", "Markovic", new GregorianCalendar(1999, 10, 29).getTime(), UserType.EMPLOYEE, 1234, EmployeeType.WAITER);
+		EmployeeDTO employee = new EmployeeDTO(null, 0, "petarns99@gmail.com", "Petar", "Markovic", new GregorianCalendar(1999, 10, 29).getTime(), UserType.EMPLOYEE, 1994, EmployeeType.WAITER);
 		
 		EmployeeDTO createdEmployee = employeeService.create(employee);
 		assertEquals("Petar", employeeService.getOne(createdEmployee.getId()).getName());

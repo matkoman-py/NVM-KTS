@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import com.rest.RestaurantApp.domain.enums.EmployeeType;
 import com.rest.RestaurantApp.dto.EmployeeAuthDTO;
 import com.rest.RestaurantApp.exceptions.EmployeeWithEmailAlreadyExists;
+import com.rest.RestaurantApp.exceptions.EmployeeWithPinAlreadyExists;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,7 +70,7 @@ public class EmployeeService implements IEmployeeService{
 		
 		Optional<Employee> hasPin = employeeRepository.findByPincode(employee.getPincode());
 		if(!hasPin.isEmpty()) {
-			throw new EmployeeWithEmailAlreadyExists("Employee with pincode " + employee.getPincode() + " already exists");
+			throw new EmployeeWithPinAlreadyExists("Employee with pincode " + employee.getPincode() + " already exists");
 		}
 		
 		Optional<Employee> hasEmail = employeeRepository.findByEmail(employee.getEmail());

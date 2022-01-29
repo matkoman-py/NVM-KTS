@@ -130,7 +130,9 @@ public class EmployeeControllerTest {
 	
 	@Test
 	public void testCreate() {
-		EmployeeDTO employee = new EmployeeDTO(7,10000,"acafaca@gmail.com","Aleksa","Kekezovic",new Date(),UserType.EMPLOYEE, 1111, EmployeeType.COOK);
+		
+		EmployeeDTO employee = new EmployeeDTO(7,10000,"acafaca@gmail.com","Aleksa","Kekezovic"
+				,new Date(),UserType.EMPLOYEE, 9988, EmployeeType.COOK);
 
 		ResponseEntity<EmployeeDTO> responseEntity = restTemplate.exchange(
 				"/api/employee", HttpMethod.POST, new HttpEntity<EmployeeDTO>(employee), EmployeeDTO.class);
@@ -140,8 +142,32 @@ public class EmployeeControllerTest {
 		assertEquals("Kekezovic", employeeService.getOne(responseEntity.getBody().getId()).getSurname());
 		assertEquals("acafaca@gmail.com", employeeService.getOne(responseEntity.getBody().getId()).getEmail());
 		assertEquals(EmployeeType.COOK, employeeService.getOne(responseEntity.getBody().getId()).getEmployeeType());
-		assertEquals(1111, employeeService.getOne(responseEntity.getBody().getId()).getPincode());
+		assertEquals(9988, employeeService.getOne(responseEntity.getBody().getId()).getPincode());
 	
 		employeeService.delete(responseEntity.getBody().getId());
+	}
+	
+	@Test
+	public void testCreate_PincodeInUse() {
+		
+		EmployeeDTO employee = new EmployeeDTO(7,10000,"acafaca@gmail.com","Aleksa","Kekezovic"
+				,new Date(),UserType.EMPLOYEE, 1234, EmployeeType.COOK);
+
+		ResponseEntity<String> responseEntity = restTemplate.exchange(
+				"/api/employee", HttpMethod.POST, new HttpEntity<EmployeeDTO>(employee), String.class);
+		
+		assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
+	}
+	
+	@Test
+	public void testCreate_EmailInUse() {
+		
+		EmployeeDTO employee = new EmployeeDTO(7,10000,"mateja99@yahoo.com","Aleksa","Kekezovic"
+				,new Date(),UserType.EMPLOYEE, 1111, EmployeeType.COOK);
+
+		ResponseEntity<String> responseEntity = restTemplate.exchange(
+				"/api/employee", HttpMethod.POST, new HttpEntity<EmployeeDTO>(employee), String.class);
+		
+		assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
 	}
 }
