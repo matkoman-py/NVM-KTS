@@ -12,4 +12,6 @@ public interface OrderedArticleRepository extends JpaRepository<OrderedArticle, 
 
     @Query("select oa from OrderedArticle oa join fetch oa.order oao")
     ArrayList<OrderedArticle> findAllWithOrder();
+    
+    ArrayList<OrderedArticle> findByArticleId(Integer articleId);
 }

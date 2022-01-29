@@ -37,7 +37,7 @@ public class EmployeeControllerTest {
 	
 	@Test
 	public void testGetOne_ValidId() throws Exception {
-		ResponseEntity<EmployeeDTO> responseEntity = restTemplate.getForEntity(
+		ResponseEntity<EmployeeDTO> responseEntity = restTemplate.withBasicAuth("manager_test", "test").getForEntity(
 				"/api/employee/4", EmployeeDTO.class);
 
 		EmployeeDTO employee = responseEntity.getBody();
@@ -47,7 +47,7 @@ public class EmployeeControllerTest {
 	
 	@Test
 	public void testGetOne_InvalidId() throws Exception {
-		ResponseEntity<String> responseEntity = restTemplate.getForEntity(
+		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test").getForEntity(
 				"/api/employee/15", String.class);
 		
 		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
@@ -55,7 +55,7 @@ public class EmployeeControllerTest {
 	
 	@Test 
 	public void testGetAll() {
-		ResponseEntity<EmployeeDTO[]> responseEntity = restTemplate.getForEntity("/api/employee", EmployeeDTO[].class);
+		ResponseEntity<EmployeeDTO[]> responseEntity = restTemplate.withBasicAuth("manager_test", "test").getForEntity("/api/employee", EmployeeDTO[].class);
 		
 		EmployeeDTO[] employees = responseEntity.getBody();
 		
@@ -65,7 +65,7 @@ public class EmployeeControllerTest {
 	
 	@Test
 	public void testDelete_ValidId() { 
-		ResponseEntity<String> responseEntity = restTemplate.exchange(
+		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/employee/6", HttpMethod.DELETE, new HttpEntity<Object>(null), String.class);
 
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -73,7 +73,7 @@ public class EmployeeControllerTest {
 	
 	@Test
 	public void testDelete_InvalidId() { 
-		ResponseEntity<String> responseEntity = restTemplate.exchange(
+		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/employee/15", HttpMethod.DELETE, new HttpEntity<Object>(null), String.class);
 
 		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
@@ -81,7 +81,7 @@ public class EmployeeControllerTest {
 	
 	@Test
 	public void testcheckIfWaiterPin_ValidPinAndValidEmployeeType() {
-		ResponseEntity<String> responseEntity = restTemplate.exchange(
+		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/employee/test_waiter/1234", HttpMethod.GET, new HttpEntity<Object>(null), String.class);
 		
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -89,7 +89,7 @@ public class EmployeeControllerTest {
 	
 	@Test
 	public void testcheckIfWaiterPin_NonExistingPin() {
-		ResponseEntity<String> responseEntity = restTemplate.exchange(
+		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/employee/test_waiter/6666", HttpMethod.GET, new HttpEntity<Object>(null), String.class);
 		
 		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
@@ -97,7 +97,7 @@ public class EmployeeControllerTest {
 	
 	@Test
 	public void testcheckIfWaiterPin_ValidPinAndInvalidEmployeeType() {
-		ResponseEntity<Boolean> responseEntity = restTemplate.exchange(
+		ResponseEntity<Boolean> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/employee/test_waiter/2910", HttpMethod.GET, new HttpEntity<Object>(null), Boolean.class);
 		
 		assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
@@ -107,7 +107,7 @@ public class EmployeeControllerTest {
 	public void testUpdate_InvalidId() {
 		EmployeeDTO employee = new EmployeeDTO(7,10000,"aca@gmail.com","Aleksa","Kekezovic",new Date(),UserType.EMPLOYEE, 1111, EmployeeType.COOK);
 
-		ResponseEntity<String> responseEntity = restTemplate.exchange(
+		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/employee/15", HttpMethod.PUT, new HttpEntity<EmployeeDTO>(employee), String.class);
 		
 		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
@@ -117,7 +117,7 @@ public class EmployeeControllerTest {
 	public void testUpdate_ValidId() {
 		EmployeeDTO employee = new EmployeeDTO(7,10000,"aca@gmail.com","Aleksa","Kekezovic",new Date(),UserType.EMPLOYEE, 1111, EmployeeType.COOK);
 
-		ResponseEntity<EmployeeDTO> responseEntity = restTemplate.exchange(
+		ResponseEntity<EmployeeDTO> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/employee/4", HttpMethod.PUT, new HttpEntity<EmployeeDTO>(employee), EmployeeDTO.class);
 		
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -134,7 +134,7 @@ public class EmployeeControllerTest {
 		EmployeeDTO employee = new EmployeeDTO(7,10000,"acafaca@gmail.com","Aleksa","Kekezovic"
 				,new Date(),UserType.EMPLOYEE, 9988, EmployeeType.COOK);
 
-		ResponseEntity<EmployeeDTO> responseEntity = restTemplate.exchange(
+		ResponseEntity<EmployeeDTO> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/employee", HttpMethod.POST, new HttpEntity<EmployeeDTO>(employee), EmployeeDTO.class);
 		
 		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
@@ -153,7 +153,7 @@ public class EmployeeControllerTest {
 		EmployeeDTO employee = new EmployeeDTO(7,10000,"acafaca@gmail.com","Aleksa","Kekezovic"
 				,new Date(),UserType.EMPLOYEE, 1234, EmployeeType.COOK);
 
-		ResponseEntity<String> responseEntity = restTemplate.exchange(
+		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/employee", HttpMethod.POST, new HttpEntity<EmployeeDTO>(employee), String.class);
 		
 		assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
@@ -165,7 +165,7 @@ public class EmployeeControllerTest {
 		EmployeeDTO employee = new EmployeeDTO(7,10000,"mateja99@yahoo.com","Aleksa","Kekezovic"
 				,new Date(),UserType.EMPLOYEE, 1111, EmployeeType.COOK);
 
-		ResponseEntity<String> responseEntity = restTemplate.exchange(
+		ResponseEntity<String> responseEntity = restTemplate.withBasicAuth("manager_test", "test").exchange(
 				"/api/employee", HttpMethod.POST, new HttpEntity<EmployeeDTO>(employee), String.class);
 		
 		assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());

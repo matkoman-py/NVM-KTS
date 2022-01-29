@@ -7,27 +7,58 @@ import { ArticleProfit } from 'src/app/modules/shared/models/articleProfit';
   providedIn: 'any',
 })
 export class ReportsService {
-  private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+  private header = new HttpHeaders({
+    'Content-Type': 'application/json',
+    Authorization: 'Bearer ' + localStorage.getItem('token'),
+  });
   constructor(private http: HttpClient) {}
 
-  articleProfitYearReport(year: number) : Observable<ArticleProfit>{
-    return this.http.get<ArticleProfit>('/api/report/articleProfitYear/' + year);
+  articleProfitYearReport(year: number): Observable<ArticleProfit> {
+    return this.http.get<ArticleProfit>(
+      '/api/report/articleProfitYear/' + year,
+      { headers: this.header }
+    );
   }
 
-  articleProfitQuarter(year: number, quarter: number) : Observable<ArticleProfit>{
-    return this.http.get<ArticleProfit>('/api/report/articleProfitQuarter/' + year + '/' + quarter);
+  articleProfitQuarter(
+    year: number,
+    quarter: number
+  ): Observable<ArticleProfit> {
+    return this.http.get<ArticleProfit>(
+      '/api/report/articleProfitQuarter/' + year + '/' + quarter,
+      { headers: this.header }
+    );
   }
 
-  articleProfitMonth(year: number, month: number) : Observable<ArticleProfit>{
-    return this.http.get<ArticleProfit>('/api/report/articleProfitMonth/' + year + '/' + month);
+  articleProfitMonth(year: number, month: number): Observable<ArticleProfit> {
+    return this.http.get<ArticleProfit>(
+      '/api/report/articleProfitMonth/' + year + '/' + month,
+      { headers: this.header }
+    );
   }
 
-  articleProfitDay(year: number, month: number, day: number) : Observable<ArticleProfit>{
-    return this.http.get<ArticleProfit>('/api/report/articleProfitDay/' + year + '/' + month + '/' + day);
+  articleProfitDay(
+    year: number,
+    month: number,
+    day: number
+  ): Observable<ArticleProfit> {
+    return this.http.get<ArticleProfit>(
+      '/api/report/articleProfitDay/' + year + '/' + month + '/' + day,
+      { headers: this.header }
+    );
   }
 
-  articleProfitBetweenDates(dateFrom: Date, dateTo: Date) : Observable<ArticleProfit>{
-    return this.http.get<ArticleProfit>('/api/report/articleProfitBetweenDates/' + dateFrom.toUTCString() + '/' + dateTo.toUTCString());
+  articleProfitBetweenDates(
+    dateFrom: Date,
+    dateTo: Date
+  ): Observable<ArticleProfit> {
+    return this.http.get<ArticleProfit>(
+      '/api/report/articleProfitBetweenDates/' +
+        dateFrom.toUTCString() +
+        '/' +
+        dateTo.toUTCString(),
+      { headers: this.header }
+    );
   }
 }
 // "29-Sep-2021"

@@ -19,6 +19,7 @@ import com.rest.RestaurantApp.dto.ArticleDTO;
 import com.rest.RestaurantApp.exceptions.NotFoundException;
 import com.rest.RestaurantApp.repositories.ArticleRepository;
 import com.rest.RestaurantApp.repositories.IngredientRepository;
+import com.rest.RestaurantApp.repositories.OrderedArticleRepository;
 import com.rest.RestaurantApp.repositories.PriceInfoRepository;
 
 @Service
@@ -31,12 +32,15 @@ public class ArticleService implements IArticleService {
 	
 	private PriceInfoRepository priceInfoRepository;
 	
+	private OrderedArticleRepository orderedArticleRepository;
 	
 	@Autowired
-	public ArticleService(ArticleRepository articleRepository, IngredientRepository ingredientRepository, PriceInfoRepository priceInfoRepository) {
+	public ArticleService(ArticleRepository articleRepository, IngredientRepository ingredientRepository, PriceInfoRepository priceInfoRepository
+			, OrderedArticleRepository orderedArticleRepository) {
 		this.articleRepository = articleRepository;
 		this.ingredientRepository = ingredientRepository;
 		this.priceInfoRepository = priceInfoRepository;
+		this.orderedArticleRepository = orderedArticleRepository;
 	}
 	
 	@Override
@@ -75,6 +79,10 @@ public class ArticleService implements IArticleService {
 			throw new NotFoundException("There is no article with the given id: " + id);
 		}
 		Article article = articleData.get();
+		orderedArticleRepository.findByArticleId(article.getId()).stream().forEach(orderedArticle -> {
+			orderedArticle.setDeleted(true);
+			orderedArticleRepository.save(orderedArticle);
+		});
 		article.setDeleted(true);
 		articleRepository.save(article);
 		return new ArticleDTO(article);

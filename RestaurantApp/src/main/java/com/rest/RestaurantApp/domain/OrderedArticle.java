@@ -2,12 +2,14 @@ package com.rest.RestaurantApp.domain;
 
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.Where;
@@ -20,6 +22,7 @@ public class OrderedArticle extends BaseEntity{
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private ArticleStatus status;
+	
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "article_id", nullable = false)
