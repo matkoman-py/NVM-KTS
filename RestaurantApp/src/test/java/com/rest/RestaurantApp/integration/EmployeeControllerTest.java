@@ -86,6 +86,26 @@ public class EmployeeControllerTest {
 	}
 	
 	@Test
+	public void testDelete_InvalidEmployee_WaiterPreparingOrder() { 
+		ResponseEntity<String> responseEntity = restTemplate.exchange(
+				"/api/employee/3", HttpMethod.DELETE, new HttpEntity<Object>(null), String.class);
+
+		assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
+		assertEquals("Employee with id 3 is currently working on an order", responseEntity.getBody());
+	}
+	
+	
+	@Test
+	public void testDelete_InvalidEmployee_CookOrBarmanPreparingArticle() { 
+		ResponseEntity<String> responseEntity = restTemplate.exchange(
+				"/api/employee/7", HttpMethod.DELETE, new HttpEntity<Object>(null), String.class);
+
+		assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
+		assertEquals("Employee with id 7 is currently working on an article", responseEntity.getBody());
+	}
+	
+	
+	@Test
 	public void testcheckIfWaiterPin_ValidPinAndValidEmployeeType() {
 		ResponseEntity<String> responseEntity = restTemplate.exchange(
 				"/api/employee/test_waiter/1234", HttpMethod.GET, new HttpEntity<Object>(null), String.class);
