@@ -55,7 +55,7 @@ public class IngredientTest {
 		ingredientsPage.clickDeleteBtn();
 		
 		//sacekaj da se ocita promena
-		Thread.sleep(600);
+		Thread.sleep(1500);
 		int countAfterDelete = ingredientsPage.getIngredientCount();
 		assertEquals(count-1, countAfterDelete);
 		
@@ -66,7 +66,7 @@ public class IngredientTest {
 		ingredientsPage.clickCreateBtn();
 		
 		//sacekaj da se ocita promena
-		Thread.sleep(600);
+		Thread.sleep(1500);
 		int countAfterCreate = ingredientsPage.getIngredientCount();
 		
 		assertEquals(count+1, countAfterCreate);
@@ -77,7 +77,7 @@ public class IngredientTest {
 		ingredientsPage.setCreateUpdateName("Updatiran sastojak");
 		ingredientsPage.clickUpdateBtn();
 		
-		Thread.sleep(600);
+		Thread.sleep(1500);
 		int countAfterUpdate = ingredientsPage.getIngredientCount();
 		assertEquals(count, countAfterUpdate);
 		
@@ -88,7 +88,7 @@ public class IngredientTest {
 		ingredientsPage.clickOption(1);
 		ingredientsPage.clickSearchBtn();
 		
-		Thread.sleep(600);
+		Thread.sleep(1500);
 		int countAfterSearch = ingredientsPage.getIngredientCount();
 		
 		assertTrue(countAfterSearch <= count);

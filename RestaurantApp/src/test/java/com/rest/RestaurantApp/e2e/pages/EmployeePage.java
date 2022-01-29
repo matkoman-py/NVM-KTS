@@ -54,7 +54,7 @@ public class EmployeePage {
 	@FindBy(id = "search-button")
 	private WebElement searchBtn;
 	
-	@FindBy(xpath = "//*[@id=\"pr_id_4\"]/p-paginator/div/span[1]")
+	@FindBy(xpath = "//*[@id=\"pr_id_3\"]/p-paginator/div/span[1]")
 	private WebElement employeeCount;
 	
 	@FindBy(xpath = "/html/body/app-root/div/div[2]/div/app-employees/div/div[1]/div/div[4]/p-dropdown/div")

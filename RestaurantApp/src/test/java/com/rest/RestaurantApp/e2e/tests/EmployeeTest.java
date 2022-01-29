@@ -59,7 +59,7 @@ public class EmployeeTest {
 //		
 //		
 //		//sacekaj da se ocita promena
-		Thread.sleep(1000);
+		Thread.sleep(1500);
 		int countAfterDelete = employeePage.getEmployeeCount();
 		assertEquals(count-1, countAfterDelete);
 		
@@ -74,7 +74,7 @@ public class EmployeeTest {
 		employeePage.setEmpEmail("mirko213e@gmail.com");
 		employeePage.clickCreateBtn();
 		
-		Thread.sleep(1000);
+		Thread.sleep(1500);
 		int countAfterCreate = employeePage.getEmployeeCount();
 		assertEquals(count+1, countAfterCreate);
 
@@ -82,9 +82,9 @@ public class EmployeeTest {
 		
 		count = countAfterCreate;
 		
-		employeePage.clickOnRow(2);
+		employeePage.clickOnRow(3);
 		employeePage.setEmpBirthday("3/3/2003");
-		employeePage.setEmpPin("5555");
+		employeePage.setEmpPin("78652");
 		employeePage.setEmpSalary("56000");
 		employeePage.setEmpName("Marko");
 		employeePage.selectRole(0);
@@ -92,7 +92,7 @@ public class EmployeeTest {
 		employeePage.setEmpEmail("markoni@gmail.com");
 		employeePage.clickUpdateBtn();
 		
-		Thread.sleep(1000);
+		Thread.sleep(1500);
 		int countAfterUpdate = employeePage.getEmployeeCount();
 		assertEquals(count, countAfterUpdate);
 
@@ -103,7 +103,7 @@ public class EmployeeTest {
 		employeePage.setEmailSearch("mar");
 		employeePage.clickSearchBtn();
 		
-		Thread.sleep(1000);
+		Thread.sleep(1500);
 		int countAfterSearch = employeePage.getEmployeeCount();
 		assertTrue(count >= countAfterSearch);
 	
