@@ -10,8 +10,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 
 @Component
 public class TokenUtils {
@@ -56,7 +58,8 @@ public class TokenUtils {
         String role;
         try {
             final Claims claims = this.getAllClaimsFromToken(token);
-            role = claims.getSubject().split(",")[1];
+            ArrayList<HashMap<String, String>> authorities = (ArrayList<HashMap<String, String>>) claims.get("authority");
+            role = authorities.get(0).getOrDefault("authority", null);
         } catch (Exception e) {
             role = null;
         }
@@ -65,7 +68,6 @@ public class TokenUtils {
 
     private Claims getAllClaimsFromToken(String token) {
         Claims claims;
-        
         try {
             claims = Jwts.parser()
                     .setSigningKey(SECRET)
@@ -80,10 +82,9 @@ public class TokenUtils {
     
     public Boolean validateToken(String token, UserDetails userDetails) {
         User user = (User) userDetails;
-        
         String identity = getIdentityFromToken(token);
         
-        return (identity != null && identity.equals(userDetails.getUsername()));
+        return (identity != null);
     }
 
     public String getIdentityFromToken(String token) {
